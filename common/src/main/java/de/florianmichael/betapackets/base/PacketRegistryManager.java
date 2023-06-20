@@ -23,6 +23,8 @@ public class PacketRegistryManager {
 
         // Play packets since v1.7.0
         registerPacketRegistry(ProtocolCollection.R1_8, new PacketRegistry1_8());
+
+        packetRegistries.forEach((protocolCollection, packetRegistry) -> packetRegistry.init());
     }
 
     public void registerPacketRegistry(final ProtocolCollection version, final PacketRegistry packetRegistry) {

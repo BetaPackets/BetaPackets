@@ -23,6 +23,7 @@ public class BungeeCordBetaPacketsPipeline extends BetaPacketsPipeline {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (!compressed && needsReorderPipeline(ctx.pipeline())) {
+                    System.out.println("Reorder pipeline");
                     ctx.fireUserEventTriggered(new ReorderPipelineEvent());
                     compressed = true;
                 }

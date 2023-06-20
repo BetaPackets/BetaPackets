@@ -19,6 +19,7 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform {
         try {
             final Class<?> pipelineUtils = Class.forName("net.md_5.bungee.netty.PipelineUtils");
             pipelineUtilsKickStringWriter = pipelineUtils.getDeclaredField("legacyKicker");
+            pipelineUtilsKickStringWriter.setAccessible(true);
         } catch (NoSuchFieldException | ClassNotFoundException e) {
             BetaPackets.getPlatform().getLogging().severe("Failed to get kick string writer in platform BungeeCord");
             e.printStackTrace();

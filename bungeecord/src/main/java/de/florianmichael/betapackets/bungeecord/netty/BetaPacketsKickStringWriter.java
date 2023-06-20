@@ -9,6 +9,7 @@ public class BetaPacketsKickStringWriter extends KickStringWriter {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("handlerAdded");
         ctx.pipeline().addFirst(new BungeeCordBetaPacketsPipeline(new UserConnection(ctx.channel())));
     }
 
