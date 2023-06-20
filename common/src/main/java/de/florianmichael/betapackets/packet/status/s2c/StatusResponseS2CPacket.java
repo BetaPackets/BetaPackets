@@ -63,7 +63,7 @@ public class StatusResponseS2CPacket extends Packet {
             players = new Players(max, online, sample);
         }
 
-        final String description = jsonObject.get("description").getAsString();
+        final String description = jsonObject.get("description").getAsJsonObject().get("text").getAsString();
         final String favicon = jsonObject.has("favicon") ? jsonObject.get("favicon").getAsString() : null;
         final Boolean enforcesSecureChat = jsonObject.has("enforcesSecureChat") ? jsonObject.get("enforcesSecureChat").getAsBoolean() : null;
         final Boolean previewsChat = jsonObject.has("previewsChat") ? jsonObject.get("previewsChat").getAsBoolean() : null;

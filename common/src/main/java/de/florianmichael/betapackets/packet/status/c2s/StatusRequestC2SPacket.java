@@ -22,6 +22,9 @@ import de.florianmichael.betapackets.base.packet.Packet;
 
 public class StatusRequestC2SPacket extends Packet {
 
+    public StatusRequestC2SPacket(final FriendlyByteBuf buf) {
+    }
+
     @Override
     public void write(FriendlyByteBuf buf) {
     }

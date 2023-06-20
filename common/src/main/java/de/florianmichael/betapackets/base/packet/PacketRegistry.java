@@ -72,6 +72,7 @@ public abstract class PacketRegistry {
             return clazz.getConstructor(FriendlyByteBuf.class).newInstance(buf);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             BetaPackets.getPlatform().getLogging().severe("Couldn't create packet " + packetId + " in " + getClass().getSimpleName() + "!");
+            e.printStackTrace();
         }
         return null;
     }

@@ -9,6 +9,10 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "Jitpack"
+        url = "https://jitpack.io"
+    }
 }
 
 dependencies {
