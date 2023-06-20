@@ -32,6 +32,7 @@ public class PacketRegistryManager {
         // Handshake, Status and Login definition since v1.7.0
         registerPacketRegistry(ProtocolCollection.R1_7_5, new BasePacketRegistry1_7.PacketRegistryHandshake1_7());
         registerPacketRegistry(ProtocolCollection.R1_7_5, new BasePacketRegistry1_7.PacketRegistryLogin1_7());
+        registerPacketRegistry(ProtocolCollection.R1_7_5, new BasePacketRegistry1_7.PacketRegistryStatus1_7());
 
         // Play packets since v1.7.0
         registerPacketRegistry(ProtocolCollection.R1_8, new PacketRegistry1_8());

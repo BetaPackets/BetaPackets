@@ -27,6 +27,10 @@ import de.florianmichael.betapackets.packet.login.s2c.EncryptionRequestS2CPacket
 import de.florianmichael.betapackets.packet.login.s2c.LoginDisconnectS2CPacket;
 import de.florianmichael.betapackets.packet.login.s2c.LoginSuccessS2CPacket;
 import de.florianmichael.betapackets.packet.login.s2c.SetCompressionS2CPacket;
+import de.florianmichael.betapackets.packet.status.c2s.PingRequestC2SPacket;
+import de.florianmichael.betapackets.packet.status.c2s.StatusRequestC2SPacket;
+import de.florianmichael.betapackets.packet.status.s2c.PongResponseC2SPacket;
+import de.florianmichael.betapackets.packet.status.s2c.StatusResponseS2CPacket;
 
 public class BasePacketRegistry1_7 {
 
@@ -59,6 +63,24 @@ public class BasePacketRegistry1_7 {
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, EncryptionRequestS2CPacket.class);
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x02, LoginSuccessS2CPacket.class);
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x03, SetCompressionS2CPacket.class);
+        }
+    }
+
+    public static class PacketRegistryStatus1_7 extends PacketRegistry {
+
+        public PacketRegistryStatus1_7() {
+            super(NetworkState.STATUS);
+        }
+
+        @Override
+        public void init() {
+            // C -> S
+            this.registerPacket(NetworkSide.SERVERBOUND, 0x00, StatusRequestC2SPacket.class);
+            this.registerPacket(NetworkSide.SERVERBOUND, 0x01, PingRequestC2SPacket.class);
+
+            // S -> C
+            this.registerPacket(NetworkSide.CLIENTBOUND, 0x00, StatusResponseS2CPacket.class);
+            this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, PongResponseC2SPacket.class);
         }
     }
 }
