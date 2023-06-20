@@ -15,11 +15,23 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.packet;
+package de.florianmichael.betapackets.bungeecord.platform;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.api.BetaPacketsAPIBase;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public abstract class Packet {
+import java.util.UUID;
 
-    public abstract void write(final FriendlyByteBuf buf);
+public class BungeeCordAPIBase implements BetaPacketsAPIBase<ProxiedPlayer> {
+    private final ProxyServer proxyServer;
+
+    public BungeeCordAPIBase(ProxyServer proxyServer) {
+        this.proxyServer = proxyServer;
+    }
+
+    @Override
+    public ProxiedPlayer get(UUID uuid) {
+        return proxyServer.getPlayer(uuid);
+    }
 }

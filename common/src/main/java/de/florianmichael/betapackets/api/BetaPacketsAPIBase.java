@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.packet;
+package de.florianmichael.betapackets.api;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import java.util.UUID;
 
-public abstract class Packet {
+public interface BetaPacketsAPIBase<T> {
 
-    public abstract void write(final FriendlyByteBuf buf);
+    T get(final UUID uuid);
 }
