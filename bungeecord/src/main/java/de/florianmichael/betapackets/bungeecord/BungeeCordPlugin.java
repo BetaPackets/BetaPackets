@@ -5,13 +5,16 @@ import de.florianmichael.betapackets.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.bungeecord.netty.BetaPacketsKickStringWriter;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.protocol.KickStringWriter;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform {
 
+    private final static Logger logging = new JLoggerToSLF4J(LoggerFactory.getLogger("BetaPackets (BungeeCord)"));
     private static Field pipelineUtilsKickStringWriter;
 
     @Override
@@ -51,6 +54,6 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform {
 
     @Override
     public Logger getLogging() {
-        return getLogger();
+        return logging;
     }
 }

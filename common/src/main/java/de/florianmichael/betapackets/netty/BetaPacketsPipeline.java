@@ -4,10 +4,7 @@ import de.florianmichael.betapackets.api.UserConnection;
 import de.florianmichael.betapackets.netty.element.BetaPacketsDecoder;
 import de.florianmichael.betapackets.netty.element.BetaPacketsEncoder;
 import de.florianmichael.betapackets.netty.event.ReorderPipelineEvent;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelPipeline;
+import io.netty.channel.*;
 
 public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     public final static String HANDLER_PACKET_DECODER_NAME = "betapackets-packet-decoder";

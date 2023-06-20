@@ -1,6 +1,7 @@
 package de.florianmichael.betapackets.netty.element;
 
 import de.florianmichael.betapackets.BetaPackets;
+import de.florianmichael.betapackets.DebugMode;
 import de.florianmichael.betapackets.api.UserConnection;
 import de.florianmichael.betapackets.base.FriendlyByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
@@ -22,27 +23,32 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
+    private HandshakeC2SPacket handleHandshake(final FriendlyByteBuf data) {
+        final HandshakeC2SPacket handshakeC2SPacket = new HandshakeC2SPacket(data);
+
+        userConnection.init(NetworkState.HANDSHAKE, ProtocolCollection.fromProtocolId(handshakeC2SPacket.getProtocolVersion()));
+        userConnection.setState(handshakeC2SPacket.getState());
+
+        return handshakeC2SPacket;
+    }
+
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         final FriendlyByteBuf data = new FriendlyByteBuf(msg.copy());
         final int packetId = data.readVarInt();
 
         Packet model;
-        if (!userConnection.hasLoaded() && packetId == 0x00) {
-            model = new HandshakeC2SPacket(data);
-            userConnection.init(NetworkState.HANDSHAKE, ProtocolCollection.fromProtocolId(((HandshakeC2SPacket) model).getProtocolVersion()));
+        if (!userConnection.hasLoaded() && packetId == 0x00 /* C -> S, HANDSHAKE, HANDSHAKE */) {
+            model = handleHandshake(data); // We need this to init the user connection and to track the next state
         } else {
             model = BetaPackets.getPacketRegistryManager().createModel(
                     userConnection.getProtocolVersion(),
                     userConnection.getState(),
                     NetworkSide.SERVERBOUND,
-                    packetId,
-                    data
+                    packetId, data
             );
         }
-        if (model != null) {
-            System.out.println(model.toString());
-        }
+        DebugMode.printPacket(userConnection.getState(), NetworkSide.CLIENTBOUND, model);
 
         out.add(ctx.alloc().buffer().writeBytes(msg).retain());
     }

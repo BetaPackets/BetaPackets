@@ -13,8 +13,8 @@ public class EncryptionRequestS2CPacket extends Packet {
     public EncryptionRequestS2CPacket(final FriendlyByteBuf buf) {
         this(
                 buf.readString(20),
-                buf.readByteArray(buf.readVarInt()),
-                buf.readByteArray(buf.readVarInt())
+                buf.readByteArray(),
+                buf.readByteArray()
         );
     }
 

@@ -6,6 +6,7 @@ import de.florianmichael.betapackets.model.NetworkState;
 import de.florianmichael.betapackets.packet.handshake.HandshakeC2SPacket;
 import de.florianmichael.betapackets.packet.login.c2s.EncryptionResponseC2SPacket;
 import de.florianmichael.betapackets.packet.login.c2s.LoginStartC2SPacket;
+import de.florianmichael.betapackets.packet.login.s2c.EncryptionRequestS2CPacket;
 import de.florianmichael.betapackets.packet.login.s2c.LoginDisconnectS2CPacket;
 import de.florianmichael.betapackets.packet.login.s2c.LoginSuccessS2CPacket;
 import de.florianmichael.betapackets.packet.login.s2c.SetCompressionS2CPacket;
@@ -38,7 +39,7 @@ public class BasePacketRegistry1_7 {
 
             // S -> C
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x00, LoginDisconnectS2CPacket.class);
-            this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, EncryptionResponseC2SPacket.class);
+            this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, EncryptionRequestS2CPacket.class);
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x02, LoginSuccessS2CPacket.class);
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x03, SetCompressionS2CPacket.class);
         }

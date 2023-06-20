@@ -21,6 +21,10 @@ public class UserConnection {
         this.loaded = true;
     }
 
+    public void setState(NetworkState state) {
+        this.state = state;
+    }
+
     public boolean hasLoaded() {
         return loaded;
     }

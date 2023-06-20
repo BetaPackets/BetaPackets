@@ -43,6 +43,7 @@ public class PacketRegistryManager {
                 return clazz.getConstructor(FriendlyByteBuf.class).newInstance(buf);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 BetaPackets.getPlatform().getLogging().severe("Couldn't create packet " + packetId + " in " + packetRegistry.getClass().getSimpleName() + "!");
+                e.printStackTrace();
             }
         }
         return null;

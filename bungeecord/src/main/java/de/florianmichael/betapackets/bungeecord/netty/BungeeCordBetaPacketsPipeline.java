@@ -17,15 +17,12 @@ public class BungeeCordBetaPacketsPipeline extends BetaPacketsPipeline {
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         super.handlerAdded(ctx);
 
-        ctx.pipeline().addFirst(new ChannelOutboundHandlerAdapter() {
-            private boolean compressed = false;
-
+        ctx.pipeline().addLast(new ChannelOutboundHandlerAdapter() {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-                if (!compressed && needsReorderPipeline(ctx.pipeline())) {
-                    System.out.println("Reorder pipeline");
-                    ctx.fireUserEventTriggered(new ReorderPipelineEvent());
-                    compressed = true;
+                if (needsReorderPipeline(ctx.pipeline())) {
+                    System.out.println("NEEDS REORDER");
+                    ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent());
                 }
                 super.write(ctx, msg, promise);
             }

@@ -52,7 +52,7 @@ public class FriendlyByteBuf {
     }
 
     private int toEncodedStringLength(int decodedLength) {
-        return decodedLength * 3;
+        return decodedLength * 4;
     }
 
     public byte readByte() {
@@ -61,6 +61,10 @@ public class FriendlyByteBuf {
 
     public int readerIndex() {
         return buffer.readerIndex();
+    }
+
+    public long readLong() {
+        return buffer.readLong();
     }
 
     public ByteBuf readerIndex(int index) {
