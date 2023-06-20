@@ -23,7 +23,7 @@ public abstract class PacketRegistry {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
 
         if (packets.containsKey(id)) {
-            BetaPackets.getPlatform().getLogger().warning("Packet " + id + "already registered in " + getClass().getSimpleName() + ", overwriting current packet!");
+            BetaPackets.getPlatform().getLogging().warning("Packet " + id + "already registered in " + getClass().getSimpleName() + ", overwriting current packet!");
         }
         packets.put(id, packet);
     }
@@ -32,7 +32,7 @@ public abstract class PacketRegistry {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
 
         if (!packets.containsKey(id)) {
-            BetaPackets.getPlatform().getLogger().severe("Packet " + id + " doesn't exist, ignoring redirect to " + newId + "!");
+            BetaPackets.getPlatform().getLogging().severe("Packet " + id + " doesn't exist, ignoring redirect to " + newId + "!");
             return;
         }
         packets.put(newId, packets.get(id));

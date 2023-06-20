@@ -6,14 +6,14 @@ import java.util.logging.Logger;
 
 public interface BetaPacketsPlatform {
 
-    default void onLoad() {
+    default void loadPlatform() {
         BetaPackets.init(this);
 
-        final Logger logger = getLogger();
+        final Logger logger = getLogging();
         logger.info("Injecting BetaPackets platform into " + getPlatformName());
     }
 
-    Logger getLogger();
+    Logger getLogging();
 
     String getPlatformName();
 }

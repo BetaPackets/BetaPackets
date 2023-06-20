@@ -31,23 +31,18 @@ public class PacketRegistryManager {
 
     public Packet createModel(final ProtocolCollection version, final NetworkState state, final NetworkSide side, final int packetId, final FriendlyByteBuf buf) {
         for (Map.Entry<ProtocolCollection, PacketRegistry> packetRegistryEntry : packetRegistries.entrySet()) {
-            if (packetRegistryEntry.getKey().isNewerThanOrEqualTo(version)) {
-                final PacketRegistry packetRegistry = packetRegistryEntry.getValue();
+            final PacketRegistry packetRegistry = packetRegistryEntry.getValue();
 
-                if (packetRegistry.getNetworkState() == state) {
-                    if (!packetRegistry.getPackets(side).containsKey(packetId)) {
-                        BetaPackets.getPlatform().getLogger().severe("Packet " + packetId + " doesn't exist in " + packetRegistry.getClass().getSimpleName() + "!");
-                        return null;
-                    }
-                    try {
-                        final Class<? extends Packet> clazz = packetRegistry.getPackets(side).get(packetId);
+            if (packetRegistryEntry.getKey().isOlderThan(version) || packetRegistry.getNetworkState() != state || !packetRegistry.getPackets(side).containsKey(packetId)) continue;
 
-                        return clazz.getConstructor(FriendlyByteBuf.class).newInstance(buf);
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                        BetaPackets.getPlatform().getLogger().severe("Couldn't create packet " + packetId + " in " + packetRegistry.getClass().getSimpleName() + "!");
-                        e.printStackTrace();
-                    }
-                }
+            try {
+                final Class<? extends Packet> clazz = packetRegistry.getPackets(side).get(packetId);
+
+                return clazz.getConstructor(FriendlyByteBuf.class).newInstance(buf);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                BetaPackets.getPlatform().getLogging().severe("Couldn't create packet " + packetId + " in " + packetRegistry.getClass().getSimpleName() + "!");
+                e.printStackTrace();
             }
         }
         return null;
