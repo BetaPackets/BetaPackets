@@ -16,4 +16,8 @@ public class BetaPackets {
     public static BetaPacketsPlatform getPlatform() {
         return platform;
     }
+
+    public static PacketRegistryManager getPacketRegistryManager() {
+        return packetRegistryManager;
+    }
 }

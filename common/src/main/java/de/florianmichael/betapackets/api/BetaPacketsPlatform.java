@@ -8,6 +8,7 @@ public interface BetaPacketsPlatform {
 
     default void onLoad() {
         BetaPackets.init(this);
+
         final Logger logger = getLogger();
         logger.info("Injecting BetaPackets platform into " + getPlatformName());
     }
