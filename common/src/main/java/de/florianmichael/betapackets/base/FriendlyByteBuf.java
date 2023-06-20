@@ -79,6 +79,28 @@ public class FriendlyByteBuf {
         return buffer.readShort();
     }
 
+    public int readableBytes() {
+        return buffer.readableBytes();
+    }
+
+    public byte[] readByteArray() {
+        return readByteArray(readableBytes());
+    }
+
+    public ByteBuf readBytes(byte[] bytes) {
+        return buffer.readBytes(bytes);
+    }
+
+    public byte[] readByteArray(int maxSize) {
+        int i = this.readVarInt();
+        if (i > maxSize) {
+            throw new DecoderException("ByteArray with size " + i + " is bigger than allowed " + maxSize);
+        }
+        byte[] bs = new byte[i];
+        this.readBytes(bs);
+        return bs;
+    }
+
     public ByteBuf unwrapped() {
         return buffer;
     }
