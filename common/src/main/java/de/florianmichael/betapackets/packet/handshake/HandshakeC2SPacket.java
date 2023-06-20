@@ -31,6 +31,22 @@ public class HandshakeC2SPacket extends Packet {
         // C -> S only, not implemented
     }
 
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public short getPort() {
+        return port;
+    }
+
+    public NetworkState getState() {
+        return state;
+    }
+
     @Override
     public String toString() {
         return "HandshakeC2SPacket{" +

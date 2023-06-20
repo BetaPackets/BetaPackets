@@ -1,5 +1,6 @@
 package de.florianmichael.betapackets.netty.element;
 
+import de.florianmichael.betapackets.api.UserConnection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
@@ -7,8 +8,17 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import java.util.List;
 
 public class BetaPacketsCodec extends MessageToMessageCodec<ByteBuf, ByteBuf> {
-    private final BetaPacketsDecoder decoder = new BetaPacketsDecoder();
-    private final BetaPacketsEncoder encoder = new BetaPacketsEncoder();
+    private final BetaPacketsDecoder decoder;
+    private final BetaPacketsEncoder encoder;
+
+    private final UserConnection userConnection;
+
+    public BetaPacketsCodec(UserConnection userConnection) {
+        this.decoder = new BetaPacketsDecoder(userConnection);
+        this.encoder = new BetaPacketsEncoder(userConnection);
+
+        this.userConnection = userConnection;
+    }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
@@ -20,8 +30,12 @@ public class BetaPacketsCodec extends MessageToMessageCodec<ByteBuf, ByteBuf> {
         decoder.decode(ctx, msg, out);
     }
 
+    public UserConnection getUserConnection() {
+        return userConnection;
+    }
+
     @Override
     public boolean isSharable() {
-        return true;
+        return this.userConnection != null;
     }
 }

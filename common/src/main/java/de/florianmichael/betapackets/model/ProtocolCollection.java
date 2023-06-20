@@ -71,6 +71,15 @@ public enum ProtocolCollection {
         return protocolName;
     }
 
+    public static ProtocolCollection fromProtocolId(final int protocolId) {
+        for (ProtocolCollection protocol : ProtocolCollection.values()) {
+            if (protocol.getProtocolId() == protocolId) {
+                return protocol;
+            }
+        }
+        return null;
+    }
+
     public boolean isOlderThan(final ProtocolCollection other) {
         return this.ordinal() < other.ordinal();
     }
