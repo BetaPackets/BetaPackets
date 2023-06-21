@@ -46,6 +46,14 @@ public class MCByteBuf {
         this.buffer = buffer;
     }
 
+    public float readFloat() {
+        return buffer.readFloat();
+    }
+
+    public void writeFloat(final float input) {
+        buffer.writeFloat(input);
+    }
+
     public int readVarInt() {
         byte b;
         int i = 0;

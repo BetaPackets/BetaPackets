@@ -36,5 +36,7 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x02, ChatMessageS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x03, TimeUpdateS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x04, EntityEquipmentS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x05, SpawnPositionS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x06, UpdateHealthS2CPacket.class);
     }
 }
