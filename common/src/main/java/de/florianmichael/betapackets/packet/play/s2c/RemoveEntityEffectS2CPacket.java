@@ -27,7 +27,7 @@ public class RemoveEntityEffectS2CPacket extends EntityS2CPacket {
     public RemoveEntityEffectS2CPacket(FunctionalByteBuf transformer) {
         super(transformer);
 
-        this.entityEffect = transformer.getUserConnection().getCurrentRegistry().getPotionEffectType().byId(transformer.readByte());
+        this.entityEffect = transformer.getUserConnection().getCurrentRegistry().getPotionEffectType().getByIndex(transformer.readByte());
     }
 
     public RemoveEntityEffectS2CPacket(int entityId, IPotionEffectType entityEffect) {
@@ -40,7 +40,7 @@ public class RemoveEntityEffectS2CPacket extends EntityS2CPacket {
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(entityEffect.getId());
+        buf.writeByte(entityEffect.getIndex());
     }
 
     @Override

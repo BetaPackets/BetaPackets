@@ -96,7 +96,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     public List<Metadata> readMetadata(final IMetadataType metadataType) {
         final List<Metadata> list = new ArrayList<>();
         for (int i = readByte(); i != Byte.MAX_VALUE; i = readByte()) {
-            list.add(new Metadata(i & 31, metadataType.byIndex((i & 224) >> 5), this));
+            list.add(new Metadata(i & 31, metadataType.getByIndex((i & 224) >> 5), this));
         }
         return list;
     }

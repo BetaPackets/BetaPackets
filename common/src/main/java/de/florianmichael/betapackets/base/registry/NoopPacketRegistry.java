@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.base.registry;
 
+import de.florianmichael.betapackets.base.registry.model.IGameStateType;
 import de.florianmichael.betapackets.base.registry.model.IParticleType;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
@@ -40,6 +41,11 @@ public abstract class NoopPacketRegistry extends PacketRegistry {
 
     @Override
     public IParticleType getParticleType() {
+        return null;
+    }
+
+    @Override
+    public IGameStateType getGameStateType() {
         return null;
     }
 }
