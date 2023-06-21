@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model.metadata;
 
-public enum Difficulty {
+import de.florianmichael.betapackets.base.MCByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-    public static Difficulty byId(final int id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == id) return value;
-        }
-        return null;
-    }
+public interface IMetadataType {
+
+    Function<MCByteBuf, Object> getReader();
+    BiConsumer<MCByteBuf, Object> getWriter();
+
+    IMetadataType byIndex(final int index);
+    int getIndex();
 }

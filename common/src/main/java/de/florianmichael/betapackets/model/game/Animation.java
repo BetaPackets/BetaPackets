@@ -17,15 +17,17 @@
 
 package de.florianmichael.betapackets.model.game;
 
-public enum Difficulty {
+public enum Animation {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    SWING_ARM,
+    TAKE_DAMAGE,
+    LEAVE_BED,
+    EAT_FOOD,
+    CRITICAL_EFFECT,
+    MAGIC_CRITICAL_EFFECT;
 
-    public static Difficulty byId(final int id) {
-        for (Difficulty value : values()) {
+    public static Animation byId(final int id) {
+        for (Animation value : values()) {
             if (value.ordinal() == id) return value;
         }
         return null;

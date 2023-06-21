@@ -15,32 +15,34 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.model.metadata;
 
 import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.chat.ChatPosition;
 
-public class ChatMessageS2CPacket extends Packet {
+public class Metadata {
 
-    public String jsonData;
-    public ChatPosition position;
+    public int index;
+    public IMetadataType metadataType;
+    public Object value;
 
-    public ChatMessageS2CPacket(final PacketTransformer transformer) {
-        this(
-                transformer.readString(32767),
-                ChatPosition.byId(transformer.readByte())
-        );
+    public Metadata(int index, IMetadataType metadataType, PacketTransformer transformer) {
+        this.index = index;
+        this.metadataType = metadataType;
+        this.value = metadataType.getReader().apply(transformer);
     }
 
-    public ChatMessageS2CPacket(final String jsonData, final ChatPosition position) {
-        this.jsonData = jsonData;
-        this.position = position;
+    public Metadata(int index, IMetadataType metadataType, Object value) {
+        this.index = index;
+        this.metadataType = metadataType;
+        this.value = value;
     }
 
     @Override
-    public void write(PacketTransformer buf) {
-        buf.writeString(this.jsonData);
-        buf.writeByte(this.position.ordinal());
+    public String toString() {
+        return "Metadata{" +
+                "index=" + index +
+                ", metadataType=" + metadataType +
+                ", value=" + value +
+                '}';
     }
 }

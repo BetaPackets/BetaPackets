@@ -19,28 +19,33 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.chat.ChatPosition;
+import de.florianmichael.betapackets.model.world.BlockPos;
 
-public class ChatMessageS2CPacket extends Packet {
+public class UseBedS2CPacket extends Packet {
 
-    public String jsonData;
-    public ChatPosition position;
+    public int entityId;
+    public BlockPos position;
 
-    public ChatMessageS2CPacket(final PacketTransformer transformer) {
-        this(
-                transformer.readString(32767),
-                ChatPosition.byId(transformer.readByte())
-        );
+    public UseBedS2CPacket(final PacketTransformer transformer) {
+        this(transformer.readInt(), BlockPos.fromLong(transformer.readLong()));
     }
 
-    public ChatMessageS2CPacket(final String jsonData, final ChatPosition position) {
-        this.jsonData = jsonData;
+    public UseBedS2CPacket(int entityId, BlockPos position) {
+        this.entityId = entityId;
         this.position = position;
     }
 
     @Override
-    public void write(PacketTransformer buf) {
-        buf.writeString(this.jsonData);
-        buf.writeByte(this.position.ordinal());
+    public void write(PacketTransformer buf) throws Exception {
+        buf.writeInt(entityId);
+        buf.writeLong(position.toLong());
+    }
+
+    @Override
+    public String toString() {
+        return "UseBedS2CPacket{" +
+                "entityId=" + entityId +
+                ", position=" + position +
+                '}';
     }
 }

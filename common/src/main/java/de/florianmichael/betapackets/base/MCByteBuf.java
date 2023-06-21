@@ -18,6 +18,8 @@
 package de.florianmichael.betapackets.base;
 
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.metadata.IMetadataType;
+import de.florianmichael.betapackets.model.metadata.Metadata;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -31,6 +33,8 @@ import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MCByteBuf {
 
@@ -54,6 +58,10 @@ public class MCByteBuf {
         buffer.writeFloat(input);
     }
 
+    public void writeDouble(final double input) {
+        buffer.writeDouble(input);
+    }
+
     public int readVarInt() {
         byte b;
         int i = 0;
@@ -67,38 +75,73 @@ public class MCByteBuf {
         return i;
     }
 
-    public ItemStackV1_3 readItemStack() throws IOException {
-        int id = this.readShort();
+    public ItemStackV1_3 readItemStack() {
+        try {
+            int id = this.readShort();
 
-        if (id >= 0) {
-            final int count = this.readByte();
-            final int damage = this.readShort();
+            if (id >= 0) {
+                final int count = this.readByte();
+                final int damage = this.readShort();
 
-            return new ItemStackV1_3(id, count, damage, this.readCompoundTag());
+                return new ItemStackV1_3(id, count, damage, this.readCompoundTag());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return null;
     }
 
-    public CompoundTag readCompoundTag()  throws IOException {
-        final DataInput dataInput = new DataInputStream(new ByteBufInputStream(buffer));
-        return NbtIO.JAVA.getReader().readCompound(dataInput, NbtReadTracker.unlimited());
+    public CompoundTag readCompoundTag() {
+        try {
+            final DataInput dataInput = new DataInputStream(new ByteBufInputStream(buffer));
+            return NbtIO.JAVA.getReader().readCompound(dataInput, NbtReadTracker.unlimited());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void writeItemStack(ItemStackV1_3 stack) throws IOException {
-        if (stack == null) {
-            this.writeShort(-1);
-        } else {
-            this.writeShort(stack.itemId);
-            this.writeByte(stack.count);
-            this.writeShort(stack.damage);
-            this.writeCompoundTag(stack.tag);
+    public void writeItemStack(ItemStackV1_3 stack) {
+        try {
+            if (stack == null) {
+                this.writeShort(-1);
+            } else {
+                this.writeShort(stack.itemId);
+                this.writeByte(stack.count);
+                this.writeShort(stack.damage);
+                this.writeCompoundTag(stack.tag);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void writeCompoundTag(final CompoundTag tag) throws IOException {
-        final DataOutput dataOutput = new DataOutputStream(new ByteBufOutputStream(buffer));
-        NbtIO.JAVA.getWriter().write(dataOutput, tag);
+    public void writeCompoundTag(final CompoundTag tag) {
+        try {
+            final DataOutput dataOutput = new DataOutputStream(new ByteBufOutputStream(buffer));
+            NbtIO.JAVA.getWriter().write(dataOutput, tag);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Metadata> readMetadata(final IMetadataType metadataType) {
+        final List<Metadata> list = new ArrayList<>();
+        for (int i = readByte(); i != Byte.MAX_VALUE; i = readByte()) {
+            list.add(new Metadata(i & 31, metadataType.byIndex((i & 224) >> 5), this));
+        }
+        return list;
+    }
+
+    public void writeMetadata(final List<Metadata> metadata) {
+        for (Metadata metadatum : metadata) {
+            this.writeByte((metadatum.metadataType.getIndex() << 5 | metadatum.index & 31));
+            metadatum.metadataType.getWriter().accept(this, metadatum);
+        }
+    }
+
+    public double readDouble() {
+        return buffer.readDouble();
     }
 
     public String readString() {

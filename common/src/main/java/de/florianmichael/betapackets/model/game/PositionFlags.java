@@ -17,17 +17,38 @@
 
 package de.florianmichael.betapackets.model.game;
 
-public enum Difficulty {
+import java.util.EnumSet;
+import java.util.Set;
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+public enum PositionFlags {
 
-    public static Difficulty byId(final int id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == id) return value;
+    X,
+    Y,
+    Z,
+    Y_ROT,
+    X_ROT;
+
+    private int getId() {
+        return 1 << this.ordinal();
+    }
+
+    private boolean isSameID(int inputId) {
+        return (inputId & this.getId()) == this.getId();
+    }
+
+    public static Set<PositionFlags> getFlags(int flags) {
+        final Set<PositionFlags> set = EnumSet.noneOf(PositionFlags.class);
+        for (PositionFlags positionFlag : values()) {
+            if (positionFlag.isSameID(flags)) set.add(positionFlag);
         }
-        return null;
+        return set;
+    }
+
+    public static int merge(final Set<PositionFlags> flags) {
+        int i = 0;
+        for (PositionFlags positionFlag : flags) {
+            i |= positionFlag.getId();
+        }
+        return i;
     }
 }

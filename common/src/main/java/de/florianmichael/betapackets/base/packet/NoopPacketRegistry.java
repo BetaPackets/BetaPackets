@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.base.packet;
 
-public enum Difficulty {
+import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.metadata.IMetadataType;
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+public abstract class NoopPacketRegistry extends PacketRegistry {
 
-    public static Difficulty byId(final int id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == id) return value;
-        }
+    public NoopPacketRegistry(NetworkState networkState) {
+        super(networkState);
+    }
+
+    @Override
+    public IMetadataType getMetadataType() {
         return null;
     }
 }

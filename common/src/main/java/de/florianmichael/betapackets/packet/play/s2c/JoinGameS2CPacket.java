@@ -43,7 +43,7 @@ public class JoinGameS2CPacket extends Packet {
 
         this.gameMode = GameMode.byId(mask);
         this.dimension = transformer.readByte();
-        this.difficulty = Difficulty.values()[transformer.readUnsignedByte()];
+        this.difficulty = Difficulty.byId(transformer.readUnsignedByte());
         this.maxPlayers = transformer.readUnsignedByte();
         this.levelType = LevelType.byType(transformer.readString(16));
         if (this.levelType == null) {

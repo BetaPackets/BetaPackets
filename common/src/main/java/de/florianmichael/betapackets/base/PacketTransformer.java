@@ -19,7 +19,10 @@ package de.florianmichael.betapackets.base;
 
 import de.florianmichael.betapackets.api.UserConnection;
 import de.florianmichael.betapackets.model.ProtocolCollection;
+import de.florianmichael.betapackets.model.metadata.Metadata;
 import io.netty.buffer.ByteBuf;
+
+import java.util.List;
 
 public class PacketTransformer extends MCByteBuf {
 
@@ -33,6 +36,11 @@ public class PacketTransformer extends MCByteBuf {
     public PacketTransformer(ByteBuf buffer, final UserConnection userConnection) {
         super(buffer);
         this.userConnection = userConnection;
+    }
+
+
+    public List<Metadata> readMetadata() {
+        return readMetadata(userConnection.getCurrentRegistry().getMetadataType());
     }
 
     public UserConnection getUserConnection() {

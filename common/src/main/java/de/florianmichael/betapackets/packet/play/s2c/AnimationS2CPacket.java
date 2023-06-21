@@ -19,28 +19,25 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.chat.ChatPosition;
+import de.florianmichael.betapackets.model.game.Animation;
 
-public class ChatMessageS2CPacket extends Packet {
+public class AnimationS2CPacket extends Packet {
 
-    public String jsonData;
-    public ChatPosition position;
+    public int entityId;
+    public Animation type;
 
-    public ChatMessageS2CPacket(final PacketTransformer transformer) {
-        this(
-                transformer.readString(32767),
-                ChatPosition.byId(transformer.readByte())
-        );
+    public AnimationS2CPacket(final PacketTransformer transformer) {
+        this(transformer.readVarInt(), transformer.readUnsignedByte());
     }
 
-    public ChatMessageS2CPacket(final String jsonData, final ChatPosition position) {
-        this.jsonData = jsonData;
-        this.position = position;
+    public AnimationS2CPacket(int entityId, int type) {
+        this.entityId = entityId;
+        this.type = Animation.byId(type);
     }
 
     @Override
-    public void write(PacketTransformer buf) {
-        buf.writeString(this.jsonData);
-        buf.writeByte(this.position.ordinal());
+    public void write(PacketTransformer buf) throws Exception {
+        buf.writeVarInt(entityId);
+        buf.writeByte(type.ordinal());
     }
 }

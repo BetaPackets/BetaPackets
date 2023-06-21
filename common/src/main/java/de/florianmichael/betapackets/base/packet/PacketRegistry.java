@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.model.NetworkSide;
 import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.metadata.IMetadataType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ public abstract class PacketRegistry {
     }
 
     public abstract void init();
+    public abstract IMetadataType getMetadataType();
 
     public void registerPacket(final NetworkSide side, final int id, final Class<? extends Packet> packet) {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);

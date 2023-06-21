@@ -15,19 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.packet.play.s2c;
 
-public enum Difficulty {
+import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.packet.Packet;
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+public class HeldItemChangeS2CPacket extends Packet {
 
-    public static Difficulty byId(final int id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == id) return value;
-        }
-        return null;
+    public byte slot;
+
+    public HeldItemChangeS2CPacket(final PacketTransformer transformer) {
+        this(transformer.readByte());
+    }
+
+    public HeldItemChangeS2CPacket(byte slot) {
+        this.slot = slot;
+    }
+
+    @Override
+    public void write(PacketTransformer buf) throws Exception {
+        buf.writeByte(slot);
+    }
+
+    @Override
+    public String toString() {
+        return "HeldItemChangeS2CPacket{" +
+                "slot=" + slot +
+                '}';
     }
 }

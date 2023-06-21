@@ -15,19 +15,17 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model.vec;
 
-public enum Difficulty {
+public class Rotations {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    public float x;
+    public float y;
+    public float z;
 
-    public static Difficulty byId(final int id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == id) return value;
-        }
-        return null;
+    public Rotations(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 }

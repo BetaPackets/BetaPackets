@@ -25,4 +25,11 @@ public enum ChatPosition {
     public boolean isChatBox() {
         return this == CHAT || this == SYSTEM_MESSAGE;
     }
+
+    public static ChatPosition byId(final int id) {
+        for (ChatPosition value : values()) {
+            if (value.ordinal() == id) return value;
+        }
+        return null;
+    }
 }
