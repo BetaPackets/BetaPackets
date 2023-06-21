@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.registry.v1_8;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
-import de.florianmichael.betapackets.registry.model.IMetadataType;
+import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 import de.florianmichael.betapackets.model.position.Rotations;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
@@ -74,7 +74,7 @@ public enum MetadataType1_8 implements IMetadataType {
     }
 
     @Override
-    public IMetadataType byIndex(int index) {
+    public IMetadataType getByIndex(int index) {
         for (MetadataType1_8 value : values()) {
             if (value.ordinal() == index) return value;
         }

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.EntityStatusOpCodes;
 
 public class EntityStatusS2CPacket extends EntityS2CPacket {

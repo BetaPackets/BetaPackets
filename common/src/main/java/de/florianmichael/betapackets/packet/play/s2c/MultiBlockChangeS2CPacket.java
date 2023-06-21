@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.position.BlockChunkRecord1_8;
 
 import java.util.ArrayList;

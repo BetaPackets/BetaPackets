@@ -17,42 +17,38 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.registry.model.IGameStateType;
 
-public class UpdateHealthS2CPacket extends Packet {
+public class ChangeGameStateS2CPacket extends Packet {
 
-    public float health;
-    public int foodLevel;
-    public float saturationLevel;
+    public IGameStateType reason;
+    public float value;
 
-    public UpdateHealthS2CPacket(final FunctionalByteBuf transformer) {
+    public ChangeGameStateS2CPacket(final FunctionalByteBuf buf) {
         this(
-                transformer.readFloat(),
-                transformer.readVarInt(),
-                transformer.readFloat()
+                buf.getUserConnection().getCurrentRegistry().getGameStateType().getByIndex(buf.readUnsignedByte()),
+                buf.readFloat()
         );
     }
 
-    public UpdateHealthS2CPacket(float health, int foodLevel, float saturationLevel) {
-        this.health = health;
-        this.foodLevel = foodLevel;
-        this.saturationLevel = saturationLevel;
+    public ChangeGameStateS2CPacket(IGameStateType reason, float value) {
+        this.reason = reason;
+        this.value = value;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeFloat(health);
-        buf.writeVarInt(foodLevel);
-        buf.writeFloat(saturationLevel);
+        buf.writeByte(reason.getIndex());
+        buf.writeFloat(value);
     }
 
     @Override
     public String toString() {
-        return "UpdateHealthS2CPacket{" +
-                "health=" + health +
-                ", foodLevel=" + foodLevel +
-                ", saturationLevel=" + saturationLevel +
+        return "ChangeGameStateS2CPacket{" +
+                "reason=" + reason +
+                ", value=" + value +
                 '}';
     }
 }

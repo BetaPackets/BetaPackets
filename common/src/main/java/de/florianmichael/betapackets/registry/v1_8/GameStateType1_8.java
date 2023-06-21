@@ -15,31 +15,35 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.status.s2c;
+package de.florianmichael.betapackets.registry.v1_8;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.registry.model.IGameStateType;
 
-public class PongResponseC2SPacket extends Packet {
-    public long payload;
+public enum GameStateType1_8 implements IGameStateType {
 
-    public PongResponseC2SPacket(final FunctionalByteBuf buf) {
-        this(buf.readLong());
-    }
+    INVALID_BED,
+    END_RAINING,
+    BEGIN_RAINING,
+    CHANGE_GAMEMODE,
+    ENTER_CREDITS,
+    DEMO_MESSAGE,
+    ARROW_HITTING_PLAYER,
+    FADE_VALUE,
+    FADE_TIME,
+    PLAY_MOB_APPEARANCE_EFFECT_AND_SOUND,
 
-    public PongResponseC2SPacket(long payload) {
-        this.payload = payload;
+    NONE;
+
+    @Override
+    public IGameStateType getByIndex(int index) {
+        for (GameStateType1_8 value : values()) {
+            if (value.getIndex() == index && value != NONE) return value;
+        }
+        return null;
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
-        buf.writeLong(payload);
-    }
-
-    @Override
-    public String toString() {
-        return "PongResponseC2SPacket{" +
-                "payload=" + payload +
-                '}';
+    public int getIndex() {
+        return ordinal();
     }
 }

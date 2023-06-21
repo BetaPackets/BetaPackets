@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets;
 
-import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 

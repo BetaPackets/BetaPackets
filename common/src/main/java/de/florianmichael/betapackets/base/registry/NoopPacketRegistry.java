@@ -15,31 +15,31 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.status.s2c;
+package de.florianmichael.betapackets.base.registry;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.registry.model.IParticleType;
+import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 
-public class PongResponseC2SPacket extends Packet {
-    public long payload;
+public abstract class NoopPacketRegistry extends PacketRegistry {
 
-    public PongResponseC2SPacket(final FunctionalByteBuf buf) {
-        this(buf.readLong());
-    }
-
-    public PongResponseC2SPacket(long payload) {
-        this.payload = payload;
+    public NoopPacketRegistry(NetworkState networkState) {
+        super(networkState);
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
-        buf.writeLong(payload);
+    public IMetadataType getMetadataType() {
+        return null;
     }
 
     @Override
-    public String toString() {
-        return "PongResponseC2SPacket{" +
-                "payload=" + payload +
-                '}';
+    public IPotionEffectType getPotionEffectType() {
+        return null;
+    }
+
+    @Override
+    public IParticleType getParticleType() {
+        return null;
     }
 }

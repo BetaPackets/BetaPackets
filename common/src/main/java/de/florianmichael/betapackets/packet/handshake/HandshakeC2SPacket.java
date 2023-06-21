@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.handshake;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.base.NetworkState;
 
 public class HandshakeC2SPacket extends Packet {

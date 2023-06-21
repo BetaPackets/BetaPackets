@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
 
 public class EntityEffectS2CPacket extends EntityS2CPacket {
 
@@ -30,7 +30,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     public EntityEffectS2CPacket(FunctionalByteBuf transformer) {
         super(transformer);
 
-        this.entityEffect = transformer.getUserConnection().getCurrentRegistry().getPotionEffectType().byId(transformer.readByte());
+        this.entityEffect = transformer.getUserConnection().getCurrentRegistry().getPotionEffectType().getByIndex(transformer.readByte());
         this.amplifier = transformer.readByte();
         this.duration = transformer.readVarInt();
         this.hideParticles = transformer.readByte();
@@ -49,7 +49,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(entityEffect.getId());
+        buf.writeByte(entityEffect.getIndex());
         buf.writeByte(amplifier);
         buf.writeVarInt(duration);
         buf.writeByte(hideParticles);

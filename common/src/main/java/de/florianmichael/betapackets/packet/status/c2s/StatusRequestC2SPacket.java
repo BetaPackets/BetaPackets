@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.status.c2s;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.Packet;
 
 public class StatusRequestC2SPacket extends Packet {
 

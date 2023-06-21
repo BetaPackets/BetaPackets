@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.registry;
 
-import de.florianmichael.betapackets.base.packet.NoopPacketRegistry;
+import de.florianmichael.betapackets.base.registry.NoopPacketRegistry;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.packet.handshake.HandshakeC2SPacket;

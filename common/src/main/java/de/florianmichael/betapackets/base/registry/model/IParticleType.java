@@ -15,31 +15,14 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.status.s2c;
+package de.florianmichael.betapackets.base.registry.model;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+public interface IParticleType {
 
-public class PongResponseC2SPacket extends Packet {
-    public long payload;
+    IParticleType getByIndex(final int index);
+    int getIndex();
 
-    public PongResponseC2SPacket(final FunctionalByteBuf buf) {
-        this(buf.readLong());
-    }
-
-    public PongResponseC2SPacket(long payload) {
-        this.payload = payload;
-    }
-
-    @Override
-    public void write(FunctionalByteBuf buf) {
-        buf.writeLong(payload);
-    }
-
-    @Override
-    public String toString() {
-        return "PongResponseC2SPacket{" +
-                "payload=" + payload +
-                '}';
-    }
+    String getName();
+    boolean shouldIgnoreRange();
+    int getArgumentCount();
 }

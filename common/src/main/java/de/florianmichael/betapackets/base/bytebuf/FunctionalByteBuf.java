@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base;
+package de.florianmichael.betapackets.base.bytebuf;
 
 import de.florianmichael.betapackets.api.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.PrimitiveByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
-import de.florianmichael.betapackets.registry.model.IMetadataType;
+import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 import de.florianmichael.betapackets.model.metadata.Metadata;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;

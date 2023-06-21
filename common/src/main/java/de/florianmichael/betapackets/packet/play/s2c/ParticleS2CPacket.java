@@ -17,14 +17,103 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.registry.model.IParticleType;
+
+import java.util.Arrays;
 
 public class ParticleS2CPacket extends Packet {
 
+    public IParticleType particleType;
+    public boolean longDistance;
 
+    public float x;
+    public float y;
+    public float z;
+
+    public float offsetX;
+    public float offsetY;
+    public float offsetZ;
+
+    public float particleData;
+    public int particleCount;
+
+    public int[] data;
+
+    public ParticleS2CPacket(final FunctionalByteBuf buf) {
+        this.particleType = buf.getUserConnection().getCurrentRegistry().getParticleType().getByIndex(buf.readInt());
+        if (this.particleType == null) {
+            this.particleType = buf.getUserConnection().getCurrentRegistry().getParticleType();
+        }
+        this.longDistance = buf.readBoolean();
+
+        this.x = buf.readFloat();
+        this.y = buf.readFloat();
+        this.z = buf.readFloat();
+
+        this.offsetX = buf.readFloat();
+        this.offsetY = buf.readFloat();
+        this.offsetZ = buf.readFloat();
+
+        this.particleData = buf.readFloat();
+        this.particleCount = buf.readInt();
+
+        this.data = new int[this.particleType.getArgumentCount()];
+        for (int i = 0; i < this.data.length; i++) {
+            this.data[i] = buf.readVarInt();
+        }
+    }
+
+    public ParticleS2CPacket(IParticleType particleType, boolean longDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int[] data) {
+        this.particleType = particleType;
+        this.longDistance = longDistance;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.offsetZ = offsetZ;
+        this.particleData = particleData;
+        this.particleCount = particleCount;
+        this.data = data;
+    }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeInt(this.particleType.getIndex());
+        buf.writeBoolean(this.longDistance);
+
+        buf.writeFloat(this.x);
+        buf.writeFloat(this.y);
+        buf.writeFloat(this.z);
+
+        buf.writeFloat(this.offsetX);
+        buf.writeFloat(this.offsetY);
+        buf.writeFloat(this.offsetZ);
+
+        buf.writeFloat(this.particleData);
+        buf.writeInt(this.particleCount);
+
+        for (int datum : this.data) {
+            buf.writeVarInt(datum);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ParticleS2CPacket{" +
+                "particleType=" + particleType +
+                ", longDistance=" + longDistance +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", offsetX=" + offsetX +
+                ", offsetY=" + offsetY +
+                ", offsetZ=" + offsetZ +
+                ", particleData=" + particleData +
+                ", particleCount=" + particleCount +
+                ", data=" + Arrays.toString(data) +
+                '}';
     }
 }

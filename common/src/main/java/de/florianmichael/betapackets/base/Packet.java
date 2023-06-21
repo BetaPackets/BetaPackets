@@ -15,25 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.packet;
+package de.florianmichael.betapackets.base;
 
-import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.betapackets.registry.model.IPotionEffectType;
-import de.florianmichael.betapackets.registry.model.IMetadataType;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public abstract class NoopPacketRegistry extends PacketRegistry {
+public abstract class Packet {
 
-    public NoopPacketRegistry(NetworkState networkState) {
-        super(networkState);
-    }
-
-    @Override
-    public IMetadataType getMetadataType() {
-        return null;
-    }
-
-    @Override
-    public IPotionEffectType getPotionEffectType() {
-        return null;
-    }
+    public abstract void write(final FunctionalByteBuf buf) throws Exception;
 }

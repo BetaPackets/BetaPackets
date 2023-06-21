@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.base;
 
-import de.florianmichael.betapackets.base.packet.PacketRegistry;
+import de.florianmichael.betapackets.base.registry.PacketRegistry;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.registry.BasePacketRegistry1_7;
 import de.florianmichael.betapackets.registry.v1_8.PacketRegistry1_8;

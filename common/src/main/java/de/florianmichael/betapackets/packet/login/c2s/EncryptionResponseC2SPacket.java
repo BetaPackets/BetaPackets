@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.login.c2s;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.Packet;
 
 import java.util.Arrays;
 

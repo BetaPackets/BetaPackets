@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.registry.v1_8;
 
-import de.florianmichael.betapackets.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
 
 public enum PotionEffectType1_8 implements IPotionEffectType {
     SPEED,
@@ -63,15 +63,15 @@ public enum PotionEffectType1_8 implements IPotionEffectType {
     }
 
     @Override
-    public IPotionEffectType byId(int id) {
+    public IPotionEffectType getByIndex(int id) {
         for (IPotionEffectType type : values()) {
-            if (type.getId() == id && type != NONE) return type;
+            if (type.getIndex() == id && type != NONE) return type;
         }
         return null;
     }
 
     @Override
-    public int getId() {
+    public int getIndex() {
         return ordinal();
     }
 }

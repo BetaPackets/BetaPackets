@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.registry.model;
+package de.florianmichael.betapackets.base.registry.model;
 
 public interface IPotionEffectType {
 
-    IPotionEffectType byId(final int id);
-    int getId();
+    IPotionEffectType getByIndex(final int index);
+    int getIndex();
 }

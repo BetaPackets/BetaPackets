@@ -15,11 +15,18 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.packet;
+package de.florianmichael.betapackets.base.registry.model;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public abstract class Packet {
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-    public abstract void write(final FunctionalByteBuf buf) throws Exception;
+public interface IMetadataType {
+
+    IMetadataType getByIndex(final int index);
+    int getIndex();
+
+    Function<FunctionalByteBuf, Object> getReader();
+    BiConsumer<FunctionalByteBuf, Object> getWriter();
 }

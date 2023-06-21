@@ -15,18 +15,10 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.registry.model;
+package de.florianmichael.betapackets.base.registry.model;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
+public interface IGameStateType {
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-public interface IMetadataType {
-
-    Function<FunctionalByteBuf, Object> getReader();
-    BiConsumer<FunctionalByteBuf, Object> getWriter();
-
-    IMetadataType byIndex(final int index);
+    IGameStateType getByIndex(final int index);
     int getIndex();
 }

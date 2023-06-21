@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.model.metadata;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.registry.model.IMetadataType;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 
 public class Metadata {
 
