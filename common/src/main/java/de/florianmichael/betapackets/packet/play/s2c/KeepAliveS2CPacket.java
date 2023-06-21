@@ -15,35 +15,31 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.s2c;
+package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 
-public class SetCompressionS2CPacket extends Packet {
-    public int threshold;
+public class KeepAliveS2CPacket extends Packet {
+    public int keepAliveId;
 
-    public SetCompressionS2CPacket(final PacketTransformer buf) {
+    public KeepAliveS2CPacket(final PacketTransformer buf) {
         this(buf.readVarInt());
     }
 
-    public SetCompressionS2CPacket(int threshold) {
-        this.threshold = threshold;
-    }
-
-    public int getThreshold() {
-        return threshold;
+    public KeepAliveS2CPacket(int keepAliveId) {
+        this.keepAliveId = keepAliveId;
     }
 
     @Override
     public void write(PacketTransformer buf) {
-        buf.writeVarInt(threshold);
+        buf.writeVarInt(keepAliveId);
     }
 
     @Override
     public String toString() {
-        return "SetCompressionS2CPacket{" +
-                "threshold=" + threshold +
+        return "KeepAliveS2CPacket{" +
+                "keepAliveId=" + keepAliveId +
                 '}';
     }
 }

@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.base.packet;
 
 import de.florianmichael.betapackets.BetaPackets;
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.model.NetworkSide;
 import de.florianmichael.betapackets.model.NetworkState;
 
@@ -61,7 +61,7 @@ public abstract class PacketRegistry {
         return side == NetworkSide.CLIENTBOUND ? clientboundPackets : serverboundPackets;
     }
 
-    public Packet createModel(final NetworkSide side, final int packetId, final FriendlyByteBuf buf) {
+    public Packet createModel(final NetworkSide side, final int packetId, final PacketTransformer buf) {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
 
         if (!packets.containsKey(packetId)) return null;
@@ -69,7 +69,7 @@ public abstract class PacketRegistry {
         try {
             final Class<? extends Packet> clazz = packets.get(packetId);
 
-            return clazz.getConstructor(FriendlyByteBuf.class).newInstance(buf);
+            return clazz.getConstructor(PacketTransformer.class).newInstance(buf);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             BetaPackets.getPlatform().getLogging().severe("Couldn't create packet " + packetId + " in " + getClass().getSimpleName() + "!");
             e.printStackTrace();

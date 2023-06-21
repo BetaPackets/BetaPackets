@@ -15,35 +15,39 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.s2c;
+package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 
-public class SetCompressionS2CPacket extends Packet {
-    public int threshold;
+public class TimeUpdateS2CPacket extends Packet {
 
-    public SetCompressionS2CPacket(final PacketTransformer buf) {
-        this(buf.readVarInt());
+    public long worldAge;
+    public long timeOfDay;
+
+    public TimeUpdateS2CPacket(final PacketTransformer transformer) {
+        this(
+                transformer.readLong(),
+                transformer.readLong()
+        );
     }
 
-    public SetCompressionS2CPacket(int threshold) {
-        this.threshold = threshold;
-    }
-
-    public int getThreshold() {
-        return threshold;
+    public TimeUpdateS2CPacket(long worldAge, long timeOfDay) {
+        this.worldAge = worldAge;
+        this.timeOfDay = timeOfDay;
     }
 
     @Override
     public void write(PacketTransformer buf) {
-        buf.writeVarInt(threshold);
+        buf.writeLong(this.worldAge);
+        buf.writeLong(this.timeOfDay);
     }
 
     @Override
     public String toString() {
-        return "SetCompressionS2CPacket{" +
-                "threshold=" + threshold +
+        return "TimeUpdateS2CPacket{" +
+                "worldAge=" + worldAge +
+                ", timeOfDay=" + timeOfDay +
                 '}';
     }
 }

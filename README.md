@@ -36,6 +36,9 @@ BetaPackets.getPlatform().getEventProvider().subscribe(ClientboundPacketListener
 ## Supported versions
 - 1.8.x
 
+## Note
+BetaPackets uses for items and chat components [MCStructs](https://github.com/Lenni0451/MCStructs/tree/main)
+
 ## Contact
 If you encounter any issues, please report them on the
 [issue tracker](https://github.com/FlorianMichael/BetaPackets/issues).  

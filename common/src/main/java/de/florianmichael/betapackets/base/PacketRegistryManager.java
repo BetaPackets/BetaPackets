@@ -22,11 +22,13 @@ import de.florianmichael.betapackets.model.ProtocolCollection;
 import de.florianmichael.betapackets.packet.registry.BasePacketRegistry1_7;
 import de.florianmichael.betapackets.packet.registry.PacketRegistry1_8;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PacketRegistryManager {
-    private final Map<ProtocolCollection, PacketRegistry> packetRegistries = new HashMap<>();
+    private final Map<ProtocolCollection, List<PacketRegistry>> packetRegistries = new HashMap<>();
 
     public PacketRegistryManager() {
         // Handshake, Status and Login definition since v1.7.0
@@ -37,14 +39,14 @@ public class PacketRegistryManager {
         // Play packets since v1.7.0
         registerPacketRegistry(ProtocolCollection.R1_8, new PacketRegistry1_8());
 
-        packetRegistries.forEach((protocolCollection, packetRegistry) -> packetRegistry.init());
+        packetRegistries.forEach((protocolCollection, packetRegistry) -> packetRegistry.forEach(PacketRegistry::init));
     }
 
     public void registerPacketRegistry(final ProtocolCollection version, final PacketRegistry packetRegistry) {
-        packetRegistries.put(version, packetRegistry);
+        packetRegistries.computeIfAbsent(version, k -> new ArrayList<>()).add(packetRegistry);
     }
 
-    public Map<ProtocolCollection, PacketRegistry> getPacketRegistries() {
+    public Map<ProtocolCollection, List<PacketRegistry>> getPacketRegistries() {
         return packetRegistries;
     }
 }

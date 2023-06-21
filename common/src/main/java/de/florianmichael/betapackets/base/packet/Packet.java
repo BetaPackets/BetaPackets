@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.base.packet;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 
 public abstract class Packet {
 
-    public abstract void write(final FriendlyByteBuf buf);
+    public abstract void write(final PacketTransformer buf) throws Exception;
 }

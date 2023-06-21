@@ -15,35 +15,31 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.s2c;
+package de.florianmichael.betapackets.model.item;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.base.packet.Packet;
+import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
-public class SetCompressionS2CPacket extends Packet {
-    public int threshold;
+public class ItemStackV1_3 {
 
-    public SetCompressionS2CPacket(final PacketTransformer buf) {
-        this(buf.readVarInt());
-    }
+    public int itemId;
+    public int count;
+    public int damage;
+    public CompoundTag tag;
 
-    public SetCompressionS2CPacket(int threshold) {
-        this.threshold = threshold;
-    }
-
-    public int getThreshold() {
-        return threshold;
-    }
-
-    @Override
-    public void write(PacketTransformer buf) {
-        buf.writeVarInt(threshold);
+    public ItemStackV1_3(int itemId, int count, int damage, CompoundTag tag) {
+        this.itemId = itemId;
+        this.count = count;
+        this.damage = damage;
+        this.tag = tag;
     }
 
     @Override
     public String toString() {
-        return "SetCompressionS2CPacket{" +
-                "threshold=" + threshold +
+        return "ItemStackV1_3{" +
+                "itemId=" + itemId +
+                ", count=" + count +
+                ", damage=" + damage +
+                ", tag='" + tag + '\'' +
                 '}';
     }
 }

@@ -15,31 +15,38 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.c2s;
+package de.florianmichael.betapackets.model.game;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.base.packet.Packet;
+public enum LevelType {
 
-public class LoginStartC2SPacket extends Packet {
-    public final String name;
+    DEFAULT,
+    FLAT,
+    LARGE_BIOMES,
+    AMPLIFIED,
+    CUSTOMIZED,
+    DEBUG_WORLD,
+    DEFAULT_1_1;
 
-    public LoginStartC2SPacket(final PacketTransformer buf) {
-        this(buf.readString(16));
+    private String name;
+
+    LevelType() {
+        this.name = name().toLowerCase();
+        if (this.name.equals("large_biomes")) {
+            this.name = "largeBiomes";
+        }
+        if (this.name.equals("debug_world")) {
+            this.name = "debug_all_block_states";
+        }
     }
 
-    public LoginStartC2SPacket(String name) {
-        this.name = name;
+    public static LevelType byType(final String levelType) {
+        for (LevelType value : values()) {
+            if (value.getName().equals(levelType)) return value;
+        }
+        return null;
     }
 
-    @Override
-    public void write(PacketTransformer buf) {
-        buf.writeString(name);
-    }
-
-    @Override
-    public String toString() {
-        return "LoginStartC2SPacket{" +
-                "name='" + name + '\'' +
-                '}';
+    public String getName() {
+        return name;
     }
 }

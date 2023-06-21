@@ -17,23 +17,32 @@
 
 package de.florianmichael.betapackets.base;
 
+import de.florianmichael.betapackets.model.item.ItemStackV1_3;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
+import io.netty.handler.codec.EncoderException;
+import net.lenni0451.mcstructs.nbt.io.NbtIO;
+import net.lenni0451.mcstructs.nbt.io.NbtReadTracker;
+import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-public class FriendlyByteBuf {
+public class MCByteBuf {
+
     public final static short DEFAULT_MAX_STRING_LENGTH = Short.MAX_VALUE;
 
     private final ByteBuf buffer;
 
-    public FriendlyByteBuf() {
+    public MCByteBuf() {
         this(Unpooled.buffer());
     }
 
-    public FriendlyByteBuf(final ByteBuf buffer) {
+    public MCByteBuf(final ByteBuf buffer) {
         this.buffer = buffer;
     }
 
@@ -48,6 +57,40 @@ public class FriendlyByteBuf {
             throw new RuntimeException("VarInt too big");
         } while ((b & 0x80) == 128);
         return i;
+    }
+
+    public ItemStackV1_3 readItemStack() throws IOException {
+        int id = this.readShort();
+
+        if (id >= 0) {
+            final int count = this.readByte();
+            final int damage = this.readShort();
+
+            return new ItemStackV1_3(id, count, damage, this.readCompoundTag());
+        }
+
+        return null;
+    }
+
+    public CompoundTag readCompoundTag()  throws IOException {
+        final DataInput dataInput = new DataInputStream(new ByteBufInputStream(buffer));
+        return NbtIO.JAVA.getReader().readCompound(dataInput, NbtReadTracker.unlimited());
+    }
+
+    public void writeItemStack(ItemStackV1_3 stack) throws IOException {
+        if (stack == null) {
+            this.writeShort(-1);
+        } else {
+            this.writeShort(stack.itemId);
+            this.writeByte(stack.count);
+            this.writeShort(stack.damage);
+            this.writeCompoundTag(stack.tag);
+        }
+    }
+
+    public void writeCompoundTag(final CompoundTag tag) throws IOException {
+        final DataOutput dataOutput = new DataOutputStream(new ByteBufOutputStream(buffer));
+        NbtIO.JAVA.getWriter().write(dataOutput, tag);
     }
 
     public String readString() {
@@ -96,6 +139,10 @@ public class FriendlyByteBuf {
         return buffer.toString(index, length, charset);
     }
 
+    public boolean readBoolean() {
+        return buffer.readBoolean();
+    }
+
     public short readShort() {
         return buffer.readShort();
     }
@@ -106,6 +153,14 @@ public class FriendlyByteBuf {
 
     public byte[] readByteArray() {
         return readByteArray(readableBytes());
+    }
+
+    public int readInt() {
+        return buffer.readInt();
+    }
+
+    public short readUnsignedByte() {
+        return buffer.readUnsignedByte();
     }
 
     public ByteBuf readBytes(byte[] bytes) {
@@ -120,6 +175,56 @@ public class FriendlyByteBuf {
         byte[] bs = new byte[i];
         this.readBytes(bs);
         return bs;
+    }
+
+    public void writeString(String string) {
+        byte[] asBytes = string.getBytes(StandardCharsets.UTF_8);
+
+        if (asBytes.length > 32767) {
+            throw new EncoderException("String too big (was " + string.length() + " bytes encoded, max " + 32767 + ")");
+        }
+
+        this.writeVarInt(asBytes.length);
+        this.writeBytes(asBytes);
+    }
+
+    public void writeVarInt(int input) {
+        while ((input & -128) != 0)
+        {
+            this.writeByte(input & 127 | 128);
+            input >>>= 7;
+        }
+
+        this.writeByte(input);
+    }
+
+    public void writeByteArray(byte[] array) {
+        this.writeVarInt(array.length);
+        this.writeBytes(array);
+    }
+
+    public void writeByte(final int input) {
+        buffer.writeByte(input);
+    }
+
+    public void writeBytes(final byte[] input) {
+        buffer.writeBytes(input);
+    }
+
+    public void writeShort(final int input) {
+        buffer.writeShort(input);
+    }
+
+    public void writeLong(final long input) {
+        buffer.writeLong(input);
+    }
+
+    public void writeBoolean(final boolean input) {
+        buffer.writeBoolean(input);
+    }
+
+    public void writeInt(final int input) {
+        buffer.writeInt(input);
     }
 
     public ByteBuf unwrapped() {

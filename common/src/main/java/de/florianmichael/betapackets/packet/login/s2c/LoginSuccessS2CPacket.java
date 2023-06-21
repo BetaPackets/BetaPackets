@@ -17,16 +17,16 @@
 
 package de.florianmichael.betapackets.packet.login.s2c;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 import java.util.UUID;
 
 public class LoginSuccessS2CPacket extends Packet {
-    private final UUID uuid;
-    private final String username;
+    public UUID uuid;
+    public String username;
 
-    public LoginSuccessS2CPacket(final FriendlyByteBuf buf) {
+    public LoginSuccessS2CPacket(final PacketTransformer buf) {
         this(
                 UUID.fromString(buf.readString(36)),
                 buf.readString(16)
@@ -38,17 +38,10 @@ public class LoginSuccessS2CPacket extends Packet {
         this.username = username;
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
     @Override
-    public void write(FriendlyByteBuf buf) {
-        // S -> C only, not implemented
+    public void write(PacketTransformer buf) {
+        buf.writeString(uuid.toString());
+        buf.writeString(username);
     }
 
     @Override

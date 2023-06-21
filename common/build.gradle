@@ -18,4 +18,5 @@ dependencies {
     compileOnly "com.google.code.gson:gson:2.10.1"
 
     implementation "com.github.FlorianMichael:DietrichEvents:1.3.7"
+    implementation "net.lenni0451.mcstructs:all:2.2.6"
 }

@@ -15,35 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.s2c;
+package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.chat.ChatPosition;
 
-public class SetCompressionS2CPacket extends Packet {
-    public int threshold;
+public class ChatMessageS2CPacket extends Packet {
 
-    public SetCompressionS2CPacket(final PacketTransformer buf) {
-        this(buf.readVarInt());
+    public String jsonData;
+    public ChatPosition position;
+
+    public ChatMessageS2CPacket(final PacketTransformer transformer) {
+        this(
+                transformer.readString(32767),
+                ChatPosition.values()[transformer.readByte()]
+        );
     }
 
-    public SetCompressionS2CPacket(int threshold) {
-        this.threshold = threshold;
-    }
-
-    public int getThreshold() {
-        return threshold;
+    public ChatMessageS2CPacket(final String jsonData, final ChatPosition position) {
+        this.jsonData = jsonData;
+        this.position = position;
     }
 
     @Override
     public void write(PacketTransformer buf) {
-        buf.writeVarInt(threshold);
-    }
-
-    @Override
-    public String toString() {
-        return "SetCompressionS2CPacket{" +
-                "threshold=" + threshold +
-                '}';
+        buf.writeString(this.jsonData);
+        buf.writeByte(this.position.ordinal());
     }
 }

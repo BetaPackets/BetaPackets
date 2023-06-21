@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.NetworkState;
 import de.florianmichael.betapackets.model.ProtocolCollection;
 import io.netty.channel.Channel;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -48,10 +49,13 @@ public class UserConnection {
     public void setState(NetworkState state) {
         this.state = state;
 
-        for (Map.Entry<ProtocolCollection, PacketRegistry> packetRegistryEntry : BetaPackets.getPacketRegistryManager().getPacketRegistries().entrySet()) {
-            if (packetRegistryEntry.getKey().isNewerThanOrEqualTo(this.protocolVersion) && packetRegistryEntry.getValue().getNetworkState() == state) {
-                this.currentRegistry = packetRegistryEntry.getValue();
-                break;
+        for (Map.Entry<ProtocolCollection, List<PacketRegistry>> listEntry : BetaPackets.getPacketRegistryManager().getPacketRegistries().entrySet()) {
+            if (listEntry.getKey().isNewerThanOrEqualTo(this.protocolVersion)) {
+                for (PacketRegistry packetRegistry : listEntry.getValue()) {
+                    if (packetRegistry.getNetworkState() == this.state) {
+                        this.currentRegistry = packetRegistry;
+                    }
+                }
             }
         }
     }

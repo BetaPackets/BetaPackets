@@ -15,31 +15,14 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.c2s;
+package de.florianmichael.betapackets.model.chat;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.base.packet.Packet;
+public enum ChatPosition {
+    CHAT,
+    SYSTEM_MESSAGE,
+    ABOVE_HOTBAR;
 
-public class LoginStartC2SPacket extends Packet {
-    public final String name;
-
-    public LoginStartC2SPacket(final PacketTransformer buf) {
-        this(buf.readString(16));
-    }
-
-    public LoginStartC2SPacket(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void write(PacketTransformer buf) {
-        buf.writeString(name);
-    }
-
-    @Override
-    public String toString() {
-        return "LoginStartC2SPacket{" +
-                "name='" + name + '\'' +
-                '}';
+    public boolean isChatBox() {
+        return this == CHAT || this == SYSTEM_MESSAGE;
     }
 }

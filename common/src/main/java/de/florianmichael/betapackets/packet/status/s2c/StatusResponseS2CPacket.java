@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.packet.status.s2c;
 
 import com.google.gson.*;
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.ping.PingResponse;
 import de.florianmichael.betapackets.model.ping.Player;
@@ -30,12 +30,12 @@ import java.util.UUID;
 public class StatusResponseS2CPacket extends Packet {
     private final static Gson GSON = new GsonBuilder().create();
 
-    private final PingResponse pingResponse;
+    public String rawPingResponse;
+    public PingResponse pingResponse;
 
-    public StatusResponseS2CPacket(final FriendlyByteBuf buf) {
-        final String data = buf.readString(32767);
-
-        final JsonObject jsonObject = GSON.fromJson(data, JsonObject.class);
+    public StatusResponseS2CPacket(final PacketTransformer buf) {
+        rawPingResponse = buf.readString(32767);
+        final JsonObject jsonObject = GSON.fromJson(rawPingResponse, JsonObject.class);
 
         Version version = null;
         if (jsonObject.has("version")) {
@@ -71,16 +71,13 @@ public class StatusResponseS2CPacket extends Packet {
         pingResponse = new PingResponse(version, players, description, favicon, enforcesSecureChat, previewsChat);
     }
 
-    public StatusResponseS2CPacket(PingResponse pingResponse) {
-        this.pingResponse = pingResponse;
-    }
-
-    public PingResponse getPingResponse() {
-        return pingResponse;
+    public StatusResponseS2CPacket(final String rawPingResponse) {
+        this.rawPingResponse = rawPingResponse;
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(PacketTransformer buf) {
+        buf.writeString(rawPingResponse);
     }
 
     @Override

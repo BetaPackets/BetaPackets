@@ -18,7 +18,9 @@
 package de.florianmichael.betapackets.packet.registry;
 
 import de.florianmichael.betapackets.base.packet.PacketRegistry;
+import de.florianmichael.betapackets.model.NetworkSide;
 import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.packet.play.s2c.*;
 
 public class PacketRegistry1_8 extends PacketRegistry {
 
@@ -28,6 +30,11 @@ public class PacketRegistry1_8 extends PacketRegistry {
 
     @Override
     public void init() {
-
+        // S -> C
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x00, KeepAliveS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, JoinGameS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x02, ChatMessageS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x03, TimeUpdateS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x04, EntityEquipmentS2CPacket.class);
     }
 }

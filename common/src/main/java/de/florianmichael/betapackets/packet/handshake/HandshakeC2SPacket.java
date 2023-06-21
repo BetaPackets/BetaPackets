@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.handshake;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.NetworkState;
 
@@ -27,7 +27,7 @@ public class HandshakeC2SPacket extends Packet {
     private final short port;
     private final NetworkState state;
 
-    public HandshakeC2SPacket(final FriendlyByteBuf buf) {
+    public HandshakeC2SPacket(final PacketTransformer buf) {
         this(
                 buf.readVarInt(),
                 buf.readString(255),
@@ -44,8 +44,11 @@ public class HandshakeC2SPacket extends Packet {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        // C -> S only, not implemented
+    public void write(PacketTransformer buf) {
+        buf.writeVarInt(protocolVersion);
+        buf.writeString(address);
+        buf.writeShort(port);
+        buf.writeVarInt(state.getId());
     }
 
     public int getProtocolVersion() {

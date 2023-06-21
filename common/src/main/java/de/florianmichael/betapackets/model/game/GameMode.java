@@ -15,31 +15,37 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.login.c2s;
+package de.florianmichael.betapackets.model.game;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.base.packet.Packet;
+public enum GameMode {
 
-public class LoginStartC2SPacket extends Packet {
-    public final String name;
+    NOT_SET,
+    SURVIVAL,
+    CREATIVE,
+    ADVENTURE,
+    SPECTATOR;
 
-    public LoginStartC2SPacket(final PacketTransformer buf) {
-        this(buf.readString(16));
+    private String name;
+
+    GameMode() {
+        this.name = name().toLowerCase();
+        if (this.name.equals("not_set")) {
+            this.name = "";
+        }
     }
 
-    public LoginStartC2SPacket(String name) {
-        this.name = name;
+    public int getId() {
+        return ordinal() - 1;
     }
 
-    @Override
-    public void write(PacketTransformer buf) {
-        buf.writeString(name);
+    public static GameMode byId(final int id) {
+        for (GameMode value : values()) {
+            if (value.getId() == id) return value;
+        }
+        return null;
     }
 
-    @Override
-    public String toString() {
-        return "LoginStartC2SPacket{" +
-                "name='" + name + '\'' +
-                '}';
+    public String getName() {
+        return name;
     }
 }

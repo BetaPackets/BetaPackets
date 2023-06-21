@@ -17,13 +17,13 @@
 
 package de.florianmichael.betapackets.packet.login.s2c;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class LoginDisconnectS2CPacket extends Packet {
-    private final String reason;
+    public String reason;
 
-    public LoginDisconnectS2CPacket(final FriendlyByteBuf buf) {
+    public LoginDisconnectS2CPacket(final PacketTransformer buf) {
         this(buf.readString(32767));
     }
 
@@ -31,13 +31,9 @@ public class LoginDisconnectS2CPacket extends Packet {
         this.reason = reason;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
     @Override
-    public void write(FriendlyByteBuf buf) {
-        // S -> C only, not implemented
+    public void write(PacketTransformer buf) {
+        buf.writeString(reason);
     }
 
     @Override

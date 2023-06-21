@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.netty.element;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.DebugMode;
 import de.florianmichael.betapackets.api.UserConnection;
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.event.ClientboundPacketListener;
 import de.florianmichael.betapackets.model.NetworkSide;
@@ -40,24 +40,22 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
-    private LoginSuccessS2CPacket handleLoginSuccess(final FriendlyByteBuf data) {
+    private LoginSuccessS2CPacket handleLoginSuccess(final PacketTransformer data) {
         final LoginSuccessS2CPacket loginSuccessS2CPacket = new LoginSuccessS2CPacket(data);
 
-        if (userConnection.getState() == NetworkState.LOGIN) {
-            userConnection.setState(NetworkState.PLAY);
-        }
-        userConnection.setPlayer(loginSuccessS2CPacket.getUuid());
+        userConnection.setState(NetworkState.PLAY);
+        userConnection.setPlayer(loginSuccessS2CPacket.uuid);
 
         return loginSuccessS2CPacket;
     }
 
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final FriendlyByteBuf data = new FriendlyByteBuf(msg.copy());
+        final PacketTransformer data = new PacketTransformer(msg.copy(), userConnection);
         final int packetId = data.readVarInt();
 
         final Packet model;
-        if (packetId == 0x02 /* S -> C, LOGIN_SUCCESS, LOGIN */) {
+        if (userConnection.getState() == NetworkState.LOGIN && packetId == 0x02 /* S -> C, LOGIN_SUCCESS, LOGIN */) {
             model = handleLoginSuccess(data);
         } else {
             model = userConnection.getCurrentRegistry().createModel(NetworkSide.CLIENTBOUND, packetId, data);

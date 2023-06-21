@@ -17,13 +17,13 @@
 
 package de.florianmichael.betapackets.packet.status.s2c;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class PongResponseC2SPacket extends Packet {
-    private final long payload;
+    public long payload;
 
-    public PongResponseC2SPacket(final FriendlyByteBuf buf) {
+    public PongResponseC2SPacket(final PacketTransformer buf) {
         this(buf.readLong());
     }
 
@@ -31,12 +31,9 @@ public class PongResponseC2SPacket extends Packet {
         this.payload = payload;
     }
 
-    public long getPayload() {
-        return payload;
-    }
-
     @Override
-    public void write(FriendlyByteBuf buf) {
+    public void write(PacketTransformer buf) {
+        buf.writeLong(payload);
     }
 
     @Override

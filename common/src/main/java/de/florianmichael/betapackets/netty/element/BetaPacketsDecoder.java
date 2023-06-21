@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.netty.element;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.DebugMode;
 import de.florianmichael.betapackets.api.UserConnection;
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.event.ServerboundPacketListener;
 import de.florianmichael.betapackets.model.NetworkSide;
@@ -41,18 +41,19 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
-    private HandshakeC2SPacket handleHandshake(final FriendlyByteBuf data) {
+    private HandshakeC2SPacket handleHandshake(final PacketTransformer data) {
         final HandshakeC2SPacket handshakeC2SPacket = new HandshakeC2SPacket(data);
 
         userConnection.init(NetworkState.HANDSHAKE, ProtocolCollection.fromProtocolId(handshakeC2SPacket.getProtocolVersion()));
         userConnection.setState(handshakeC2SPacket.getState());
+        System.out.println(userConnection.getState() + " " + userConnection.getCurrentRegistry());
 
         return handshakeC2SPacket;
     }
 
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final FriendlyByteBuf data = new FriendlyByteBuf(msg.copy());
+        final PacketTransformer data = new PacketTransformer(msg.copy(), userConnection);
         final int packetId = data.readVarInt();
 
         Packet model;

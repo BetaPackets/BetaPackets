@@ -17,17 +17,17 @@
 
 package de.florianmichael.betapackets.packet.login.s2c;
 
-import de.florianmichael.betapackets.base.FriendlyByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 import java.util.Arrays;
 
 public class EncryptionRequestS2CPacket extends Packet {
-    private final String serverId;
-    private final byte[] key;
-    private final byte[] verifyToken;
+    public String serverId;
+    public byte[] key;
+    public byte[] verifyToken;
 
-    public EncryptionRequestS2CPacket(final FriendlyByteBuf buf) {
+    public EncryptionRequestS2CPacket(final PacketTransformer buf) {
         this(
                 buf.readString(20),
                 buf.readByteArray(),
@@ -41,21 +41,11 @@ public class EncryptionRequestS2CPacket extends Packet {
         this.verifyToken = verifyToken;
     }
 
-    public String getServerId() {
-        return serverId;
-    }
-
-    public byte[] getKey() {
-        return key;
-    }
-
-    public byte[] getVerifyToken() {
-        return verifyToken;
-    }
-
     @Override
-    public void write(FriendlyByteBuf buf) {
-        // S -> C only, not implemented
+    public void write(PacketTransformer buf) {
+        buf.writeString(serverId);
+        buf.writeByteArray(key);
+        buf.writeByteArray(verifyToken);
     }
 
     @Override
