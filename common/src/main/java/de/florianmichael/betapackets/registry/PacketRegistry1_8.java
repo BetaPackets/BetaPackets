@@ -20,6 +20,7 @@ package de.florianmichael.betapackets.registry;
 import de.florianmichael.betapackets.base.registry.PacketRegistry;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.packet.play.c2s.AnimationC2SPacket;
 import de.florianmichael.betapackets.packet.play.s2c.*;
 
 public class PacketRegistry1_8 extends PacketRegistry {
@@ -87,5 +88,8 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x35, UpdateBlockEntityS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x36, OpenSignEditorS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x37, StatisticsS2CPacket.class);
+
+        // C -> S
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x0A, AnimationC2SPacket.class);
     }
 }
