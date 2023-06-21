@@ -15,34 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.registry;
+package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.registry.model.*;
-import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public abstract class NoopPacketRegistry extends PacketRegistry {
+public class CloseWindowS2CPacket extends Packet {
 
-    public NoopPacketRegistry(NetworkState networkState) {
-        super(networkState);
+    public int windowId;
+
+    public CloseWindowS2CPacket(final FunctionalByteBuf buf) {
+        this(buf.readUnsignedByte());
+    }
+
+    public CloseWindowS2CPacket(int windowId) {
+        this.windowId = windowId;
     }
 
     @Override
-    public IMetadataType getMetadataType() {
-        return null;
+    public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeByte(windowId);
     }
 
     @Override
-    public IPotionEffectType getPotionEffectType() {
-        return null;
-    }
-
-    @Override
-    public IParticleType getParticleType() {
-        return null;
-    }
-
-    @Override
-    public IGameStateType getGameStateType() {
-        return null;
+    public String toString() {
+        return "CloseWindowS2CPacket{" +
+                "windowId=" + windowId +
+                '}';
     }
 }

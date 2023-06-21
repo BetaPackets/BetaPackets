@@ -20,12 +20,9 @@ package de.florianmichael.betapackets.base.registry;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.base.registry.model.IGameStateType;
-import de.florianmichael.betapackets.base.registry.model.IParticleType;
+import de.florianmichael.betapackets.base.registry.model.*;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
-import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

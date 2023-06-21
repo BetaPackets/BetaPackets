@@ -79,6 +79,14 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x29, SoundEffectS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x2A, ParticleS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x2B, ChangeGameStateS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x2C, SpawnGlobalEntityS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x2D, OpenWindowS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x2E, CloseWindowS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x2F, SetSlotS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x30, WindowItemsS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x31, WindowPropertyS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x32, ConfirmTransactionS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x33, UpdateSignS2CPacket.class);
     }
 
     @Override

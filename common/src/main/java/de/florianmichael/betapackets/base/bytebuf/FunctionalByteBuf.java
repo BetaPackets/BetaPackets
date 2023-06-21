@@ -29,6 +29,8 @@ import io.netty.buffer.ByteBufOutputStream;
 import net.lenni0451.mcstructs.nbt.io.NbtIO;
 import net.lenni0451.mcstructs.nbt.io.NbtReadTracker;
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
+import net.lenni0451.mcstructs.text.ATextComponent;
+import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -93,6 +95,10 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         }
     }
 
+    public List<Metadata> readMetadata() {
+        return readMetadata(userConnection.getCurrentRegistry().getMetadataType());
+    }
+
     public List<Metadata> readMetadata(final IMetadataType metadataType) {
         final List<Metadata> list = new ArrayList<>();
         for (int i = readByte(); i != Byte.MAX_VALUE; i = readByte()) {
@@ -108,8 +114,22 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         }
     }
 
-    public List<Metadata> readMetadata() {
-        return readMetadata(userConnection.getCurrentRegistry().getMetadataType());
+    public ATextComponent readComponent() {
+        final String text = readString(32767);
+        if (getProtocolVersion() == ProtocolCollection.R1_8) {
+            return TextComponentSerializer.V1_8.deserialize(text);
+        } else if (getProtocolVersion().isNewerThan(ProtocolCollection.R1_9)) {
+            return TextComponentSerializer.V1_9.deserialize(text);
+        }
+        return null;
+    }
+
+    public void writeComponent(final ATextComponent component) {
+        if (getProtocolVersion() == ProtocolCollection.R1_8) {
+            writeString(TextComponentSerializer.V1_8.serialize(component));
+        } else if (getProtocolVersion().isNewerThan(ProtocolCollection.R1_9)) {
+            writeString(TextComponentSerializer.V1_9.serialize(component));
+        }
     }
 
     public UserConnection getUserConnection() {

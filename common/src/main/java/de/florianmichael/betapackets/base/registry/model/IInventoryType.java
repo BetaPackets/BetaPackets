@@ -15,34 +15,10 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.registry;
+package de.florianmichael.betapackets.base.registry.model;
 
-import de.florianmichael.betapackets.base.registry.model.*;
-import de.florianmichael.betapackets.model.base.NetworkState;
+public interface IInventoryType {
 
-public abstract class NoopPacketRegistry extends PacketRegistry {
-
-    public NoopPacketRegistry(NetworkState networkState) {
-        super(networkState);
-    }
-
-    @Override
-    public IMetadataType getMetadataType() {
-        return null;
-    }
-
-    @Override
-    public IPotionEffectType getPotionEffectType() {
-        return null;
-    }
-
-    @Override
-    public IParticleType getParticleType() {
-        return null;
-    }
-
-    @Override
-    public IGameStateType getGameStateType() {
-        return null;
-    }
+    IInventoryType getByIndex(final int index);
+    int getIndex();
 }
