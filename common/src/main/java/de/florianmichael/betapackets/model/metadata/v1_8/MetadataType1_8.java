@@ -48,7 +48,7 @@ public enum MetadataType1_8 implements IMetadataType {
         byteBuf.writeFloat(rotations.z);
     }),
 
-    DUMMY(null, null);
+    NONE(null, null);
 
     public final Function<MCByteBuf, Object> reader;
     public final BiConsumer<MCByteBuf, Object> writer;

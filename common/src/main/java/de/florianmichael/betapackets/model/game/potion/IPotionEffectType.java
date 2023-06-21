@@ -15,18 +15,10 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.model.game.potion;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+public interface IPotionEffectType {
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-public interface IMetadataType {
-
-    Function<MCByteBuf, Object> getReader();
-    BiConsumer<MCByteBuf, Object> getWriter();
-
-    IMetadataType byIndex(final int index);
-    int getIndex();
+    IPotionEffectType byId(final int id);
+    int getId();
 }

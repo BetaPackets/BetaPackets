@@ -15,18 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.packet.Packet;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+public class EntityS2CPacket extends Packet {
 
-public interface IMetadataType {
+    public int entityId;
 
-    Function<MCByteBuf, Object> getReader();
-    BiConsumer<MCByteBuf, Object> getWriter();
+    public EntityS2CPacket(final PacketTransformer buf) {
+        this(buf.readVarInt());
+    }
 
-    IMetadataType byIndex(final int index);
-    int getIndex();
+    public EntityS2CPacket(int entityId) {
+        this.entityId = entityId;
+    }
+
+    @Override
+    public void write(PacketTransformer buf) throws Exception {
+        buf.writeVarInt(entityId);
+    }
+
+    @Override
+    public String toString() {
+        return "EntityS2CPacket{" +
+                "entityId=" + entityId +
+                '}';
+    }
 }

@@ -20,6 +20,8 @@ package de.florianmichael.betapackets.packet.registry;
 import de.florianmichael.betapackets.base.packet.PacketRegistry;
 import de.florianmichael.betapackets.model.NetworkSide;
 import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
+import de.florianmichael.betapackets.model.game.potion.v1_8.PotionEffectType1_8;
 import de.florianmichael.betapackets.model.metadata.IMetadataType;
 import de.florianmichael.betapackets.model.metadata.v1_8.MetadataType1_8;
 import de.florianmichael.betapackets.packet.play.s2c.*;
@@ -46,10 +48,33 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x0A, UseBedS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x0B, AnimationS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x0C, SpawnPlayerS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x0D, CollectItemS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x0E, SpawnObjectS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x0F, SpawnMobS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x10, SpawnPaintingS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x11, SpawnExperienceOrbS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x12, EntityVelocityS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x13, DestroyEntitiesS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x14, EntityS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x15, EntityRelativeMoveS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x16, EntityLookS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x17, EntityLookAndRelativeMoveS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x18, EntityTeleportS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x19, EntityHeadLookS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x1A, EntityStatusS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x1B, AttachEntityS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x1C, EntityMetadataS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x1D, EntityEffectS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x1E, RemoveEntityEffectS2CPacket.class);
     }
 
     @Override
     public IMetadataType getMetadataType() {
-        return MetadataType1_8.DUMMY; // Just some dummy value
+        return MetadataType1_8.NONE;
+    }
+
+    @Override
+    public IPotionEffectType getPotionEffectType() {
+        return PotionEffectType1_8.NONE;
     }
 }

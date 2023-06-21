@@ -15,25 +15,38 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.packet;
+package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.model.NetworkState;
-import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
-import de.florianmichael.betapackets.model.metadata.IMetadataType;
+import de.florianmichael.betapackets.base.PacketTransformer;
 
-public abstract class NoopPacketRegistry extends PacketRegistry {
+public class EntityHeadLookS2CPacket extends EntityS2CPacket {
 
-    public NoopPacketRegistry(NetworkState networkState) {
-        super(networkState);
+    public byte yaw;
+
+    public EntityHeadLookS2CPacket(PacketTransformer buf) {
+        super(buf);
+
+        this.yaw = buf.readByte();
+    }
+
+    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
+        super(entityId);
+
+        this.yaw = yaw;
     }
 
     @Override
-    public IMetadataType getMetadataType() {
-        return null;
+    public void write(PacketTransformer buf) throws Exception {
+        super.write(buf);
+
+        buf.writeByte(yaw);
     }
 
     @Override
-    public IPotionEffectType getPotionEffectType() {
-        return null;
+    public String toString() {
+        return "EntityHeadLookS2CPacket{" +
+                "yaw=" + yaw +
+                ", entityId=" + entityId +
+                '}';
     }
 }
