@@ -15,17 +15,10 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.vec;
+package de.florianmichael.betapackets.registry.model;
 
-public class Rotations {
+public interface IPotionEffectType {
 
-    public float x;
-    public float y;
-    public float z;
-
-    public Rotations(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+    IPotionEffectType byId(final int id);
+    int getId();
 }

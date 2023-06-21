@@ -18,11 +18,11 @@
 package de.florianmichael.betapackets.base.packet;
 
 import de.florianmichael.betapackets.BetaPackets;
-import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.model.NetworkSide;
-import de.florianmichael.betapackets.model.NetworkState;
-import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
-import de.florianmichael.betapackets.model.metadata.IMetadataType;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.NetworkSide;
+import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.registry.model.IMetadataType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -65,7 +65,7 @@ public abstract class PacketRegistry {
         return side == NetworkSide.CLIENTBOUND ? clientboundPackets : serverboundPackets;
     }
 
-    public Packet createModel(final NetworkSide side, final int packetId, final PacketTransformer buf) {
+    public Packet createModel(final NetworkSide side, final int packetId, final FunctionalByteBuf buf) {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
 
         if (!packets.containsKey(packetId)) return null;
@@ -73,7 +73,7 @@ public abstract class PacketRegistry {
         try {
             final Class<? extends Packet> clazz = packets.get(packetId);
 
-            return clazz.getConstructor(PacketTransformer.class).newInstance(buf);
+            return clazz.getConstructor(FunctionalByteBuf.class).newInstance(buf);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             BetaPackets.getPlatform().getLogging().severe("Couldn't create packet " + packetId + " in " + getClass().getSimpleName() + "!");
             e.printStackTrace();

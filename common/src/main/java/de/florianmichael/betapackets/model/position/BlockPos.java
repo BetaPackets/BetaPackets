@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world;
-
-import de.florianmichael.betapackets.model.vec.Vec3i;
+package de.florianmichael.betapackets.model.position;
 
 public class BlockPos extends Vec3i {
 

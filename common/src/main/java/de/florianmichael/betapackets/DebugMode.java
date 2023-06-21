@@ -18,8 +18,8 @@
 package de.florianmichael.betapackets;
 
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.NetworkSide;
-import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.base.NetworkSide;
+import de.florianmichael.betapackets.model.base.NetworkState;
 
 public class DebugMode {
     public final static boolean ENABLED = true;

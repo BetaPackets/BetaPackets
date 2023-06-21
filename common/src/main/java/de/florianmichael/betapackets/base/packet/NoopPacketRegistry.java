@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.base.packet;
 
-import de.florianmichael.betapackets.model.NetworkState;
-import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
-import de.florianmichael.betapackets.model.metadata.IMetadataType;
+import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.registry.model.IMetadataType;
 
 public abstract class NoopPacketRegistry extends PacketRegistry {
 

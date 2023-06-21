@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.world.BlockChunkRecord1_8;
+import de.florianmichael.betapackets.model.position.BlockChunkRecord1_8;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class MultiBlockChangeS2CPacket extends Packet {
     public int chunkZ;
     public List<BlockChunkRecord1_8> blockChunkRecords;
 
-    public MultiBlockChangeS2CPacket(final PacketTransformer transformer) {
+    public MultiBlockChangeS2CPacket(final FunctionalByteBuf transformer) {
         blockChunkRecords = new ArrayList<>();
 
         this.chunkX = transformer.readInt();
@@ -49,7 +49,7 @@ public class MultiBlockChangeS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeInt(chunkX);
         buf.writeInt(chunkZ);
 

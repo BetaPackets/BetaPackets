@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.registry;
+package de.florianmichael.betapackets.registry;
 
 import de.florianmichael.betapackets.base.packet.NoopPacketRegistry;
-import de.florianmichael.betapackets.base.packet.PacketRegistry;
-import de.florianmichael.betapackets.model.NetworkSide;
-import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.base.NetworkSide;
+import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.packet.handshake.HandshakeC2SPacket;
 import de.florianmichael.betapackets.packet.login.c2s.EncryptionResponseC2SPacket;
 import de.florianmichael.betapackets.packet.login.c2s.LoginStartC2SPacket;

@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.world.BlockPos;
+import de.florianmichael.betapackets.model.position.BlockPos;
 
 public class BlockActionS2CPacket extends Packet {
 
@@ -28,7 +28,7 @@ public class BlockActionS2CPacket extends Packet {
     public byte action2;
     public int blockId;
 
-    public BlockActionS2CPacket(final PacketTransformer transformer) {
+    public BlockActionS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 BlockPos.fromLong(transformer.readLong()),
                 transformer.readByte(),
@@ -45,7 +45,7 @@ public class BlockActionS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeLong(blockPos.toLong());
         buf.writeByte(action1);
         buf.writeByte(action2);

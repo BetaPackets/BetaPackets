@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.game.PositionFlags;
 
@@ -33,7 +33,7 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
 
     public Set<PositionFlags> positionFlags;
 
-    public PlayerPositionAndLookS2CPacket(final PacketTransformer transformer) {
+    public PlayerPositionAndLookS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readDouble(),
                 transformer.readDouble(),
@@ -58,7 +58,7 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeDouble(this.x);
         buf.writeDouble(this.y);
         buf.writeDouble(this.z);

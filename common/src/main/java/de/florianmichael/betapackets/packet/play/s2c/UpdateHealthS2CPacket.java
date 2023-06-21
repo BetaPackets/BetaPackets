@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class UpdateHealthS2CPacket extends Packet {
@@ -26,7 +26,7 @@ public class UpdateHealthS2CPacket extends Packet {
     public int foodLevel;
     public float saturationLevel;
 
-    public UpdateHealthS2CPacket(final PacketTransformer transformer) {
+    public UpdateHealthS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readFloat(),
                 transformer.readVarInt(),
@@ -41,7 +41,7 @@ public class UpdateHealthS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeFloat(health);
         buf.writeVarInt(foodLevel);
         buf.writeFloat(saturationLevel);

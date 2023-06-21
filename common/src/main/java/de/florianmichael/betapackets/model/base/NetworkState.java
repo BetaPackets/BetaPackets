@@ -15,32 +15,17 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.model.base;
 
-import de.florianmichael.betapackets.base.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
+public enum NetworkState {
 
-public class HeldItemChangeS2CPacket extends Packet {
+    HANDSHAKE, PLAY, STATUS, LOGIN;
 
-    public byte slot;
-
-    public HeldItemChangeS2CPacket(final FunctionalByteBuf transformer) {
-        this(transformer.readByte());
+    public int getId() {
+        return ordinal() - 1;
     }
 
-    public HeldItemChangeS2CPacket(byte slot) {
-        this.slot = slot;
-    }
-
-    @Override
-    public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeByte(slot);
-    }
-
-    @Override
-    public String toString() {
-        return "HeldItemChangeS2CPacket{" +
-                "slot=" + slot +
-                '}';
+    public static NetworkState fromId(int id) {
+        return values()[id + 1];
     }
 }

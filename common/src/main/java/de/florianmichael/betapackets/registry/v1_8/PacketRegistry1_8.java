@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.registry;
+package de.florianmichael.betapackets.registry.v1_8;
 
 import de.florianmichael.betapackets.base.packet.PacketRegistry;
-import de.florianmichael.betapackets.model.NetworkSide;
-import de.florianmichael.betapackets.model.NetworkState;
-import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
-import de.florianmichael.betapackets.model.game.potion.v1_8.PotionEffectType1_8;
-import de.florianmichael.betapackets.model.metadata.IMetadataType;
-import de.florianmichael.betapackets.model.metadata.v1_8.MetadataType1_8;
+import de.florianmichael.betapackets.model.base.NetworkSide;
+import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.registry.model.IMetadataType;
 import de.florianmichael.betapackets.packet.play.s2c.*;
 
 public class PacketRegistry1_8 extends PacketRegistry {
@@ -74,7 +72,9 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x24, BlockActionS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x25, BlockBreakAnimationS2CPacket.class);
         // TODO | 0x26 MapChunkBulk
-
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x27, ExplosionS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x28, EffectS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x29, SoundEffectS2CPacket.class);
     }
 
     @Override

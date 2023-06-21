@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.base.packet;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 
 public abstract class Packet {
 
-    public abstract void write(final PacketTransformer buf) throws Exception;
+    public abstract void write(final FunctionalByteBuf buf) throws Exception;
 }

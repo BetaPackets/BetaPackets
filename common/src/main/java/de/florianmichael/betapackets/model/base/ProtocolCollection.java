@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model;
+package de.florianmichael.betapackets.model.base;
 
 // Thanks to my 12-year-old self for this enum, I guess?
 public enum ProtocolCollection {

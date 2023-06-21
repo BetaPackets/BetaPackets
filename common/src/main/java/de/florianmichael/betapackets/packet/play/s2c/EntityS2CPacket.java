@@ -17,14 +17,14 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class EntityS2CPacket extends Packet {
 
     public int entityId;
 
-    public EntityS2CPacket(final PacketTransformer buf) {
+    public EntityS2CPacket(final FunctionalByteBuf buf) {
         this(buf.readVarInt());
     }
 
@@ -33,7 +33,7 @@ public class EntityS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
     }
 

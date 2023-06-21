@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.metadata.Metadata;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class EntityMetadataS2CPacket extends EntityS2CPacket {
     public List<Metadata> metadata;
 
-    public EntityMetadataS2CPacket(PacketTransformer buf) {
+    public EntityMetadataS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
         this.metadata = buf.readMetadata();
@@ -38,7 +38,7 @@ public class EntityMetadataS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeMetadata(metadata);

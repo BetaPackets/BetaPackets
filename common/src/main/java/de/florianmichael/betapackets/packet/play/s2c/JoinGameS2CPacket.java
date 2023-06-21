@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.game.Difficulty;
 import de.florianmichael.betapackets.model.game.GameMode;
@@ -34,7 +34,7 @@ public class JoinGameS2CPacket extends Packet {
     public LevelType levelType;
     public boolean reducedDebugInfo;
 
-    public JoinGameS2CPacket(final PacketTransformer transformer) {
+    public JoinGameS2CPacket(final FunctionalByteBuf transformer) {
         this.entityId = transformer.readInt();
 
         int mask = transformer.readUnsignedByte();
@@ -64,7 +64,7 @@ public class JoinGameS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeInt(this.entityId);
 
         int i = this.gameMode.getId();

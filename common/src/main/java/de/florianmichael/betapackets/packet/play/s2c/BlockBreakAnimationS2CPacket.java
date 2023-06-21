@@ -17,9 +17,9 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.world.BlockPos;
+import de.florianmichael.betapackets.model.position.BlockPos;
 
 public class BlockBreakAnimationS2CPacket extends Packet {
 
@@ -27,7 +27,7 @@ public class BlockBreakAnimationS2CPacket extends Packet {
     public BlockPos blockPos;
     public int progress;
 
-    public BlockBreakAnimationS2CPacket(final PacketTransformer transformer) {
+    public BlockBreakAnimationS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readVarInt(),
                 BlockPos.fromLong(transformer.readLong()),
@@ -42,7 +42,7 @@ public class BlockBreakAnimationS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(breakerEntityId);
         buf.writeLong(blockPos.toLong());
         buf.writeVarInt(progress);

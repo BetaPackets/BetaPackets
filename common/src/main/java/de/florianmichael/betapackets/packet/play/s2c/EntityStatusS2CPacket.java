@@ -17,14 +17,14 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.EntityStatusOpCodes;
 
 public class EntityStatusS2CPacket extends EntityS2CPacket {
 
     public EntityStatusOpCodes entityStatus;
 
-    public EntityStatusS2CPacket(PacketTransformer buf) {
+    public EntityStatusS2CPacket(FunctionalByteBuf buf) {
         super(buf);
         this.entityStatus = EntityStatusOpCodes.byId(buf.readByte());
     }
@@ -35,7 +35,7 @@ public class EntityStatusS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeByte(entityStatus.ordinal());

@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world;
+package de.florianmichael.betapackets.model.position;
+
+import de.florianmichael.betapackets.model.position.BlockPos;
 
 public class BlockChunkRecord1_8 {
 

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.login.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 import java.util.UUID;
@@ -26,7 +26,7 @@ public class LoginSuccessS2CPacket extends Packet {
     public UUID uuid;
     public String username;
 
-    public LoginSuccessS2CPacket(final PacketTransformer buf) {
+    public LoginSuccessS2CPacket(final FunctionalByteBuf buf) {
         this(
                 UUID.fromString(buf.readString(36)),
                 buf.readString(16)
@@ -39,7 +39,7 @@ public class LoginSuccessS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeString(uuid.toString());
         buf.writeString(username);
     }

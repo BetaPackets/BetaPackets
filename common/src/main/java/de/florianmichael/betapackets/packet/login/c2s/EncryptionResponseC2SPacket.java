@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.login.c2s;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class EncryptionResponseC2SPacket extends Packet {
     public byte[] sharedSecret;
     public byte[] verifyToken;
 
-    public EncryptionResponseC2SPacket(final PacketTransformer buf) {
+    public EncryptionResponseC2SPacket(final FunctionalByteBuf buf) {
         this(buf.readByteArray(), buf.readByteArray());
     }
 
@@ -36,7 +36,7 @@ public class EncryptionResponseC2SPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeByteArray(sharedSecret);
         buf.writeByteArray(verifyToken);
     }

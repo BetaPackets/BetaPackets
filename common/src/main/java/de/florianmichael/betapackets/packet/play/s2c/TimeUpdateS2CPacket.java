@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class TimeUpdateS2CPacket extends Packet {
@@ -25,7 +25,7 @@ public class TimeUpdateS2CPacket extends Packet {
     public long worldAge;
     public long timeOfDay;
 
-    public TimeUpdateS2CPacket(final PacketTransformer transformer) {
+    public TimeUpdateS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readLong(),
                 transformer.readLong()
@@ -38,7 +38,7 @@ public class TimeUpdateS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeLong(this.worldAge);
         buf.writeLong(this.timeOfDay);
     }

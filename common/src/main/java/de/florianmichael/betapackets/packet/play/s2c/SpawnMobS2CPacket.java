@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.metadata.Metadata;
 
@@ -42,7 +42,7 @@ public class SpawnMobS2CPacket extends Packet {
 
     public List<Metadata> metadata;
 
-    public SpawnMobS2CPacket(final PacketTransformer transformer) {
+    public SpawnMobS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readVarInt(),
                 transformer.readByte() & 255,
@@ -79,7 +79,7 @@ public class SpawnMobS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
         buf.writeByte(type);
 

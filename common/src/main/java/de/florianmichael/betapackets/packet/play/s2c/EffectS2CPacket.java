@@ -21,29 +21,44 @@ import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
-public class SpawnPositionS2CPacket extends Packet {
+public class EffectS2CPacket extends Packet {
 
+    public int effectId;
     public BlockPos blockPos;
+    public int data;
+    public boolean disableRelativeVolume;
 
-    public SpawnPositionS2CPacket(final FunctionalByteBuf transformer) {
+    public EffectS2CPacket(final FunctionalByteBuf transformer) {
         this(
-                BlockPos.fromLong(transformer.readLong())
+                transformer.readInt(),
+                BlockPos.fromLong(transformer.readLong()),
+                transformer.readInt(),
+                transformer.readBoolean()
         );
     }
 
-    public SpawnPositionS2CPacket(BlockPos blockPos) {
+    public EffectS2CPacket(int effectId, BlockPos blockPos, int data, boolean disableRelativeVolume) {
+        this.effectId = effectId;
         this.blockPos = blockPos;
+        this.data = data;
+        this.disableRelativeVolume = disableRelativeVolume;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeInt(effectId);
         buf.writeLong(blockPos.toLong());
+        buf.writeInt(data);
+        buf.writeBoolean(disableRelativeVolume);
     }
 
     @Override
     public String toString() {
-        return "SpawnPositionS2CPacket{" +
-                "blockPos=" + blockPos +
+        return "EffectS2CPacket{" +
+                "effectId=" + effectId +
+                ", blockPos=" + blockPos +
+                ", data=" + data +
+                ", disableRelativeVolume=" + disableRelativeVolume +
                 '}';
     }
 }

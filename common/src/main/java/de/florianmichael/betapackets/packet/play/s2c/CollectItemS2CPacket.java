@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class CollectItemS2CPacket extends Packet {
@@ -25,7 +25,7 @@ public class CollectItemS2CPacket extends Packet {
     public int collectedEntityId;
     public int collectorEntityId;
 
-    public CollectItemS2CPacket(final PacketTransformer transformer) {
+    public CollectItemS2CPacket(final FunctionalByteBuf transformer) {
         this(transformer.readVarInt(), transformer.readVarInt());
     }
 
@@ -35,7 +35,7 @@ public class CollectItemS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(collectedEntityId);
         buf.writeVarInt(collectorEntityId);
     }

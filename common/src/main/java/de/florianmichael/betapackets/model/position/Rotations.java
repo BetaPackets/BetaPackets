@@ -15,10 +15,17 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game.potion;
+package de.florianmichael.betapackets.model.position;
 
-public interface IPotionEffectType {
+public class Rotations {
 
-    IPotionEffectType byId(final int id);
-    int getId();
+    public float x;
+    public float y;
+    public float z;
+
+    public Rotations(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 }

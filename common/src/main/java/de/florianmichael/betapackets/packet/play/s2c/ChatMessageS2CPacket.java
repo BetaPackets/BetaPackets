@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.chat.ChatPosition;
 
@@ -26,7 +26,7 @@ public class ChatMessageS2CPacket extends Packet {
     public String jsonData;
     public ChatPosition position;
 
-    public ChatMessageS2CPacket(final PacketTransformer transformer) {
+    public ChatMessageS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readString(32767),
                 ChatPosition.byId(transformer.readByte())
@@ -39,7 +39,7 @@ public class ChatMessageS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeString(this.jsonData);
         buf.writeByte(this.position.ordinal());
     }

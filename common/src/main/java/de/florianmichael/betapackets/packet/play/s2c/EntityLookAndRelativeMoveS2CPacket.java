@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 
 public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
 
@@ -30,7 +30,7 @@ public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
 
     public boolean onGround;
 
-    public EntityLookAndRelativeMoveS2CPacket(PacketTransformer buf) {
+    public EntityLookAndRelativeMoveS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
         this.deltaX = buf.readByte();
@@ -57,7 +57,7 @@ public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeByte(deltaX);

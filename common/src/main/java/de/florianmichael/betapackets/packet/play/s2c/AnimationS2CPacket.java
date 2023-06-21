@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.game.Animation;
 
@@ -26,7 +26,7 @@ public class AnimationS2CPacket extends Packet {
     public int entityId;
     public Animation type;
 
-    public AnimationS2CPacket(final PacketTransformer transformer) {
+    public AnimationS2CPacket(final FunctionalByteBuf transformer) {
         this(transformer.readVarInt(), transformer.readUnsignedByte());
     }
 
@@ -36,7 +36,7 @@ public class AnimationS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
         buf.writeByte(type.ordinal());
     }

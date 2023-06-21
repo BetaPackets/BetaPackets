@@ -17,13 +17,13 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 
 public class EntityHeadLookS2CPacket extends EntityS2CPacket {
 
     public byte yaw;
 
-    public EntityHeadLookS2CPacket(PacketTransformer buf) {
+    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
         this.yaw = buf.readByte();
@@ -36,7 +36,7 @@ public class EntityHeadLookS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeByte(yaw);

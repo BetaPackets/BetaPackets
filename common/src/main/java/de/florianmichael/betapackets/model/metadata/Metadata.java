@@ -17,7 +17,8 @@
 
 package de.florianmichael.betapackets.model.metadata;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.registry.model.IMetadataType;
 
 public class Metadata {
 
@@ -25,7 +26,7 @@ public class Metadata {
     public IMetadataType metadataType;
     public Object value;
 
-    public Metadata(int index, IMetadataType metadataType, MCByteBuf transformer) {
+    public Metadata(int index, IMetadataType metadataType, FunctionalByteBuf transformer) {
         this.index = index;
         this.metadataType = metadataType;
         this.value = metadataType.getReader().apply(transformer);

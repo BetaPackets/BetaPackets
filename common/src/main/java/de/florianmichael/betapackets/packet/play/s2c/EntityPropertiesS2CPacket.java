@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.properties.EntityProperty;
 import de.florianmichael.betapackets.model.entity.properties.EntityPropertyModifier;
 import de.florianmichael.betapackets.model.entity.properties.Operation;
@@ -30,7 +30,7 @@ public class EntityPropertiesS2CPacket extends EntityS2CPacket {
 
     public List<EntityProperty> entityProperties;
 
-    public EntityPropertiesS2CPacket(PacketTransformer buf) {
+    public EntityPropertiesS2CPacket(FunctionalByteBuf buf) {
         super(buf);
         entityProperties = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class EntityPropertiesS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeInt(entityProperties.size());

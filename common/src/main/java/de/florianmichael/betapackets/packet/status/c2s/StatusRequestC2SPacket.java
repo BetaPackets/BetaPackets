@@ -17,15 +17,15 @@
 
 package de.florianmichael.betapackets.packet.status.c2s;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class StatusRequestC2SPacket extends Packet {
 
-    public StatusRequestC2SPacket(final PacketTransformer buf) {
+    public StatusRequestC2SPacket(final FunctionalByteBuf buf) {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
     }
 }

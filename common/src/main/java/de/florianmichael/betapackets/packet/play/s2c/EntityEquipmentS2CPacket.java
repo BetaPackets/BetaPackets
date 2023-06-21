@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
 
@@ -29,7 +29,7 @@ public class EntityEquipmentS2CPacket extends Packet {
     public int slot;
     public ItemStackV1_3 item;
 
-    public EntityEquipmentS2CPacket(final PacketTransformer transformer) throws IOException {
+    public EntityEquipmentS2CPacket(final FunctionalByteBuf transformer) throws IOException {
         this(
                 transformer.readVarInt(),
                 transformer.readShort(),
@@ -44,7 +44,7 @@ public class EntityEquipmentS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
         buf.writeShort(this.slot);
         buf.writeItemStack(this.item);

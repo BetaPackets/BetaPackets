@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model;
+package de.florianmichael.betapackets.packet.play.s2c;
 
-public enum NetworkState {
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.packet.Packet;
 
-    HANDSHAKE, PLAY, STATUS, LOGIN;
+public class ParticleS2CPacket extends Packet {
 
-    public int getId() {
-        return ordinal() - 1;
-    }
 
-    public static NetworkState fromId(int id) {
-        return values()[id + 1];
+
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
     }
 }

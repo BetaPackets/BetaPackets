@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
-import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
+import de.florianmichael.betapackets.registry.model.IPotionEffectType;
 
 public class EntityEffectS2CPacket extends EntityS2CPacket {
 
@@ -27,7 +27,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     public int duration;
     public byte hideParticles;
 
-    public EntityEffectS2CPacket(PacketTransformer transformer) {
+    public EntityEffectS2CPacket(FunctionalByteBuf transformer) {
         super(transformer);
 
         this.entityEffect = transformer.getUserConnection().getCurrentRegistry().getPotionEffectType().byId(transformer.readByte());
@@ -46,7 +46,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeByte(entityEffect.getId());

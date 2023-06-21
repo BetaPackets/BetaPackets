@@ -17,13 +17,13 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class KeepAliveS2CPacket extends Packet {
     public int keepAliveId;
 
-    public KeepAliveS2CPacket(final PacketTransformer buf) {
+    public KeepAliveS2CPacket(final FunctionalByteBuf buf) {
         this(buf.readVarInt());
     }
 
@@ -32,7 +32,7 @@ public class KeepAliveS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeVarInt(keepAliveId);
     }
 

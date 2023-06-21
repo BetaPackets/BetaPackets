@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class SpawnObjectS2CPacket extends Packet {
@@ -38,7 +38,7 @@ public class SpawnObjectS2CPacket extends Packet {
     public int speedY;
     public int speedZ;
 
-    public SpawnObjectS2CPacket(final PacketTransformer transformer) {
+    public SpawnObjectS2CPacket(final FunctionalByteBuf transformer) {
         this.entityId = transformer.readVarInt();
         this.type = transformer.readByte();
 
@@ -72,7 +72,7 @@ public class SpawnObjectS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
         buf.writeByte(type);
 

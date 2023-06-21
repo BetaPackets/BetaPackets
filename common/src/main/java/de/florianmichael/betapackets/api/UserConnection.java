@@ -19,8 +19,8 @@ package de.florianmichael.betapackets.api;
 
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.base.packet.PacketRegistry;
-import de.florianmichael.betapackets.model.NetworkState;
-import de.florianmichael.betapackets.model.ProtocolCollection;
+import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import io.netty.channel.Channel;
 
 import java.util.List;

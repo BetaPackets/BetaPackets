@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game.potion.v1_8;
+package de.florianmichael.betapackets.registry.v1_8;
 
-import de.florianmichael.betapackets.model.game.potion.IPotionEffectType;
+import de.florianmichael.betapackets.registry.model.IPotionEffectType;
 
 public enum PotionEffectType1_8 implements IPotionEffectType {
     SPEED,

@@ -18,9 +18,9 @@
 package de.florianmichael.betapackets.base;
 
 import de.florianmichael.betapackets.base.packet.PacketRegistry;
-import de.florianmichael.betapackets.model.ProtocolCollection;
-import de.florianmichael.betapackets.packet.registry.BasePacketRegistry1_7;
-import de.florianmichael.betapackets.packet.registry.PacketRegistry1_8;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.registry.BasePacketRegistry1_7;
+import de.florianmichael.betapackets.registry.v1_8.PacketRegistry1_8;
 
 import java.util.ArrayList;
 import java.util.HashMap;

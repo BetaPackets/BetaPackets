@@ -20,11 +20,11 @@ package de.florianmichael.betapackets.netty.element;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.DebugMode;
 import de.florianmichael.betapackets.api.UserConnection;
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.event.ClientboundPacketListener;
-import de.florianmichael.betapackets.model.NetworkSide;
-import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.base.NetworkSide;
+import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.packet.login.s2c.LoginSuccessS2CPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,7 +40,7 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
-    private LoginSuccessS2CPacket handleLoginSuccess(final PacketTransformer data) {
+    private LoginSuccessS2CPacket handleLoginSuccess(final FunctionalByteBuf data) {
         final LoginSuccessS2CPacket loginSuccessS2CPacket = new LoginSuccessS2CPacket(data);
 
         userConnection.setState(NetworkState.PLAY);
@@ -51,7 +51,7 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
 
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final PacketTransformer data = new PacketTransformer(msg.copy(), userConnection);
+        final FunctionalByteBuf data = new FunctionalByteBuf(msg.copy(), userConnection);
         final int packetId = data.readVarInt();
 
         final Packet model;

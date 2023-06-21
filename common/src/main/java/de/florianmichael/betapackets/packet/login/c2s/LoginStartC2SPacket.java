@@ -17,13 +17,13 @@
 
 package de.florianmichael.betapackets.packet.login.c2s;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class LoginStartC2SPacket extends Packet {
     public final String name;
 
-    public LoginStartC2SPacket(final PacketTransformer buf) {
+    public LoginStartC2SPacket(final FunctionalByteBuf buf) {
         this(buf.readString(16));
     }
 
@@ -32,7 +32,7 @@ public class LoginStartC2SPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeString(name);
     }
 

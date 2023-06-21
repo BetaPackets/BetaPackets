@@ -15,9 +15,18 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model;
+package de.florianmichael.betapackets.registry.model;
 
-public enum NetworkSide {
-    CLIENTBOUND,
-    SERVERBOUND
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+public interface IMetadataType {
+
+    Function<FunctionalByteBuf, Object> getReader();
+    BiConsumer<FunctionalByteBuf, Object> getWriter();
+
+    IMetadataType byIndex(final int index);
+    int getIndex();
 }

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.login.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class EncryptionRequestS2CPacket extends Packet {
     public byte[] key;
     public byte[] verifyToken;
 
-    public EncryptionRequestS2CPacket(final PacketTransformer buf) {
+    public EncryptionRequestS2CPacket(final FunctionalByteBuf buf) {
         this(
                 buf.readString(20),
                 buf.readByteArray(),
@@ -42,7 +42,7 @@ public class EncryptionRequestS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeString(serverId);
         buf.writeByteArray(key);
         buf.writeByteArray(verifyToken);

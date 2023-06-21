@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.vec;
+package de.florianmichael.betapackets.model.position;
 
 public class Vec3i {
 

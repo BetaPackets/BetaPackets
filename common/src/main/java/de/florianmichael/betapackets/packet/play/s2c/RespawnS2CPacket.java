@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.game.Difficulty;
 import de.florianmichael.betapackets.model.game.GameMode;
@@ -30,7 +30,7 @@ public class RespawnS2CPacket extends Packet {
     public GameMode gameMode;
     public LevelType levelType;
 
-    public RespawnS2CPacket(final PacketTransformer transformer) {
+    public RespawnS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readVarInt(),
                 Difficulty.byId(transformer.readUnsignedByte()),
@@ -48,7 +48,7 @@ public class RespawnS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(dimension);
         buf.writeByte(difficulty.ordinal());
         buf.writeByte(gameMode.ordinal());

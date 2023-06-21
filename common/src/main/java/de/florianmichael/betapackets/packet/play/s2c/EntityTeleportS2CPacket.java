@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 
 public class EntityTeleportS2CPacket extends EntityS2CPacket {
 
@@ -30,7 +30,7 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
 
     public boolean onGround;
 
-    public EntityTeleportS2CPacket(PacketTransformer buf) {
+    public EntityTeleportS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
         this.x = buf.readInt();
@@ -57,7 +57,7 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
         buf.writeInt(x);

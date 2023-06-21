@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.event;
 
 import de.florianmichael.betapackets.api.UserConnection;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.NetworkState;
+import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.dietrichevents.handle.EventExecutor;
 import de.florianmichael.dietrichevents.handle.Listener;
 import de.florianmichael.dietrichevents.types.CancellableEvent;

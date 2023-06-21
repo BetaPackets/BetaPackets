@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.packet.status.s2c;
 
 import com.google.gson.*;
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.ping.PingResponse;
 import de.florianmichael.betapackets.model.ping.Player;
@@ -33,7 +33,7 @@ public class StatusResponseS2CPacket extends Packet {
     public String rawPingResponse;
     public PingResponse pingResponse;
 
-    public StatusResponseS2CPacket(final PacketTransformer buf) {
+    public StatusResponseS2CPacket(final FunctionalByteBuf buf) {
         rawPingResponse = buf.readString(32767);
         final JsonObject jsonObject = GSON.fromJson(rawPingResponse, JsonObject.class);
 
@@ -76,7 +76,7 @@ public class StatusResponseS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeString(rawPingResponse);
     }
 

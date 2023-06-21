@@ -17,16 +17,16 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.world.BlockPos;
+import de.florianmichael.betapackets.model.position.BlockPos;
 
 public class BlockChangeS2CPacket extends Packet {
 
     public BlockPos blockPos;
     public int blockId;
 
-    public BlockChangeS2CPacket(final PacketTransformer transformer) {
+    public BlockChangeS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 BlockPos.fromLong(transformer.readLong()),
                 transformer.readVarInt()
@@ -39,7 +39,7 @@ public class BlockChangeS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeLong(blockPos.toLong());
         buf.writeVarInt(blockId);
     }

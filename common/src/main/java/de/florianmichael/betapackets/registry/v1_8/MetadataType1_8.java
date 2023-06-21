@@ -15,24 +15,24 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata.v1_8;
+package de.florianmichael.betapackets.registry.v1_8;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
-import de.florianmichael.betapackets.model.metadata.IMetadataType;
-import de.florianmichael.betapackets.model.vec.Rotations;
-import de.florianmichael.betapackets.model.world.BlockPos;
+import de.florianmichael.betapackets.registry.model.IMetadataType;
+import de.florianmichael.betapackets.model.position.Rotations;
+import de.florianmichael.betapackets.model.position.BlockPos;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public enum MetadataType1_8 implements IMetadataType {
-    BYTE(MCByteBuf::readByte, (byteBuf, value) -> byteBuf.writeByte((Integer) value)),
-    SHORT(MCByteBuf::readShort, (byteBuf, value) -> byteBuf.writeShort((Integer) value)),
-    INT(MCByteBuf::readInt, (byteBuf, value) -> byteBuf.writeInt((Integer) value)),
-    FLOAT(MCByteBuf::readFloat, (byteBuf, value) -> byteBuf.writeFloat((Float) value)),
-    STRING(MCByteBuf::readString, (byteBuf, value) -> byteBuf.writeString((String) value)),
-    ITEM_STACK(MCByteBuf::readItemStack, (byteBuf, value) -> byteBuf.writeItemStack((ItemStackV1_3) value)),
+    BYTE(FunctionalByteBuf::readByte, (byteBuf, value) -> byteBuf.writeByte((Integer) value)),
+    SHORT(FunctionalByteBuf::readShort, (byteBuf, value) -> byteBuf.writeShort((Integer) value)),
+    INT(FunctionalByteBuf::readInt, (byteBuf, value) -> byteBuf.writeInt((Integer) value)),
+    FLOAT(FunctionalByteBuf::readFloat, (byteBuf, value) -> byteBuf.writeFloat((Float) value)),
+    STRING(FunctionalByteBuf::readString, (byteBuf, value) -> byteBuf.writeString((String) value)),
+    ITEM_STACK(FunctionalByteBuf::readItemStack, (byteBuf, value) -> byteBuf.writeItemStack((ItemStackV1_3) value)),
     BLOCK_POS(byteBuf -> new BlockPos(byteBuf.readInt(), byteBuf.readInt(), byteBuf.readInt()), (byteBuf, value) -> {
         final BlockPos pos = (BlockPos) value;
 
@@ -50,21 +50,21 @@ public enum MetadataType1_8 implements IMetadataType {
 
     NONE(null, null);
 
-    public final Function<MCByteBuf, Object> reader;
-    public final BiConsumer<MCByteBuf, Object> writer;
+    public final Function<FunctionalByteBuf, Object> reader;
+    public final BiConsumer<FunctionalByteBuf, Object> writer;
 
-    MetadataType1_8(Function<MCByteBuf, Object> reader, BiConsumer<MCByteBuf, Object> writer) {
+    MetadataType1_8(Function<FunctionalByteBuf, Object> reader, BiConsumer<FunctionalByteBuf, Object> writer) {
         this.reader = reader;
         this.writer = writer;
     }
 
     @Override
-    public Function<MCByteBuf, Object> getReader() {
+    public Function<FunctionalByteBuf, Object> getReader() {
         return this.reader;
     }
 
     @Override
-    public BiConsumer<MCByteBuf, Object> getWriter() {
+    public BiConsumer<FunctionalByteBuf, Object> getWriter() {
         return writer;
     }
 

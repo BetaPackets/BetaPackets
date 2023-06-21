@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class DestroyEntitiesS2CPacket extends Packet {
 
     public int[] entityIds;
 
-    public DestroyEntitiesS2CPacket(final PacketTransformer buf) {
+    public DestroyEntitiesS2CPacket(final FunctionalByteBuf buf) {
         entityIds = new int[buf.readVarInt()];
         for (int i = 0; i < entityIds.length; i++) {
             entityIds[i] = buf.readVarInt();
@@ -38,7 +38,7 @@ public class DestroyEntitiesS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityIds.length);
         for (int entityId : entityIds) {
             buf.writeVarInt(entityId);

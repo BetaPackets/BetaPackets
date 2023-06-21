@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class EntityVelocityS2CPacket extends Packet {
@@ -28,7 +28,7 @@ public class EntityVelocityS2CPacket extends Packet {
     public int velocityY;
     public int velocityZ;
 
-    public EntityVelocityS2CPacket(final PacketTransformer buf) {
+    public EntityVelocityS2CPacket(final FunctionalByteBuf buf) {
         this(buf.readVarInt(), buf.readShort(), buf.readShort(), buf.readShort());
     }
 
@@ -40,7 +40,7 @@ public class EntityVelocityS2CPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) throws Exception {
+    public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
 
         buf.writeShort(velocityX);

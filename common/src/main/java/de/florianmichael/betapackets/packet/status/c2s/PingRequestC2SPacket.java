@@ -17,13 +17,13 @@
 
 package de.florianmichael.betapackets.packet.status.c2s;
 
-import de.florianmichael.betapackets.base.PacketTransformer;
+import de.florianmichael.betapackets.base.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 
 public class PingRequestC2SPacket extends Packet {
     public long payload;
 
-    public PingRequestC2SPacket(final PacketTransformer buf) {
+    public PingRequestC2SPacket(final FunctionalByteBuf buf) {
         this(buf.readLong());
     }
 
@@ -32,7 +32,7 @@ public class PingRequestC2SPacket extends Packet {
     }
 
     @Override
-    public void write(PacketTransformer buf) {
+    public void write(FunctionalByteBuf buf) {
         buf.writeLong(payload);
     }
 
