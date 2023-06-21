@@ -1,5 +1,7 @@
 # BetaPackets
-Standalone Minecraft protocol library for Spigot, Paper, Bukkit, BungeeCord and Velocity
+(WIP!) Standalone Minecraft protocol library for Spigot, Paper, Bukkit, BungeeCord and Velocity
+
+### Note: This project is in very early development and not ready for production use!
 
 ## Why another protocol library?
 The idea of BetaPackets is to develop a protocol library that is not based on any platform, the BetaPackets core is based only on Netty and can be implemented on anything, this ensures that this protocol library works on any server software with the same API.

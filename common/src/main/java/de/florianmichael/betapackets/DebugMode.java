@@ -27,6 +27,6 @@ public class DebugMode {
     public static void printPacket(final NetworkState state, final NetworkSide side, final Packet model) {
         if (!ENABLED || model == null) return;
 
-        System.out.println(side + " -> " + state + ": " + model);
+        BetaPackets.getPlatform().getLogging().info(side + " -> " + state + ": " + model);
     }
 }

@@ -46,7 +46,6 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
 
         userConnection.init(NetworkState.HANDSHAKE, ProtocolCollection.fromProtocolId(handshakeC2SPacket.getProtocolVersion()));
         userConnection.setState(handshakeC2SPacket.getState());
-        System.out.println(userConnection.getState() + " " + userConnection.getCurrentRegistry());
 
         return handshakeC2SPacket;
     }
