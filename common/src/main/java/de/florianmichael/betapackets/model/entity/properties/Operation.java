@@ -15,28 +15,16 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.model.entity.properties;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+public enum Operation {
 
-public class Metadata {
+    ADD_SUBTRACT_AMOUNT, ADD_SUBTRACT_AMOUNT_PERCENT_VALUE, MULTIPLY_BY_AMOUNT_PERCENT;
 
-    public int index;
-    public IMetadataType metadataType;
-    public Object value;
-
-    public Metadata(int index, IMetadataType metadataType, MCByteBuf transformer) {
-        this.index = index;
-        this.metadataType = metadataType;
-        this.value = metadataType.getReader().apply(transformer);
-    }
-
-    @Override
-    public String toString() {
-        return "Metadata{" +
-                "index=" + index +
-                ", metadataType=" + metadataType +
-                ", value=" + value +
-                '}';
+    public static Operation getById(final int id) {
+        for (Operation value : values()) {
+            if (value.ordinal() == id) return value;
+        }
+        return null;
     }
 }

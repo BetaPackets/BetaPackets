@@ -66,6 +66,15 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x1C, EntityMetadataS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x1D, EntityEffectS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x1E, RemoveEntityEffectS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x1F, SetExperienceS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x20, EntityPropertiesS2CPacket.class);
+        // TODO | 0x21 Chunks
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x22, MultiBlockChangeS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x23, BlockChangeS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x24, BlockActionS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x25, BlockBreakAnimationS2CPacket.class);
+        // TODO | 0x26 MapChunkBulk
+
     }
 
     @Override

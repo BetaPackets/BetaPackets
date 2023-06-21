@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.model.entity.properties;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+import java.util.UUID;
 
-public class Metadata {
+public class EntityPropertyModifier {
 
-    public int index;
-    public IMetadataType metadataType;
-    public Object value;
+    public UUID uuid;
+    public double amount;
+    public Operation operation;
 
-    public Metadata(int index, IMetadataType metadataType, MCByteBuf transformer) {
-        this.index = index;
-        this.metadataType = metadataType;
-        this.value = metadataType.getReader().apply(transformer);
+    public EntityPropertyModifier(UUID uuid, double amount, Operation operation) {
+        this.uuid = uuid;
+        this.amount = amount;
+        this.operation = operation;
     }
 
     @Override
     public String toString() {
-        return "Metadata{" +
-                "index=" + index +
-                ", metadataType=" + metadataType +
-                ", value=" + value +
+        return "EntityPropertyModifier{" +
+                "uuid=" + uuid +
+                ", amount=" + amount +
+                ", operation=" + operation +
                 '}';
     }
 }

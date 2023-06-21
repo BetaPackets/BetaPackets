@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.model.entity.properties;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+import java.util.List;
 
-public class Metadata {
+public class EntityProperty {
 
-    public int index;
-    public IMetadataType metadataType;
-    public Object value;
+    public String key;
+    public double value;
+    public List<EntityPropertyModifier> entityPropertyModifiers;
 
-    public Metadata(int index, IMetadataType metadataType, MCByteBuf transformer) {
-        this.index = index;
-        this.metadataType = metadataType;
-        this.value = metadataType.getReader().apply(transformer);
+    public EntityProperty(String key, double value, List<EntityPropertyModifier> entityPropertyModifiers) {
+        this.key = key;
+        this.value = value;
+        this.entityPropertyModifiers = entityPropertyModifiers;
     }
 
     @Override
     public String toString() {
-        return "Metadata{" +
-                "index=" + index +
-                ", metadataType=" + metadataType +
+        return "EntityProperty{" +
+                "key='" + key + '\'' +
                 ", value=" + value +
+                ", entityPropertyModifiers=" + entityPropertyModifiers +
                 '}';
     }
 }

@@ -15,28 +15,27 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.model.world;
 
-import de.florianmichael.betapackets.base.MCByteBuf;
+public class BlockChunkRecord1_8 {
 
-public class Metadata {
+    public short chunkPosCrammed;
+    public int blockState;
 
-    public int index;
-    public IMetadataType metadataType;
-    public Object value;
+    public BlockChunkRecord1_8(short chunkPosCrammed, int blockState) {
+        this.chunkPosCrammed = chunkPosCrammed;
+        this.blockState = blockState;
+    }
 
-    public Metadata(int index, IMetadataType metadataType, MCByteBuf transformer) {
-        this.index = index;
-        this.metadataType = metadataType;
-        this.value = metadataType.getReader().apply(transformer);
+    public BlockPos getPos() {
+        return new BlockPos(chunkPosCrammed >> 12 & 15, chunkPosCrammed & 255, chunkPosCrammed >> 8 & 15);
     }
 
     @Override
     public String toString() {
-        return "Metadata{" +
-                "index=" + index +
-                ", metadataType=" + metadataType +
-                ", value=" + value +
+        return "BlockChunkRecord1_8{" +
+                "chunkPosCrammed=" + chunkPosCrammed +
+                ", blockState=" + blockState +
                 '}';
     }
 }
