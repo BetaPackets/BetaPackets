@@ -20,7 +20,6 @@ package de.florianmichael.betapackets.base.registry;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.base.registry.model.*;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 
@@ -39,11 +38,6 @@ public abstract class PacketRegistry {
     }
 
     public abstract void init();
-
-    public abstract IMetadataType getMetadataType();
-    public abstract IPotionEffectType getPotionEffectType();
-    public abstract IParticleType getParticleType();
-    public abstract IGameStateType getGameStateType();
 
     public void registerPacket(final NetworkSide side, final int id, final Class<? extends Packet> packet) {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);

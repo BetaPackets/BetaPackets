@@ -19,13 +19,13 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.base.registry.model.IParticleType;
+import de.florianmichael.betapackets.model.potion.ParticleTypes;
 
 import java.util.Arrays;
 
 public class ParticleS2CPacket extends Packet {
 
-    public IParticleType particleType;
+    public ParticleTypes particleType;
     public boolean longDistance;
 
     public float x;
@@ -42,9 +42,9 @@ public class ParticleS2CPacket extends Packet {
     public int[] data;
 
     public ParticleS2CPacket(final FunctionalByteBuf buf) {
-        this.particleType = buf.getUserConnection().getCurrentRegistry().getParticleType().getByIndex(buf.readInt());
+        this.particleType = ParticleTypes.getById(buf.getProtocolVersion(), buf.readInt());
         if (this.particleType == null) {
-            this.particleType = buf.getUserConnection().getCurrentRegistry().getParticleType();
+            this.particleType = ParticleTypes.BARRIER;
         }
         this.longDistance = buf.readBoolean();
 
@@ -59,13 +59,13 @@ public class ParticleS2CPacket extends Packet {
         this.particleData = buf.readFloat();
         this.particleCount = buf.readInt();
 
-        this.data = new int[this.particleType.getArgumentCount()];
+        this.data = new int[this.particleType.argumentCount];
         for (int i = 0; i < this.data.length; i++) {
             this.data[i] = buf.readVarInt();
         }
     }
 
-    public ParticleS2CPacket(IParticleType particleType, boolean longDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int[] data) {
+    public ParticleS2CPacket(ParticleTypes particleType, boolean longDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int[] data) {
         this.particleType = particleType;
         this.longDistance = longDistance;
         this.x = x;
@@ -81,7 +81,7 @@ public class ParticleS2CPacket extends Packet {
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeInt(this.particleType.getIndex());
+        buf.writeInt(this.particleType.getId(buf.getProtocolVersion()));
         buf.writeBoolean(this.longDistance);
 
         buf.writeFloat(this.x);

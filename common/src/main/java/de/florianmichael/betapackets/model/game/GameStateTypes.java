@@ -15,34 +15,31 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.registry;
+package de.florianmichael.betapackets.model.game;
 
-import de.florianmichael.betapackets.base.registry.model.*;
-import de.florianmichael.betapackets.model.base.NetworkState;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public abstract class NoopPacketRegistry extends PacketRegistry {
+public enum GameStateTypes {
 
-    public NoopPacketRegistry(NetworkState networkState) {
-        super(networkState);
-    }
+    INVALID_BED,
+    END_RAINING,
+    BEGIN_RAINING,
+    CHANGE_GAMEMODE,
+    ENTER_CREDITS,
+    DEMO_MESSAGE,
+    ARROW_HITTING_PLAYER,
+    FADE_VALUE,
+    FADE_TIME,
+    PLAY_MOB_APPEARANCE_EFFECT_AND_SOUND;
 
-    @Override
-    public IMetadataType getMetadataType() {
+    public static GameStateTypes getById(final ProtocolCollection version, final int id) {
+        for (GameStateTypes value : values()) {
+            if (value.getId(version) == id) return value;
+        }
         return null;
     }
 
-    @Override
-    public IPotionEffectType getPotionEffectType() {
-        return null;
-    }
-
-    @Override
-    public IParticleType getParticleType() {
-        return null;
-    }
-
-    @Override
-    public IGameStateType getGameStateType() {
-        return null;
+    public int getId(final ProtocolCollection version) {
+        return ordinal();
     }
 }

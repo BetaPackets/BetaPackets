@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.registry;
 
-import de.florianmichael.betapackets.base.registry.NoopPacketRegistry;
+import de.florianmichael.betapackets.base.registry.PacketRegistry;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.packet.handshake.HandshakeC2SPacket;
@@ -34,7 +34,7 @@ import de.florianmichael.betapackets.packet.status.s2c.StatusResponseS2CPacket;
 
 public class BasePacketRegistry1_7 {
 
-    public static class PacketRegistryHandshake1_7 extends NoopPacketRegistry {
+    public static class PacketRegistryHandshake1_7 extends PacketRegistry {
 
         public PacketRegistryHandshake1_7() {
             super(NetworkState.HANDSHAKE);
@@ -46,7 +46,7 @@ public class BasePacketRegistry1_7 {
         }
     }
 
-    public static class PacketRegistryLogin1_7 extends NoopPacketRegistry {
+    public static class PacketRegistryLogin1_7 extends PacketRegistry {
 
         public PacketRegistryLogin1_7() {
             super(NetworkState.LOGIN);
@@ -66,7 +66,7 @@ public class BasePacketRegistry1_7 {
         }
     }
 
-    public static class PacketRegistryStatus1_7 extends NoopPacketRegistry {
+    public static class PacketRegistryStatus1_7 extends PacketRegistry {
 
         public PacketRegistryStatus1_7() {
             super(NetworkState.STATUS);

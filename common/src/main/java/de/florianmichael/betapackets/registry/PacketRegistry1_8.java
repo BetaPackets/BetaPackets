@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.registry.v1_8;
+package de.florianmichael.betapackets.registry;
 
 import de.florianmichael.betapackets.base.registry.PacketRegistry;
-import de.florianmichael.betapackets.base.registry.model.IGameStateType;
-import de.florianmichael.betapackets.base.registry.model.IParticleType;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
-import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 import de.florianmichael.betapackets.packet.play.s2c.*;
 
 public class PacketRegistry1_8 extends PacketRegistry {
@@ -87,25 +83,5 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x31, WindowPropertyS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x32, ConfirmTransactionS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x33, UpdateSignS2CPacket.class);
-    }
-
-    @Override
-    public IMetadataType getMetadataType() {
-        return MetadataType1_8.NONE;
-    }
-
-    @Override
-    public IPotionEffectType getPotionEffectType() {
-        return PotionEffectType1_8.NONE;
-    }
-
-    @Override
-    public IParticleType getParticleType() {
-        return ParticleType1_8.NONE;
-    }
-
-    @Override
-    public IGameStateType getGameStateType() {
-        return GameStateType1_8.NONE;
     }
 }

@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.registry.v1_8;
+package de.florianmichael.betapackets.model.potion;
 
-import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum PotionEffectType1_8 implements IPotionEffectType {
+public enum PotionEffectTypes {
     SPEED,
     SLOWNESS,
     HASTE,
@@ -52,26 +52,22 @@ public enum PotionEffectType1_8 implements IPotionEffectType {
     DOLPHINS_GRACE,
     BAD_OMEN,
     HERO_OF_THE_VILLAGE,
-    DARKNESS,
-
-    NONE;
+    DARKNESS;
 
     public final String name;
 
-    PotionEffectType1_8() {
+    PotionEffectTypes() {
         this.name = this.name().toLowerCase();
     }
 
-    @Override
-    public IPotionEffectType getByIndex(int id) {
-        for (IPotionEffectType type : values()) {
-            if (type.getIndex() == id && type != NONE) return type;
+    public static PotionEffectTypes getById(final ProtocolCollection version, final int id) {
+        for (PotionEffectTypes value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
     }
 
-    @Override
-    public int getIndex() {
+    public int getId(final ProtocolCollection version) {
         return ordinal();
     }
 }

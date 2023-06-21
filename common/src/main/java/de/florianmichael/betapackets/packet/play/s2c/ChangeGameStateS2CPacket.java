@@ -19,28 +19,28 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.registry.model.IGameStateType;
+import de.florianmichael.betapackets.model.game.GameStateTypes;
 
 public class ChangeGameStateS2CPacket extends Packet {
 
-    public IGameStateType reason;
+    public GameStateTypes reason;
     public float value;
 
     public ChangeGameStateS2CPacket(final FunctionalByteBuf buf) {
         this(
-                buf.getUserConnection().getCurrentRegistry().getGameStateType().getByIndex(buf.readUnsignedByte()),
+                GameStateTypes.getById(buf.getProtocolVersion(), buf.readUnsignedByte()),
                 buf.readFloat()
         );
     }
 
-    public ChangeGameStateS2CPacket(IGameStateType reason, float value) {
+    public ChangeGameStateS2CPacket(GameStateTypes reason, float value) {
         this.reason = reason;
         this.value = value;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeByte(reason.getIndex());
+        buf.writeByte(reason.getId(buf.getProtocolVersion()));
         buf.writeFloat(value);
     }
 

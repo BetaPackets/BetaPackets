@@ -18,19 +18,19 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.registry.model.IPotionEffectType;
+import de.florianmichael.betapackets.model.potion.PotionEffectTypes;
 
 public class RemoveEntityEffectS2CPacket extends EntityS2CPacket {
 
-    public IPotionEffectType entityEffect;
+    public PotionEffectTypes entityEffect;
 
-    public RemoveEntityEffectS2CPacket(FunctionalByteBuf transformer) {
-        super(transformer);
+    public RemoveEntityEffectS2CPacket(FunctionalByteBuf buf) {
+        super(buf);
 
-        this.entityEffect = transformer.getUserConnection().getCurrentRegistry().getPotionEffectType().getByIndex(transformer.readByte());
+        this.entityEffect = PotionEffectTypes.getById(buf.getProtocolVersion(), buf.readByte());
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, IPotionEffectType entityEffect) {
+    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
         super(entityId);
 
         this.entityEffect = entityEffect;
@@ -40,7 +40,7 @@ public class RemoveEntityEffectS2CPacket extends EntityS2CPacket {
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(entityEffect.getIndex());
+        buf.writeByte(entityEffect.getId(buf.getProtocolVersion()));
     }
 
     @Override

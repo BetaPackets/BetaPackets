@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.registry.v1_8;
+package de.florianmichael.betapackets.model.metadata;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
-import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 import de.florianmichael.betapackets.model.position.Rotations;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public enum MetadataType1_8 implements IMetadataType {
+public enum MetadataTypes {
     BYTE(FunctionalByteBuf::readByte, (byteBuf, value) -> byteBuf.writeByte((Integer) value)),
     SHORT(FunctionalByteBuf::readShort, (byteBuf, value) -> byteBuf.writeShort((Integer) value)),
     INT(FunctionalByteBuf::readInt, (byteBuf, value) -> byteBuf.writeInt((Integer) value)),
@@ -46,38 +46,32 @@ public enum MetadataType1_8 implements IMetadataType {
         byteBuf.writeFloat(rotations.x);
         byteBuf.writeFloat(rotations.y);
         byteBuf.writeFloat(rotations.z);
-    }),
-
-    NONE(null, null);
+    });
 
     public final Function<FunctionalByteBuf, Object> reader;
     public final BiConsumer<FunctionalByteBuf, Object> writer;
 
-    MetadataType1_8(Function<FunctionalByteBuf, Object> reader, BiConsumer<FunctionalByteBuf, Object> writer) {
+    MetadataTypes(Function<FunctionalByteBuf, Object> reader, BiConsumer<FunctionalByteBuf, Object> writer) {
         this.reader = reader;
         this.writer = writer;
     }
 
-    @Override
     public Function<FunctionalByteBuf, Object> getReader() {
         return this.reader;
     }
 
-    @Override
     public BiConsumer<FunctionalByteBuf, Object> getWriter() {
         return writer;
     }
 
-    @Override
-    public int getIndex() {
-        return ordinal();
-    }
-
-    @Override
-    public IMetadataType getByIndex(int index) {
-        for (MetadataType1_8 value : values()) {
-            if (value.ordinal() == index) return value;
+    public static MetadataTypes getById(final ProtocolCollection version, final int id) {
+        for (MetadataTypes value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return ordinal();
     }
 }

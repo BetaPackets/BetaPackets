@@ -18,11 +18,10 @@
 package de.florianmichael.betapackets.base.bytebuf;
 
 import de.florianmichael.betapackets.api.UserConnection;
-import de.florianmichael.betapackets.base.bytebuf.PrimitiveByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
-import de.florianmichael.betapackets.base.registry.model.IMetadataType;
 import de.florianmichael.betapackets.model.metadata.Metadata;
+import de.florianmichael.betapackets.model.metadata.MetadataTypes;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -96,20 +95,16 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     }
 
     public List<Metadata> readMetadata() {
-        return readMetadata(userConnection.getCurrentRegistry().getMetadataType());
-    }
-
-    public List<Metadata> readMetadata(final IMetadataType metadataType) {
         final List<Metadata> list = new ArrayList<>();
         for (int i = readByte(); i != Byte.MAX_VALUE; i = readByte()) {
-            list.add(new Metadata(i & 31, metadataType.getByIndex((i & 224) >> 5), this));
+            list.add(new Metadata(i & 31, MetadataTypes.getById(getProtocolVersion(), (i & 224) >> 5), this));
         }
         return list;
     }
 
     public void writeMetadata(final List<Metadata> metadata) {
         for (Metadata metadatum : metadata) {
-            this.writeByte((metadatum.metadataType.getIndex() << 5 | metadatum.index & 31));
+            this.writeByte((metadatum.metadataType.getId(getProtocolVersion()) << 5 | metadatum.index & 31));
             metadatum.metadataType.getWriter().accept(this, metadatum);
         }
     }
