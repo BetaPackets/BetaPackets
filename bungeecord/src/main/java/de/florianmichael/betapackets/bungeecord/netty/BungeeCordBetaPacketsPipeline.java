@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.bungeecord.netty;
 
-import de.florianmichael.betapackets.api.UserConnection;
+import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.netty.BetaPacketsPipeline;
 import de.florianmichael.betapackets.netty.event.ReorderPipelineEvent;
 import io.netty.channel.ChannelHandlerContext;

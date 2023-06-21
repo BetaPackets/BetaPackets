@@ -15,16 +15,15 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.bungeecord.netty;
+package de.florianmichael.betapackets.model;
 
-import de.florianmichael.betapackets.base.api.UserConnection;
-import io.netty.channel.ChannelHandlerContext;
-import net.md_5.bungee.protocol.KickStringWriter;
+public class Statistic {
 
-public class BetaPacketsKickStringWriter extends KickStringWriter {
+    public String name;
+    public int value;
 
-    @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        ctx.pipeline().addFirst(new BungeeCordBetaPacketsPipeline(new UserConnection(ctx.channel())));
+    public Statistic(String name, int value) {
+        this.name = name;
+        this.value = value;
     }
 }

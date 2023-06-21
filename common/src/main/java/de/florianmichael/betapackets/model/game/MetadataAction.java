@@ -15,16 +15,25 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.bungeecord.netty;
+package de.florianmichael.betapackets.model.game;
 
-import de.florianmichael.betapackets.base.api.UserConnection;
-import io.netty.channel.ChannelHandlerContext;
-import net.md_5.bungee.protocol.KickStringWriter;
+public enum MetadataAction {
 
-public class BetaPacketsKickStringWriter extends KickStringWriter {
+    SET_SPAWN_POTENTIALS_OF_MOB_SPAWNER,
+    SET_COMMAND_BLOCK_TEXT_AND_LAST_EXECUTION_STATUS,
+    SET_LEVEL_AND_PRIMARY_AND_SECONDARY_POWERS_OF_BEACON,
+    SET_ROTATION_AND_SKIN_MOB_HEAD,
+    SET_TYPE_OF_FLOWER_FLOWER_POT,
+    SET_BASE_COLOR_AND_PATTERNS_BANNER;
 
-    @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        ctx.pipeline().addFirst(new BungeeCordBetaPacketsPipeline(new UserConnection(ctx.channel())));
+    public static MetadataAction getById(final int id) {
+        for (MetadataAction value : values()) {
+            if (value.getId() == id) return value;
+        }
+        return null;
+    }
+
+    public int getId() {
+        return ordinal() + 1;
     }
 }

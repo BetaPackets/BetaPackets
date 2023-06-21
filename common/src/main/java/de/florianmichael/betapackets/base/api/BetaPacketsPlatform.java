@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.api;
+package de.florianmichael.betapackets.base.api;
 
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.dietrichevents.DietrichEvents;

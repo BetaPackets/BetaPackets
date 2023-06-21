@@ -17,31 +17,31 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.model.chat.ChatPosition;
-import net.lenni0451.mcstructs.text.ATextComponent;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.position.BlockPos;
 
-public class ChatMessageS2CPacket extends Packet {
+public class OpenSignEditorS2CPacket extends Packet {
 
-    public ATextComponent textComponent;
-    public ChatPosition position;
+    public BlockPos blockPos;
 
-    public ChatMessageS2CPacket(final FunctionalByteBuf transformer) {
-        this(
-                transformer.readComponent(),
-                ChatPosition.byId(transformer.readByte())
-        );
+    public OpenSignEditorS2CPacket(final FunctionalByteBuf buf) {
+        this(BlockPos.fromLong(buf.readLong()));
     }
 
-    public ChatMessageS2CPacket(final ATextComponent textComponent, final ChatPosition position) {
-        this.textComponent = textComponent;
-        this.position = position;
+    public OpenSignEditorS2CPacket(BlockPos blockPos) {
+        this.blockPos = blockPos;
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
-        buf.writeComponent(this.textComponent);
-        buf.writeByte(this.position.ordinal());
+    public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeLong(blockPos.toLong());
+    }
+
+    @Override
+    public String toString() {
+        return "OpenSignEditorS2CPacket{" +
+                "blockPos=" + blockPos +
+                '}';
     }
 }

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.base.bytebuf;
 
-import de.florianmichael.betapackets.api.UserConnection;
+import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
 import de.florianmichael.betapackets.model.metadata.Metadata;
@@ -114,7 +114,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         if (getProtocolVersion() == ProtocolCollection.R1_8) {
             return TextComponentSerializer.V1_8.deserialize(text);
         } else if (getProtocolVersion().isNewerThan(ProtocolCollection.R1_9)) {
-            return TextComponentSerializer.V1_9.deserialize(text);
+            return TextComponentSerializer.V1_9.deserializeReader(text);
         }
         return null;
     }

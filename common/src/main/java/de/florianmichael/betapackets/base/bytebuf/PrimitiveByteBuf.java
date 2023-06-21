@@ -23,6 +23,7 @@ import io.netty.handler.codec.EncoderException;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class PrimitiveByteBuf {
     public final static short DEFAULT_MAX_STRING_LENGTH = Short.MAX_VALUE;
@@ -118,6 +119,15 @@ public class PrimitiveByteBuf {
 
         this.writeVarInt(asBytes.length);
         this.writeBytes(asBytes);
+    }
+
+    public UUID readUUID() {
+        return new UUID(readLong(), readLong());
+    }
+
+    public void writeUUID(final UUID uuid) {
+        writeLong(uuid.getMostSignificantBits());
+        writeLong(uuid.getLeastSignificantBits());
     }
 
     // Var and unsigned

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.netty.element;
 
-import de.florianmichael.betapackets.api.UserConnection;
+import de.florianmichael.betapackets.base.api.UserConnection;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;

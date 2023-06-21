@@ -83,5 +83,9 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x31, WindowPropertyS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x32, ConfirmTransactionS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x33, UpdateSignS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x34, MapS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x35, UpdateBlockEntityS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x36, OpenSignEditorS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x37, StatisticsS2CPacket.class);
     }
 }

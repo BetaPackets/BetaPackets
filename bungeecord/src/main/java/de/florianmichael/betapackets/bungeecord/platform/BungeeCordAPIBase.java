@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.bungeecord.platform;
 
-import de.florianmichael.betapackets.api.BetaPacketsAPIBase;
+import de.florianmichael.betapackets.base.api.BetaPacketsAPIBase;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 

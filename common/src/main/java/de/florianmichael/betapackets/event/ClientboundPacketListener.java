@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.event;
 
-import de.florianmichael.betapackets.api.UserConnection;
+import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.dietrichevents.handle.EventExecutor;

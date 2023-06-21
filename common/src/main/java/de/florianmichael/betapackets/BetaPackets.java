@@ -17,22 +17,29 @@
 
 package de.florianmichael.betapackets;
 
-import de.florianmichael.betapackets.api.BetaPacketsPlatform;
+import de.florianmichael.betapackets.api.BetaPacketsAPI;
+import de.florianmichael.betapackets.base.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.base.PacketRegistryManager;
 
 public class BetaPackets {
     private static BetaPacketsPlatform platform;
 
+    private static BetaPacketsAPI api;
     private static PacketRegistryManager packetRegistryManager;
 
     public static void init(final BetaPacketsPlatform platform) {
         BetaPackets.platform = platform;
 
+        BetaPackets.api = new BetaPacketsAPI(platform);
         BetaPackets.packetRegistryManager = new PacketRegistryManager();
     }
 
     public static BetaPacketsPlatform getPlatform() {
         return platform;
+    }
+
+    public static BetaPacketsAPI getAPI() {
+        return api;
     }
 
     public static PacketRegistryManager getPacketRegistryManager() {

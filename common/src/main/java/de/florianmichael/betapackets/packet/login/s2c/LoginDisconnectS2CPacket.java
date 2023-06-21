@@ -19,21 +19,22 @@ package de.florianmichael.betapackets.packet.login.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
+import net.lenni0451.mcstructs.text.ATextComponent;
 
 public class LoginDisconnectS2CPacket extends Packet {
-    public String reason;
+    public ATextComponent reason;
 
     public LoginDisconnectS2CPacket(final FunctionalByteBuf buf) {
-        this(buf.readString(32767));
+        this(buf.readComponent());
     }
 
-    public LoginDisconnectS2CPacket(String reason) {
+    public LoginDisconnectS2CPacket(ATextComponent reason) {
         this.reason = reason;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) {
-        buf.writeString(reason);
+        buf.writeComponent(reason);
     }
 
     @Override

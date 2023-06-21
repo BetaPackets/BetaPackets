@@ -42,7 +42,7 @@ public class EntityPropertiesS2CPacket extends EntityS2CPacket {
             final List<EntityPropertyModifier> entityPropertyModifiers = new ArrayList<>();
             final int modifierSize = buf.readVarInt();
             for (int j = 0; j < modifierSize; j++) {
-                final UUID uuid = new UUID(buf.readLong(), buf.readLong());
+                final UUID uuid = buf.readUUID();
                 final double amount = buf.readDouble();
                 final Operation operation = Operation.getById(buf.readByte());
 
@@ -70,8 +70,7 @@ public class EntityPropertiesS2CPacket extends EntityS2CPacket {
 
             buf.writeVarInt(entityProperty.entityPropertyModifiers.size());
             for (EntityPropertyModifier entityPropertyModifier : entityProperty.entityPropertyModifiers) {
-                buf.writeLong(entityPropertyModifier.uuid.getMostSignificantBits());
-                buf.writeLong(entityPropertyModifier.uuid.getLeastSignificantBits());
+                buf.writeUUID(entityPropertyModifier.uuid);
 
                 buf.writeDouble(entityPropertyModifier.amount);
                 buf.writeByte(entityPropertyModifier.operation.ordinal());

@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.netty.element;
 
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.DebugMode;
-import de.florianmichael.betapackets.api.UserConnection;
+import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.event.ServerboundPacketListener;

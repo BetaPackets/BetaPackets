@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.netty;
 
-import de.florianmichael.betapackets.api.UserConnection;
+import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.netty.element.BetaPacketsDecoder;
 import de.florianmichael.betapackets.netty.element.BetaPacketsEncoder;
 import de.florianmichael.betapackets.netty.event.ReorderPipelineEvent;
