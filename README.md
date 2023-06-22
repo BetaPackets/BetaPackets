@@ -16,11 +16,12 @@ Where **Animation.java** is an enum with all possible animations of the respecti
 ## How to use?
 The BetaPacketsAPI has **3** listeners, **ClientboundPacketListener**, **ServerboundPacketListener** and **PlayerEarlyJoinPacketListener**.
 
-| Class Name                    | When it is called                                                                         | Parameter                                           | API-Access                                     |
-|-------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------|------------------------------------------------|
-| ClientboundPacketListener     | When the server sends a packet to a player                                                | UserConnection, NetworkState, Packet, Player object | BetaPacketsAPI#registerIncomingPacketListener  |
-| ServerboundPacketListener     | When the server receives a packet from a player                                           | UserConnection, NetworkState, Packet, Player object | BetaPacketsAPI#registerOutgoingPacketListener  |
-| PlayerEarlyJoinPacketListener | When a player has gone through the login process and the server sends the JoinGame packet | Player UUID, lLayer Name, Protocol Version          | BetaPacketsAPI#registerPlayerEarlyJoinListener |
+| Method name in BetaPacketsAPI   | When it is called                                                                         | Parameter                                           | Cancellable |
+|---------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------|-------------|
+| registerOutgoingPacketListener  | When the server sends a packet to a player                                                | UserConnection, NetworkState, Packet, Player object | yes         |
+| registerIncomingPacketListener  | When the server receives a packet from a player                                           | UserConnection, NetworkState, Packet, Player object | yes         |
+| registerPlayerEarlyJoinListener | When a player has gone through the login process and the server sends the JoinGame packet | Player UUID, lLayer Name, Protocol Version          | no          |
+
 The API access methods return the listener as instance and can be called via **BetaPackets.getAPI()**. The BetaPackets API also has a remove method for all listeners where you have to specify the instance of the respective listener.
 
 ### Example java code
@@ -40,7 +41,7 @@ BetaPackets.getAPI().registerIncomingPacketListener(event -> {
 | Dependency     | Download                                         |
 |----------------|--------------------------------------------------|
 | MC-Structs     | https://github.com/Lenni0451/MCStructs           |
-| DietrichEvents | https://github.com/FlorianMIchael/DietrichEvents |
+| DietrichEvents | https://github.com/FlorianMichael/DietrichEvents |
 
 ## Supported versions
 - 1.8.x
