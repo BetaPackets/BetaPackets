@@ -32,7 +32,7 @@ public enum GameStateTypes {
     FADE_TIME,
     PLAY_MOB_APPEARANCE_EFFECT_AND_SOUND;
 
-    public static GameStateTypes getById(final ProtocolCollection version, final int id) {
+    public static GameStateTypes getById(final ProtocolCollection version, final short id) {
         for (GameStateTypes value : values()) {
             if (value.getId(version) == id) return value;
         }

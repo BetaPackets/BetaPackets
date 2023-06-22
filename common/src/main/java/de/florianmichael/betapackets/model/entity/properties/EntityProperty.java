@@ -18,6 +18,7 @@
 package de.florianmichael.betapackets.model.entity.properties;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EntityProperty {
 
@@ -38,5 +39,28 @@ public class EntityProperty {
                 ", value=" + value +
                 ", entityPropertyModifiers=" + entityPropertyModifiers +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityProperty that = (EntityProperty) o;
+
+        if (Double.compare(that.value, value) != 0) return false;
+        if (!Objects.equals(key, that.key)) return false;
+        return Objects.equals(entityPropertyModifiers, that.entityPropertyModifiers);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = key != null ? key.hashCode() : 0;
+        temp = Double.doubleToLongBits(value);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (entityPropertyModifiers != null ? entityPropertyModifiers.hashCode() : 0);
+        return result;
     }
 }

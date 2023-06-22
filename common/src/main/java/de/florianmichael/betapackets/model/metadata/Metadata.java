@@ -19,6 +19,8 @@ package de.florianmichael.betapackets.model.metadata;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
+import java.util.Objects;
+
 public class Metadata {
 
     public int index;
@@ -38,5 +40,25 @@ public class Metadata {
                 ", metadataType=" + metadataType +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Metadata metadata = (Metadata) o;
+
+        if (index != metadata.index) return false;
+        if (metadataType != metadata.metadataType) return false;
+        return Objects.equals(value, metadata.value);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = index;
+        result = 31 * result + (metadataType != null ? metadataType.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
     }
 }

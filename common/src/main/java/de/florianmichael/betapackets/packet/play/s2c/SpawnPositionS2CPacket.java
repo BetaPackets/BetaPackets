@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
+import java.util.Objects;
+
 public class SpawnPositionS2CPacket extends Packet {
 
     public BlockPos blockPos;
@@ -45,5 +47,20 @@ public class SpawnPositionS2CPacket extends Packet {
         return "SpawnPositionS2CPacket{" +
                 "blockPos=" + blockPos +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SpawnPositionS2CPacket that = (SpawnPositionS2CPacket) o;
+
+        return Objects.equals(blockPos, that.blockPos);
+    }
+
+    @Override
+    public int hashCode() {
+        return blockPos != null ? blockPos.hashCode() : 0;
     }
 }

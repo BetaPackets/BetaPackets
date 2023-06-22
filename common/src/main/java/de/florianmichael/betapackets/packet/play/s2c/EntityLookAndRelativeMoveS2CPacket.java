@@ -82,4 +82,30 @@ public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
                 ", entityId=" + entityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityLookAndRelativeMoveS2CPacket that = (EntityLookAndRelativeMoveS2CPacket) o;
+
+        if (deltaX != that.deltaX) return false;
+        if (deltaY != that.deltaY) return false;
+        if (deltaZ != that.deltaZ) return false;
+        if (yaw != that.yaw) return false;
+        if (pitch != that.pitch) return false;
+        return onGround == that.onGround;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = deltaX;
+        result = 31 * result + (int) deltaY;
+        result = 31 * result + (int) deltaZ;
+        result = 31 * result + (int) yaw;
+        result = 31 * result + (int) pitch;
+        result = 31 * result + (onGround ? 1 : 0);
+        return result;
+    }
 }

@@ -17,30 +17,33 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.potion.PotionEffectTypes;
 
+import java.util.Objects;
+
 public class RemoveEntityEffectS2CPacket extends EntityS2CPacket {
 
-    public PotionEffectTypes entityEffect;
+    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
 
     public RemoveEntityEffectS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
-        this.entityEffect = PotionEffectTypes.getById(buf.getProtocolVersion(), buf.readByte());
+        this.entityEffect.read(buf);
     }
 
     public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
         super(entityId);
 
-        this.entityEffect = entityEffect;
+        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(entityEffect.getId(buf.getProtocolVersion()));
+        this.entityEffect.write(buf);
     }
 
     @Override
@@ -49,5 +52,23 @@ public class RemoveEntityEffectS2CPacket extends EntityS2CPacket {
                 "entityEffect=" + entityEffect +
                 ", entityId=" + entityId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+
+        return Objects.equals(entityEffect, that.entityEffect);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        return result;
     }
 }

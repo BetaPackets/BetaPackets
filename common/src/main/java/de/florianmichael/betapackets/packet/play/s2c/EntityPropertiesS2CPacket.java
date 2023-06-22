@@ -24,6 +24,7 @@ import de.florianmichael.betapackets.model.entity.properties.Operation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class EntityPropertiesS2CPacket extends EntityS2CPacket {
@@ -84,5 +85,20 @@ public class EntityPropertiesS2CPacket extends EntityS2CPacket {
                 "entityProperties=" + entityProperties +
                 ", entityId=" + entityId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityPropertiesS2CPacket that = (EntityPropertiesS2CPacket) o;
+
+        return Objects.equals(entityProperties, that.entityProperties);
+    }
+
+    @Override
+    public int hashCode() {
+        return entityProperties != null ? entityProperties.hashCode() : 0;
     }
 }

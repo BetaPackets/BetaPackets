@@ -55,4 +55,24 @@ public class SetExperienceS2CPacket extends Packet {
                 ", totalExperience=" + totalExperience +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SetExperienceS2CPacket that = (SetExperienceS2CPacket) o;
+
+        if (Float.compare(that.experienceBar, experienceBar) != 0) return false;
+        if (level != that.level) return false;
+        return totalExperience == that.totalExperience;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (experienceBar != +0.0f ? Float.floatToIntBits(experienceBar) : 0);
+        result = 31 * result + level;
+        result = 31 * result + totalExperience;
+        return result;
+    }
 }

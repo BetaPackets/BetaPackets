@@ -51,4 +51,24 @@ public class WindowPropertyS2CPacket extends Packet {
                 ", varValue=" + varValue +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WindowPropertyS2CPacket that = (WindowPropertyS2CPacket) o;
+
+        if (windowId != that.windowId) return false;
+        if (varIndex != that.varIndex) return false;
+        return varValue == that.varValue;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = windowId;
+        result = 31 * result + varIndex;
+        result = 31 * result + varValue;
+        return result;
+    }
 }

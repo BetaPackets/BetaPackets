@@ -66,4 +66,28 @@ public class SpawnGlobalEntityS2CPacket extends Packet {
                 ", z=" + z +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SpawnGlobalEntityS2CPacket that = (SpawnGlobalEntityS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (type != that.type) return false;
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        return z == that.z;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + type;
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        return result;
+    }
 }

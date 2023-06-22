@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.game;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum MetadataAction {
 
     SET_SPAWN_POTENTIALS_OF_MOB_SPAWNER,
@@ -26,7 +28,7 @@ public enum MetadataAction {
     SET_TYPE_OF_FLOWER_FLOWER_POT,
     SET_BASE_COLOR_AND_PATTERNS_BANNER;
 
-    public static MetadataAction getById(final int id) {
+    public static MetadataAction getById(final ProtocolCollection version, final short id) {
         for (MetadataAction value : values()) {
             if (value.getId() == id) return value;
         }
@@ -34,6 +36,6 @@ public enum MetadataAction {
     }
 
     public int getId() {
-        return ordinal() + 1;
+        return ordinal();
     }
 }

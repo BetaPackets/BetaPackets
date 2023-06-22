@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.model.ping;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Player {
@@ -35,5 +36,23 @@ public class Player {
                 "name='" + name + '\'' +
                 ", uuid=" + uuid +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player player = (Player) o;
+
+        if (!Objects.equals(name, player.name)) return false;
+        return Objects.equals(uuid, player.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+        return result;
     }
 }

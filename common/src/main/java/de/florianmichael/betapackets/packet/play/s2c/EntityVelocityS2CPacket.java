@@ -57,4 +57,26 @@ public class EntityVelocityS2CPacket extends Packet {
                 ", velocityZ=" + velocityZ +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityVelocityS2CPacket that = (EntityVelocityS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (velocityX != that.velocityX) return false;
+        if (velocityY != that.velocityY) return false;
+        return velocityZ == that.velocityZ;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + velocityX;
+        result = 31 * result + velocityY;
+        result = 31 * result + velocityZ;
+        return result;
+    }
 }

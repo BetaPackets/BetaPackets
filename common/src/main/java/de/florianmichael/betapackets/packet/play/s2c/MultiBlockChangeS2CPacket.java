@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.position.BlockChunkRecord1_8;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MultiBlockChangeS2CPacket extends Packet {
 
@@ -67,5 +68,25 @@ public class MultiBlockChangeS2CPacket extends Packet {
                 ", chunkZ=" + chunkZ +
                 ", blockChunkRecords=" + blockChunkRecords +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MultiBlockChangeS2CPacket that = (MultiBlockChangeS2CPacket) o;
+
+        if (chunkX != that.chunkX) return false;
+        if (chunkZ != that.chunkZ) return false;
+        return Objects.equals(blockChunkRecords, that.blockChunkRecords);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = chunkX;
+        result = 31 * result + chunkZ;
+        result = 31 * result + (blockChunkRecords != null ? blockChunkRecords.hashCode() : 0);
+        return result;
     }
 }

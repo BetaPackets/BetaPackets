@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.base.NetworkState;
 
+import java.util.Objects;
+
 public class HandshakeC2SPacket extends Packet {
     private final int protocolVersion;
     private final String address;
@@ -75,5 +77,27 @@ public class HandshakeC2SPacket extends Packet {
                 ", port=" + port +
                 ", state=" + state +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HandshakeC2SPacket that = (HandshakeC2SPacket) o;
+
+        if (protocolVersion != that.protocolVersion) return false;
+        if (port != that.port) return false;
+        if (!Objects.equals(address, that.address)) return false;
+        return state == that.state;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = protocolVersion;
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (int) port;
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        return result;
     }
 }

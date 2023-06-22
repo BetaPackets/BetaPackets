@@ -34,6 +34,16 @@ public class Vec4b {
     }
 
     @Override
+    public String toString() {
+        return "Vec4b{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", w=" + w +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

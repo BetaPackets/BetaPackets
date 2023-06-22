@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
+import java.util.Objects;
+
 public class BlockChangeS2CPacket extends Packet {
 
     public BlockPos blockPos;
@@ -50,5 +52,23 @@ public class BlockChangeS2CPacket extends Packet {
                 "blockPos=" + blockPos +
                 ", blockId=" + blockId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BlockChangeS2CPacket that = (BlockChangeS2CPacket) o;
+
+        if (blockId != that.blockId) return false;
+        return Objects.equals(blockPos, that.blockPos);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = blockPos != null ? blockPos.hashCode() : 0;
+        result = 31 * result + blockId;
+        return result;
     }
 }

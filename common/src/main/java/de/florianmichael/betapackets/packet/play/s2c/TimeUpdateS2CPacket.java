@@ -50,4 +50,22 @@ public class TimeUpdateS2CPacket extends Packet {
                 ", timeOfDay=" + timeOfDay +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimeUpdateS2CPacket that = (TimeUpdateS2CPacket) o;
+
+        if (worldAge != that.worldAge) return false;
+        return timeOfDay == that.timeOfDay;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (worldAge ^ (worldAge >>> 32));
+        result = 31 * result + (int) (timeOfDay ^ (timeOfDay >>> 32));
+        return result;
+    }
 }

@@ -51,4 +51,19 @@ public class DestroyEntitiesS2CPacket extends Packet {
                 "entityIds=" + Arrays.toString(entityIds) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DestroyEntitiesS2CPacket that = (DestroyEntitiesS2CPacket) o;
+
+        return Arrays.equals(entityIds, that.entityIds);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(entityIds);
+    }
 }

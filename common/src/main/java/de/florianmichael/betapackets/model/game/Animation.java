@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.game;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum Animation {
 
     SWING_ARM,
@@ -26,7 +28,7 @@ public enum Animation {
     CRITICAL_EFFECT,
     MAGIC_CRITICAL_EFFECT;
 
-    public static Animation byId(final int id) {
+    public static Animation getById(final ProtocolCollection version, final short id) {
         for (Animation value : values()) {
             if (value.ordinal() == id) return value;
         }

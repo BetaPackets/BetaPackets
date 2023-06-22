@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.position.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ExplosionS2CPacket extends Packet {
 
@@ -114,5 +115,40 @@ public class ExplosionS2CPacket extends Packet {
                 ", motionY=" + motionY +
                 ", motionZ=" + motionZ +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ExplosionS2CPacket that = (ExplosionS2CPacket) o;
+
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        if (Double.compare(that.z, z) != 0) return false;
+        if (Float.compare(that.strength, strength) != 0) return false;
+        if (Float.compare(that.motionX, motionX) != 0) return false;
+        if (Float.compare(that.motionY, motionY) != 0) return false;
+        if (Float.compare(that.motionZ, motionZ) != 0) return false;
+        return Objects.equals(affectedBlockPositions, that.affectedBlockPositions);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (strength != +0.0f ? Float.floatToIntBits(strength) : 0);
+        result = 31 * result + (affectedBlockPositions != null ? affectedBlockPositions.hashCode() : 0);
+        result = 31 * result + (motionX != +0.0f ? Float.floatToIntBits(motionX) : 0);
+        result = 31 * result + (motionY != +0.0f ? Float.floatToIntBits(motionY) : 0);
+        result = 31 * result + (motionZ != +0.0f ? Float.floatToIntBits(motionZ) : 0);
+        return result;
     }
 }

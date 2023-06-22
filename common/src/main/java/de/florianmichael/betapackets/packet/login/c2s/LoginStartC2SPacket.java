@@ -20,6 +20,8 @@ package de.florianmichael.betapackets.packet.login.c2s;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 
+import java.util.Objects;
+
 public class LoginStartC2SPacket extends Packet {
     public final String name;
 
@@ -41,5 +43,20 @@ public class LoginStartC2SPacket extends Packet {
         return "LoginStartC2SPacket{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LoginStartC2SPacket that = (LoginStartC2SPacket) o;
+
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }

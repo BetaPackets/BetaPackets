@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.game.Animation;
@@ -24,20 +25,47 @@ import de.florianmichael.betapackets.model.game.Animation;
 public class AnimationS2CPacket extends Packet {
 
     public int entityId;
-    public Animation type;
+    public ModelMapper<Short, Animation> type = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, Animation::getById);
 
-    public AnimationS2CPacket(final FunctionalByteBuf transformer) {
-        this(transformer.readVarInt(), transformer.readUnsignedByte());
+    public AnimationS2CPacket(final FunctionalByteBuf buf) {
+        this.entityId = buf.readVarInt();
+        this.type.read(buf);
     }
 
-    public AnimationS2CPacket(int entityId, int type) {
+    public AnimationS2CPacket(int entityId, Animation type) {
         this.entityId = entityId;
-        this.type = Animation.byId(type);
+        this.type = new ModelMapper<>(FunctionalByteBuf::writeByte, type);
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
-        buf.writeByte(type.ordinal());
+        this.type.write(buf);
+    }
+
+    @Override
+    public String toString() {
+        return "AnimationS2CPacket{" +
+                "entityId=" + entityId +
+                ", type=" + type +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AnimationS2CPacket that = (AnimationS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        return type.equals(that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + type.hashCode();
+        return result;
     }
 }

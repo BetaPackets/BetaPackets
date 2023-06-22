@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class EncryptionRequestS2CPacket extends Packet {
     public String serverId;
@@ -55,5 +56,25 @@ public class EncryptionRequestS2CPacket extends Packet {
                 ", key=" + Arrays.toString(key) +
                 ", verifyToken=" + Arrays.toString(verifyToken) +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EncryptionRequestS2CPacket that = (EncryptionRequestS2CPacket) o;
+
+        if (!Objects.equals(serverId, that.serverId)) return false;
+        if (!Arrays.equals(key, that.key)) return false;
+        return Arrays.equals(verifyToken, that.verifyToken);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = serverId != null ? serverId.hashCode() : 0;
+        result = 31 * result + Arrays.hashCode(key);
+        result = 31 * result + Arrays.hashCode(verifyToken);
+        return result;
     }
 }

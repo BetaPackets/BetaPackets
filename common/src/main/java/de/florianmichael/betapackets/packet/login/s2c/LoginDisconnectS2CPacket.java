@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
+import java.util.Objects;
+
 public class LoginDisconnectS2CPacket extends Packet {
     public ATextComponent reason;
 
@@ -42,5 +44,20 @@ public class LoginDisconnectS2CPacket extends Packet {
         return "LoginDisconnectS2CPacket{" +
                 "reason='" + reason + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LoginDisconnectS2CPacket that = (LoginDisconnectS2CPacket) o;
+
+        return Objects.equals(reason, that.reason);
+    }
+
+    @Override
+    public int hashCode() {
+        return reason != null ? reason.hashCode() : 0;
     }
 }

@@ -19,6 +19,8 @@ package de.florianmichael.betapackets.model.item;
 
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
+import java.util.Objects;
+
 public class ItemStackV1_3 {
 
     public int itemId;
@@ -41,5 +43,27 @@ public class ItemStackV1_3 {
                 ", damage=" + damage +
                 ", tag='" + tag + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ItemStackV1_3 that = (ItemStackV1_3) o;
+
+        if (itemId != that.itemId) return false;
+        if (count != that.count) return false;
+        if (damage != that.damage) return false;
+        return Objects.equals(tag, that.tag);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = itemId;
+        result = 31 * result + count;
+        result = 31 * result + damage;
+        result = 31 * result + (tag != null ? tag.hashCode() : 0);
+        return result;
     }
 }

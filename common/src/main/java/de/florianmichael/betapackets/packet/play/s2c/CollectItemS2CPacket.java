@@ -47,4 +47,22 @@ public class CollectItemS2CPacket extends Packet {
                 ", collectorEntityId=" + collectorEntityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CollectItemS2CPacket that = (CollectItemS2CPacket) o;
+
+        if (collectedEntityId != that.collectedEntityId) return false;
+        return collectorEntityId == that.collectorEntityId;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = collectedEntityId;
+        result = 31 * result + collectorEntityId;
+        return result;
+    }
 }

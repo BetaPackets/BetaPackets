@@ -58,4 +58,22 @@ public class AttachEntityS2CPacket extends EntityS2CPacket {
                 ", entityId=" + entityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AttachEntityS2CPacket that = (AttachEntityS2CPacket) o;
+
+        if (vehicleId != that.vehicleId) return false;
+        return leash == that.leash;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = vehicleId;
+        result = 31 * result + leash;
+        return result;
+    }
 }

@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.metadata.Metadata;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EntityMetadataS2CPacket extends EntityS2CPacket {
     public List<Metadata> metadata;
@@ -50,5 +51,20 @@ public class EntityMetadataS2CPacket extends EntityS2CPacket {
                 "metadata=" + metadata +
                 ", entityId=" + entityId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityMetadataS2CPacket that = (EntityMetadataS2CPacket) o;
+
+        return Objects.equals(metadata, that.metadata);
+    }
+
+    @Override
+    public int hashCode() {
+        return metadata != null ? metadata.hashCode() : 0;
     }
 }

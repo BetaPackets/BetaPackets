@@ -63,4 +63,28 @@ public class SpawnExperienceOrbS2CPacket extends Packet {
                 ", count=" + count +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SpawnExperienceOrbS2CPacket that = (SpawnExperienceOrbS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        return count == that.count;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        result = 31 * result + count;
+        return result;
+    }
 }

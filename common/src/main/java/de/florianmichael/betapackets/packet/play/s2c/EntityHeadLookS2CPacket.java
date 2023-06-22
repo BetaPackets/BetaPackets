@@ -49,4 +49,19 @@ public class EntityHeadLookS2CPacket extends EntityS2CPacket {
                 ", entityId=" + entityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+
+        return yaw == that.yaw;
+    }
+
+    @Override
+    public int hashCode() {
+        return yaw;
+    }
 }

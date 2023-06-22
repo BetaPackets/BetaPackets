@@ -37,4 +37,24 @@ public class Vec3i {
                 ", z=" + z +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vec3i vec3i = (Vec3i) o;
+
+        if (x != vec3i.x) return false;
+        if (y != vec3i.y) return false;
+        return z == vec3i.z;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        return result;
+    }
 }

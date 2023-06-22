@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.ping;
 
+import java.util.Objects;
+
 public class Version {
     public String name;
     public String protocol;
@@ -32,5 +34,23 @@ public class Version {
                 "name='" + name + '\'' +
                 ", protocol='" + protocol + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Version version = (Version) o;
+
+        if (!Objects.equals(name, version.name)) return false;
+        return Objects.equals(protocol, version.protocol);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
+        return result;
     }
 }

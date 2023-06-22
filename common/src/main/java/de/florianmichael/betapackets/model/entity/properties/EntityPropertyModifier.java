@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.model.entity.properties;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class EntityPropertyModifier {
@@ -38,5 +39,28 @@ public class EntityPropertyModifier {
                 ", amount=" + amount +
                 ", operation=" + operation +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityPropertyModifier that = (EntityPropertyModifier) o;
+
+        if (Double.compare(that.amount, amount) != 0) return false;
+        if (!Objects.equals(uuid, that.uuid)) return false;
+        return operation == that.operation;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = uuid != null ? uuid.hashCode() : 0;
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (operation != null ? operation.hashCode() : 0);
+        return result;
     }
 }

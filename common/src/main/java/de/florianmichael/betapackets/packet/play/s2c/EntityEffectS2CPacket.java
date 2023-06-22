@@ -17,29 +17,32 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.potion.PotionEffectTypes;
 
+import java.util.Objects;
+
 public class EntityEffectS2CPacket extends EntityS2CPacket {
 
-    public PotionEffectTypes entityEffect;
+    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
     public byte amplifier;
     public int duration;
     public byte hideParticles;
 
-    public EntityEffectS2CPacket(FunctionalByteBuf transformer) {
-        super(transformer);
+    public EntityEffectS2CPacket(FunctionalByteBuf buf) {
+        super(buf);
 
-        this.entityEffect = PotionEffectTypes.getById(transformer.getProtocolVersion(), transformer.readByte());
-        this.amplifier = transformer.readByte();
-        this.duration = transformer.readVarInt();
-        this.hideParticles = transformer.readByte();
+        this.entityEffect.read(buf);
+        this.amplifier = buf.readByte();
+        this.duration = buf.readVarInt();
+        this.hideParticles = buf.readByte();
     }
 
     public EntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect, byte amplifier, int duration, byte hideParticles) {
         super(entityId);
 
-        this.entityEffect = entityEffect;
+        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
         this.amplifier = amplifier;
         this.duration = duration;
         this.hideParticles = hideParticles;
@@ -49,7 +52,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(entityEffect.getId(buf.getProtocolVersion()));
+        entityEffect.write(buf);
         buf.writeByte(amplifier);
         buf.writeVarInt(duration);
         buf.writeByte(hideParticles);
@@ -64,5 +67,27 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
                 ", hideParticles=" + hideParticles +
                 ", entityId=" + entityId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityEffectS2CPacket that = (EntityEffectS2CPacket) o;
+
+        if (amplifier != that.amplifier) return false;
+        if (duration != that.duration) return false;
+        if (hideParticles != that.hideParticles) return false;
+        return Objects.equals(entityEffect, that.entityEffect);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityEffect != null ? entityEffect.hashCode() : 0;
+        result = 31 * result + (int) amplifier;
+        result = 31 * result + duration;
+        result = 31 * result + (int) hideParticles;
+        return result;
     }
 }

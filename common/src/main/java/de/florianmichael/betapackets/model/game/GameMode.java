@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.game;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum GameMode {
 
     NOT_SET,
@@ -38,7 +40,7 @@ public enum GameMode {
         return ordinal() - 1;
     }
 
-    public static GameMode byId(final int id) {
+    public static GameMode getById(final ProtocolCollection version, final short id) {
         for (GameMode value : values()) {
             if (value.getId() == id) return value;
         }

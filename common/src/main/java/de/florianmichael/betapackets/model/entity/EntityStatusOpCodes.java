@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.entity;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum EntityStatusOpCodes {
 
     RESET_MOB_SPAWN_MINE_CART_TIMER_OR_RABBIT_JUMP_ANIMATION,
@@ -43,7 +45,7 @@ public enum EntityStatusOpCodes {
     ENABLES_REDUCED_DEBUG_FOR_PLAYERS,
     DISABLES_REDUCED_DEBUG_FOR_PLAYERS;
 
-    public static EntityStatusOpCodes byId(final int id) {
+    public static EntityStatusOpCodes getById(final ProtocolCollection version, final byte id) {
         for (EntityStatusOpCodes value : values()) {
             if (value.ordinal() == id) return value;
         }

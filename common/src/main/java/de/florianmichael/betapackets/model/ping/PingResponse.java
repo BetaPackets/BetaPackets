@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.ping;
 
+import java.util.Objects;
+
 public class PingResponse {
 
     public Version version;
@@ -46,5 +48,32 @@ public class PingResponse {
                 ", enforcesSecureChat=" + enforcesSecureChat +
                 ", previewsChat=" + previewsChat +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PingResponse that = (PingResponse) o;
+
+        if (!Objects.equals(version, that.version)) return false;
+        if (!Objects.equals(players, that.players)) return false;
+        if (!Objects.equals(description, that.description)) return false;
+        if (!Objects.equals(favicon, that.favicon)) return false;
+        if (!Objects.equals(enforcesSecureChat, that.enforcesSecureChat))
+            return false;
+        return Objects.equals(previewsChat, that.previewsChat);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = version != null ? version.hashCode() : 0;
+        result = 31 * result + (players != null ? players.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (favicon != null ? favicon.hashCode() : 0);
+        result = 31 * result + (enforcesSecureChat != null ? enforcesSecureChat.hashCode() : 0);
+        result = 31 * result + (previewsChat != null ? previewsChat.hashCode() : 0);
+        return result;
     }
 }

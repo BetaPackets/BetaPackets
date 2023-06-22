@@ -25,6 +25,7 @@ import de.florianmichael.betapackets.model.metadata.MetadataTypes;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import net.lenni0451.mcstructs.nbt.INbtTag;
 import net.lenni0451.mcstructs.nbt.io.NbtIO;
 import net.lenni0451.mcstructs.nbt.io.NbtReadTracker;
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
@@ -78,7 +79,11 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     public CompoundTag readCompoundTag() {
         try {
             final DataInput dataInput = new DataInputStream(new ByteBufInputStream(getBuffer()));
-            return NbtIO.JAVA.getReader().readCompound(dataInput, NbtReadTracker.unlimited());
+            final INbtTag tag = NbtIO.JAVA.read(dataInput, NbtReadTracker.unlimited());
+            if (tag instanceof CompoundTag) {
+                return (CompoundTag) tag;
+            }
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
         }

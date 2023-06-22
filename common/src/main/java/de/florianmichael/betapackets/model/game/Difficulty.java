@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.game;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum Difficulty {
 
     PEACEFUL,
@@ -24,7 +26,7 @@ public enum Difficulty {
     NORMAL,
     HARD;
 
-    public static Difficulty byId(final int id) {
+    public static Difficulty getById(final ProtocolCollection version, final short id) {
         for (Difficulty value : values()) {
             if (value.ordinal() == id) return value;
         }

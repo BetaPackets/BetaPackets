@@ -43,4 +43,19 @@ public class HeldItemChangeS2CPacket extends Packet {
                 "slot=" + slot +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HeldItemChangeS2CPacket that = (HeldItemChangeS2CPacket) o;
+
+        return slot == that.slot;
+    }
+
+    @Override
+    public int hashCode() {
+        return slot;
+    }
 }

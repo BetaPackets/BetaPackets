@@ -22,6 +22,7 @@ import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class EntityEquipmentS2CPacket extends Packet {
 
@@ -57,5 +58,25 @@ public class EntityEquipmentS2CPacket extends Packet {
                 ", slot=" + slot +
                 ", item=" + item +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityEquipmentS2CPacket that = (EntityEquipmentS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (slot != that.slot) return false;
+        return Objects.equals(item, that.item);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + slot;
+        result = 31 * result + (item != null ? item.hashCode() : 0);
+        return result;
     }
 }

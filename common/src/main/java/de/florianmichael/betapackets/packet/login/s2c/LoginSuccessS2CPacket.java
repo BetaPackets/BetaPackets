@@ -20,6 +20,7 @@ package de.florianmichael.betapackets.packet.login.s2c;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class LoginSuccessS2CPacket extends Packet {
@@ -50,5 +51,23 @@ public class LoginSuccessS2CPacket extends Packet {
                 "uuid='" + uuid + '\'' +
                 ", username='" + username + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LoginSuccessS2CPacket that = (LoginSuccessS2CPacket) o;
+
+        if (!Objects.equals(uuid, that.uuid)) return false;
+        return Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        return result;
     }
 }

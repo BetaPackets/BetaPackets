@@ -55,4 +55,24 @@ public class UpdateHealthS2CPacket extends Packet {
                 ", saturationLevel=" + saturationLevel +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UpdateHealthS2CPacket that = (UpdateHealthS2CPacket) o;
+
+        if (Float.compare(that.health, health) != 0) return false;
+        if (foodLevel != that.foodLevel) return false;
+        return Float.compare(that.saturationLevel, saturationLevel) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (health != +0.0f ? Float.floatToIntBits(health) : 0);
+        result = 31 * result + foodLevel;
+        result = 31 * result + (saturationLevel != +0.0f ? Float.floatToIntBits(saturationLevel) : 0);
+        return result;
+    }
 }

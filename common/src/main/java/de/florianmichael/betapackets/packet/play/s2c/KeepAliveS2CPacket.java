@@ -42,4 +42,19 @@ public class KeepAliveS2CPacket extends Packet {
                 "keepAliveId=" + keepAliveId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        KeepAliveS2CPacket that = (KeepAliveS2CPacket) o;
+
+        return keepAliveId == that.keepAliveId;
+    }
+
+    @Override
+    public int hashCode() {
+        return keepAliveId;
+    }
 }

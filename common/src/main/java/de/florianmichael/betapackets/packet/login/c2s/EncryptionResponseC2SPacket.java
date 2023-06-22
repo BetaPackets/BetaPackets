@@ -48,4 +48,22 @@ public class EncryptionResponseC2SPacket extends Packet {
                 ", verifyToken=" + Arrays.toString(verifyToken) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EncryptionResponseC2SPacket that = (EncryptionResponseC2SPacket) o;
+
+        if (!Arrays.equals(sharedSecret, that.sharedSecret)) return false;
+        return Arrays.equals(verifyToken, that.verifyToken);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(sharedSecret);
+        result = 31 * result + Arrays.hashCode(verifyToken);
+        return result;
+    }
 }

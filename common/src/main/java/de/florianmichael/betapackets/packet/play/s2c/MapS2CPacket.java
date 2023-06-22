@@ -95,4 +95,35 @@ public class MapS2CPacket extends Packet {
                 ", mapData=" + Arrays.toString(mapData) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MapS2CPacket that = (MapS2CPacket) o;
+
+        if (mapId != that.mapId) return false;
+        if (mapScale != that.mapScale) return false;
+        if (minX != that.minX) return false;
+        if (minY != that.minY) return false;
+        if (maxX != that.maxX) return false;
+        if (maxY != that.maxY) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(visiblePlayers, that.visiblePlayers)) return false;
+        return Arrays.equals(mapData, that.mapData);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mapId;
+        result = 31 * result + (int) mapScale;
+        result = 31 * result + Arrays.hashCode(visiblePlayers);
+        result = 31 * result + minX;
+        result = 31 * result + minY;
+        result = 31 * result + maxX;
+        result = 31 * result + maxY;
+        result = 31 * result + Arrays.hashCode(mapData);
+        return result;
+    }
 }

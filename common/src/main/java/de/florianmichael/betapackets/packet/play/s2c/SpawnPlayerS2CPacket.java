@@ -22,6 +22,7 @@ import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.metadata.Metadata;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SpawnPlayerS2CPacket extends Packet {
@@ -43,7 +44,7 @@ public class SpawnPlayerS2CPacket extends Packet {
     public SpawnPlayerS2CPacket(final FunctionalByteBuf transformer) {
         this(
                 transformer.readVarInt(),
-                new UUID(transformer.readLong(), transformer.readLong()),
+                transformer.readUUID(),
 
                 transformer.readInt(),
                 transformer.readInt(),
@@ -78,8 +79,7 @@ public class SpawnPlayerS2CPacket extends Packet {
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
 
-        buf.writeLong(playerId.getMostSignificantBits());
-        buf.writeLong(playerId.getLeastSignificantBits());
+        buf.writeUUID(playerId);
 
         buf.writeInt(x);
         buf.writeInt(y);
@@ -106,5 +106,37 @@ public class SpawnPlayerS2CPacket extends Packet {
                 ", currentItem=" + currentItem +
                 ", metadata=" + metadata +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SpawnPlayerS2CPacket that = (SpawnPlayerS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        if (yaw != that.yaw) return false;
+        if (pitch != that.pitch) return false;
+        if (currentItem != that.currentItem) return false;
+        if (!Objects.equals(playerId, that.playerId)) return false;
+        return Objects.equals(metadata, that.metadata);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + (playerId != null ? playerId.hashCode() : 0);
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        result = 31 * result + (int) yaw;
+        result = 31 * result + (int) pitch;
+        result = 31 * result + currentItem;
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        return result;
     }
 }

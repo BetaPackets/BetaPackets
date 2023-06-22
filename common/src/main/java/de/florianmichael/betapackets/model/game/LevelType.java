@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.game;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum LevelType {
 
     DEFAULT,
@@ -39,7 +41,7 @@ public enum LevelType {
         }
     }
 
-    public static LevelType byType(final String levelType) {
+    public static LevelType getByType(final ProtocolCollection version, final String levelType) {
         for (LevelType value : values()) {
             if (value.getName().equals(levelType)) return value;
         }

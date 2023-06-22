@@ -59,6 +59,14 @@ public class PrimitiveByteBuf {
         buffer.writeByte(input);
     }
 
+    public void writeByte(final short input) {
+        buffer.writeByte(input);
+    }
+
+    public void writeByte(final byte input) {
+        buffer.writeByte(input);
+    }
+
     public long readLong() {
         return buffer.readLong();
     }

@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.Statistic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class StatisticsS2CPacket extends Packet {
 
@@ -55,5 +56,20 @@ public class StatisticsS2CPacket extends Packet {
         return "StatisticsS2CPacket{" +
                 "statistics=" + statistics +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StatisticsS2CPacket that = (StatisticsS2CPacket) o;
+
+        return Objects.equals(statistics, that.statistics);
+    }
+
+    @Override
+    public int hashCode() {
+        return statistics != null ? statistics.hashCode() : 0;
     }
 }

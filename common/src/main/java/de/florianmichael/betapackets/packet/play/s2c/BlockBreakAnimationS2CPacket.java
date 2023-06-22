@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
+import java.util.Objects;
+
 public class BlockBreakAnimationS2CPacket extends Packet {
 
     public int breakerEntityId;
@@ -55,5 +57,25 @@ public class BlockBreakAnimationS2CPacket extends Packet {
                 ", blockPos=" + blockPos +
                 ", progress=" + progress +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BlockBreakAnimationS2CPacket that = (BlockBreakAnimationS2CPacket) o;
+
+        if (breakerEntityId != that.breakerEntityId) return false;
+        if (progress != that.progress) return false;
+        return Objects.equals(blockPos, that.blockPos);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = breakerEntityId;
+        result = 31 * result + (blockPos != null ? blockPos.hashCode() : 0);
+        result = 31 * result + progress;
+        return result;
     }
 }

@@ -63,4 +63,24 @@ public class EntityLookS2CPacket extends EntityS2CPacket {
                 ", entityId=" + entityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityLookS2CPacket that = (EntityLookS2CPacket) o;
+
+        if (yaw != that.yaw) return false;
+        if (pitch != that.pitch) return false;
+        return onGround == that.onGround;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = yaw;
+        result = 31 * result + (int) pitch;
+        result = 31 * result + (onGround ? 1 : 0);
+        return result;
+    }
 }

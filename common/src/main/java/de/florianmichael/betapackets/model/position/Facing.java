@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.position;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum Facing {
 
     DOWN(1, new Vec3i(0, -1, 0)),
@@ -29,18 +31,18 @@ public enum Facing {
     public final int opposite;
     public final Vec3i offset;
 
-    public final static Facing[] HORIZONTALS = new Facing[]{SOUTH, WEST, NORTH, EAST};
+    public final static Facing[] HORIZONTALS = new Facing[]{ SOUTH, WEST, NORTH, EAST };
 
     Facing(int opposite, Vec3i offset) {
         this.opposite = opposite;
         this.offset = offset;
     }
 
-    public static Facing horizontalById(int id) {
+    public static Facing getHorizontalById(final int id) {
         return HORIZONTALS[Math.abs(id % HORIZONTALS.length)];
     }
 
-    public static Facing byId(int id) {
+    public static Facing getById(final ProtocolCollection version, final byte id) {
         for (Facing facing : values()) {
             if (facing.ordinal() == id) return facing;
         }

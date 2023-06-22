@@ -108,4 +108,40 @@ public class SpawnObjectS2CPacket extends Packet {
                 ", speedZ=" + speedZ +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SpawnObjectS2CPacket that = (SpawnObjectS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (type != that.type) return false;
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        if (pitch != that.pitch) return false;
+        if (yaw != that.yaw) return false;
+        if (data != that.data) return false;
+        if (speedX != that.speedX) return false;
+        if (speedY != that.speedY) return false;
+        return speedZ == that.speedZ;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + type;
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        result = 31 * result + pitch;
+        result = 31 * result + yaw;
+        result = 31 * result + data;
+        result = 31 * result + speedX;
+        result = 31 * result + speedY;
+        result = 31 * result + speedZ;
+        return result;
+    }
 }

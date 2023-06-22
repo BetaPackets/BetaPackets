@@ -22,6 +22,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
+import java.util.Objects;
+
 public class UpdateSignS2CPacket extends Packet {
 
     public BlockPos blockPos;
@@ -71,5 +73,29 @@ public class UpdateSignS2CPacket extends Packet {
                 ", line3=" + line3 +
                 ", line4=" + line4 +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UpdateSignS2CPacket that = (UpdateSignS2CPacket) o;
+
+        if (!Objects.equals(blockPos, that.blockPos)) return false;
+        if (!Objects.equals(line1, that.line1)) return false;
+        if (!Objects.equals(line2, that.line2)) return false;
+        if (!Objects.equals(line3, that.line3)) return false;
+        return Objects.equals(line4, that.line4);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = blockPos != null ? blockPos.hashCode() : 0;
+        result = 31 * result + (line1 != null ? line1.hashCode() : 0);
+        result = 31 * result + (line2 != null ? line2.hashCode() : 0);
+        result = 31 * result + (line3 != null ? line3.hashCode() : 0);
+        result = 31 * result + (line4 != null ? line4.hashCode() : 0);
+        return result;
     }
 }

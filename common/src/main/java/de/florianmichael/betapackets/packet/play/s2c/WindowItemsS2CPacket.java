@@ -59,4 +59,23 @@ public class WindowItemsS2CPacket extends Packet {
                 ", itemStacks=" + Arrays.toString(itemStacks) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WindowItemsS2CPacket that = (WindowItemsS2CPacket) o;
+
+        if (windowId != that.windowId) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(itemStacks, that.itemStacks);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = windowId;
+        result = 31 * result + Arrays.hashCode(itemStacks);
+        return result;
+    }
 }

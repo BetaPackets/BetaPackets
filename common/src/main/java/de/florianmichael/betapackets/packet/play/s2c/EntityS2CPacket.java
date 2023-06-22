@@ -43,4 +43,19 @@ public class EntityS2CPacket extends Packet {
                 "entityId=" + entityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityS2CPacket that = (EntityS2CPacket) o;
+
+        return entityId == that.entityId;
+    }
+
+    @Override
+    public int hashCode() {
+        return entityId;
+    }
 }

@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
+import java.util.Objects;
+
 public class OpenWindowS2CPacket extends Packet {
 
     public int windowId;
@@ -73,5 +75,30 @@ public class OpenWindowS2CPacket extends Packet {
                 ", slotCount=" + slotCount +
                 ", entityId=" + entityId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OpenWindowS2CPacket that = (OpenWindowS2CPacket) o;
+
+        if (windowId != that.windowId) return false;
+        if (slotCount != that.slotCount) return false;
+        if (entityId != that.entityId) return false;
+        if (!Objects.equals(inventoryType, that.inventoryType))
+            return false;
+        return Objects.equals(windowTitle, that.windowTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = windowId;
+        result = 31 * result + (inventoryType != null ? inventoryType.hashCode() : 0);
+        result = 31 * result + (windowTitle != null ? windowTitle.hashCode() : 0);
+        result = 31 * result + slotCount;
+        result = 31 * result + entityId;
+        return result;
     }
 }

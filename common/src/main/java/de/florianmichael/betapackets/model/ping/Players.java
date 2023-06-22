@@ -39,4 +39,25 @@ public class Players {
                 ", sample=" + Arrays.toString(sample) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Players players = (Players) o;
+
+        if (max != players.max) return false;
+        if (online != players.online) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(sample, players.sample);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = max;
+        result = 31 * result + online;
+        result = 31 * result + Arrays.hashCode(sample);
+        return result;
+    }
 }

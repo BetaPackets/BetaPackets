@@ -42,4 +42,19 @@ public class PingRequestC2SPacket extends Packet {
                 "payload=" + payload +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PingRequestC2SPacket that = (PingRequestC2SPacket) o;
+
+        return payload == that.payload;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (payload ^ (payload >>> 32));
+    }
 }

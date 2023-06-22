@@ -46,4 +46,19 @@ public class SetCompressionS2CPacket extends Packet {
                 "threshold=" + threshold +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SetCompressionS2CPacket that = (SetCompressionS2CPacket) o;
+
+        return threshold == that.threshold;
+    }
+
+    @Override
+    public int hashCode() {
+        return threshold;
+    }
 }

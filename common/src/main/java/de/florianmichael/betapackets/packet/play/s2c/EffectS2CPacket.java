@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
+import java.util.Objects;
+
 public class EffectS2CPacket extends Packet {
 
     public int effectId;
@@ -60,5 +62,27 @@ public class EffectS2CPacket extends Packet {
                 ", data=" + data +
                 ", disableRelativeVolume=" + disableRelativeVolume +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EffectS2CPacket that = (EffectS2CPacket) o;
+
+        if (effectId != that.effectId) return false;
+        if (data != that.data) return false;
+        if (disableRelativeVolume != that.disableRelativeVolume) return false;
+        return Objects.equals(blockPos, that.blockPos);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = effectId;
+        result = 31 * result + (blockPos != null ? blockPos.hashCode() : 0);
+        result = 31 * result + data;
+        result = 31 * result + (disableRelativeVolume ? 1 : 0);
+        return result;
     }
 }

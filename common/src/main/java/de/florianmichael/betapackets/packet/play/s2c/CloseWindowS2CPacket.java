@@ -43,4 +43,19 @@ public class CloseWindowS2CPacket extends Packet {
                 "windowId=" + windowId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CloseWindowS2CPacket that = (CloseWindowS2CPacket) o;
+
+        return windowId == that.windowId;
+    }
+
+    @Override
+    public int hashCode() {
+        return windowId;
+    }
 }

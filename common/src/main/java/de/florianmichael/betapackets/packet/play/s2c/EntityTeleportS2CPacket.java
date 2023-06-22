@@ -82,4 +82,32 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
                 ", entityId=" + entityId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        EntityTeleportS2CPacket that = (EntityTeleportS2CPacket) o;
+
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        if (yaw != that.yaw) return false;
+        if (pitch != that.pitch) return false;
+        return onGround == that.onGround;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        result = 31 * result + (int) yaw;
+        result = 31 * result + (int) pitch;
+        result = 31 * result + (onGround ? 1 : 0);
+        return result;
+    }
 }

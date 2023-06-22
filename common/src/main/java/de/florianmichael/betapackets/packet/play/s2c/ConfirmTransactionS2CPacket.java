@@ -51,4 +51,24 @@ public class ConfirmTransactionS2CPacket extends Packet {
                 ", accepted=" + accepted +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ConfirmTransactionS2CPacket that = (ConfirmTransactionS2CPacket) o;
+
+        if (windowID != that.windowID) return false;
+        if (actionNumber != that.actionNumber) return false;
+        return accepted == that.accepted;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = windowID;
+        result = 31 * result + (int) actionNumber;
+        result = 31 * result + (accepted ? 1 : 0);
+        return result;
+    }
 }

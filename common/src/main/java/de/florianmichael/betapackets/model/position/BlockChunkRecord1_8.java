@@ -40,4 +40,22 @@ public class BlockChunkRecord1_8 {
                 ", blockState=" + blockState +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BlockChunkRecord1_8 that = (BlockChunkRecord1_8) o;
+
+        if (chunkPosCrammed != that.chunkPosCrammed) return false;
+        return blockState == that.blockState;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = chunkPosCrammed;
+        result = 31 * result + blockState;
+        return result;
+    }
 }

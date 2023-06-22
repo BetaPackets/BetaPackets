@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.chat;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 public enum ChatPosition {
     CHAT,
     SYSTEM_MESSAGE,
@@ -26,7 +28,7 @@ public enum ChatPosition {
         return this == CHAT || this == SYSTEM_MESSAGE;
     }
 
-    public static ChatPosition byId(final int id) {
+    public static ChatPosition getById(final ProtocolCollection version, final byte id) {
         for (ChatPosition value : values()) {
             if (value.ordinal() == id) return value;
         }

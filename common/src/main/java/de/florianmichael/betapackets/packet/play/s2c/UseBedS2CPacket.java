@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
+import java.util.Objects;
+
 public class UseBedS2CPacket extends Packet {
 
     public int entityId;
@@ -47,5 +49,23 @@ public class UseBedS2CPacket extends Packet {
                 "entityId=" + entityId +
                 ", position=" + position +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UseBedS2CPacket that = (UseBedS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        return Objects.equals(position, that.position);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        return result;
     }
 }

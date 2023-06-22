@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model;
 
+import java.util.Objects;
+
 public class Statistic {
 
     public String name;
@@ -25,5 +27,31 @@ public class Statistic {
     public Statistic(String name, int value) {
         this.name = name;
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Statistic{" +
+                "name='" + name + '\'' +
+                ", value=" + value +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Statistic statistic = (Statistic) o;
+
+        if (value != statistic.value) return false;
+        return Objects.equals(name, statistic.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + value;
+        return result;
     }
 }

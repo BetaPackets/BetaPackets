@@ -25,6 +25,7 @@ import de.florianmichael.betapackets.model.ping.Player;
 import de.florianmichael.betapackets.model.ping.Players;
 import de.florianmichael.betapackets.model.ping.Version;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class StatusResponseS2CPacket extends Packet {
@@ -85,5 +86,24 @@ public class StatusResponseS2CPacket extends Packet {
         return "StatusResponseS2CPacket{" +
                 "pingResponse=" + pingResponse +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StatusResponseS2CPacket that = (StatusResponseS2CPacket) o;
+
+        if (!Objects.equals(rawPingResponse, that.rawPingResponse))
+            return false;
+        return Objects.equals(pingResponse, that.pingResponse);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = rawPingResponse != null ? rawPingResponse.hashCode() : 0;
+        result = 31 * result + (pingResponse != null ? pingResponse.hashCode() : 0);
+        return result;
     }
 }

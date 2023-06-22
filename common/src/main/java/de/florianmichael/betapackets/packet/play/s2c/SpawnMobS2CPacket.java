@@ -22,6 +22,7 @@ import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.model.metadata.Metadata;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SpawnMobS2CPacket extends Packet {
 
@@ -114,5 +115,43 @@ public class SpawnMobS2CPacket extends Packet {
                 ", velocityZ=" + velocityZ +
                 ", metadata=" + metadata +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SpawnMobS2CPacket that = (SpawnMobS2CPacket) o;
+
+        if (entityId != that.entityId) return false;
+        if (type != that.type) return false;
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        if (yaw != that.yaw) return false;
+        if (pitch != that.pitch) return false;
+        if (headPitch != that.headPitch) return false;
+        if (velocityX != that.velocityX) return false;
+        if (velocityY != that.velocityY) return false;
+        if (velocityZ != that.velocityZ) return false;
+        return Objects.equals(metadata, that.metadata);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entityId;
+        result = 31 * result + type;
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        result = 31 * result + (int) yaw;
+        result = 31 * result + (int) pitch;
+        result = 31 * result + (int) headPitch;
+        result = 31 * result + velocityX;
+        result = 31 * result + velocityY;
+        result = 31 * result + velocityZ;
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        return result;
     }
 }

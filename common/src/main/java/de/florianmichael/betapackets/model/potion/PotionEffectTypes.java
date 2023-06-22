@@ -60,7 +60,7 @@ public enum PotionEffectTypes {
         this.name = this.name().toLowerCase();
     }
 
-    public static PotionEffectTypes getById(final ProtocolCollection version, final int id) {
+    public static PotionEffectTypes getById(final ProtocolCollection version, final byte id) {
         for (PotionEffectTypes value : values()) {
             if (value.getId(version) == id) return value;
         }

@@ -17,28 +17,31 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.EntityStatusOpCodes;
 
+import java.util.Objects;
+
 public class EntityStatusS2CPacket extends EntityS2CPacket {
 
-    public EntityStatusOpCodes entityStatus;
+    public ModelMapper<Byte, EntityStatusOpCodes> entityStatus = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, EntityStatusOpCodes::getById);
 
     public EntityStatusS2CPacket(FunctionalByteBuf buf) {
         super(buf);
-        this.entityStatus = EntityStatusOpCodes.byId(buf.readByte());
+        this.entityStatus.read(buf);
     }
 
     public EntityStatusS2CPacket(int entityId, EntityStatusOpCodes entityStatus) {
         super(entityId);
-        this.entityStatus = entityStatus;
+        this.entityStatus = new ModelMapper<>(FunctionalByteBuf::writeByte, entityStatus);
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(entityStatus.ordinal());
+        this.entityStatus.write(buf);
     }
 
     @Override
@@ -47,5 +50,23 @@ public class EntityStatusS2CPacket extends EntityS2CPacket {
                 "entityStatus=" + entityStatus +
                 ", entityId=" + entityId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        EntityStatusS2CPacket that = (EntityStatusS2CPacket) o;
+
+        return Objects.equals(entityStatus, that.entityStatus);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (entityStatus != null ? entityStatus.hashCode() : 0);
+        return result;
     }
 }

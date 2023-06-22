@@ -21,6 +21,8 @@ import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.item.ItemStackV1_3;
 
+import java.util.Objects;
+
 public class SetSlotS2CPacket extends Packet {
 
     public int windowId;
@@ -51,5 +53,25 @@ public class SetSlotS2CPacket extends Packet {
                 ", slot=" + slot +
                 ", itemStack=" + itemStack +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SetSlotS2CPacket that = (SetSlotS2CPacket) o;
+
+        if (windowId != that.windowId) return false;
+        if (slot != that.slot) return false;
+        return Objects.equals(itemStack, that.itemStack);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = windowId;
+        result = 31 * result + slot;
+        result = 31 * result + (itemStack != null ? itemStack.hashCode() : 0);
+        return result;
     }
 }

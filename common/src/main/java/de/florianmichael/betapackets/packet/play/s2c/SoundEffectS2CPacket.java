@@ -20,6 +20,8 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 
+import java.util.Objects;
+
 public class SoundEffectS2CPacket extends Packet {
 
     public String soundName;
@@ -85,5 +87,31 @@ public class SoundEffectS2CPacket extends Packet {
                 ", soundVolume=" + soundVolume +
                 ", soundPitch=" + soundPitch +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SoundEffectS2CPacket that = (SoundEffectS2CPacket) o;
+
+        if (x != that.x) return false;
+        if (y != that.y) return false;
+        if (z != that.z) return false;
+        if (Float.compare(that.soundVolume, soundVolume) != 0) return false;
+        if (soundPitch != that.soundPitch) return false;
+        return Objects.equals(soundName, that.soundName);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = soundName != null ? soundName.hashCode() : 0;
+        result = 31 * result + x;
+        result = 31 * result + y;
+        result = 31 * result + z;
+        result = 31 * result + (soundVolume != +0.0f ? Float.floatToIntBits(soundVolume) : 0);
+        result = 31 * result + soundPitch;
+        return result;
     }
 }
