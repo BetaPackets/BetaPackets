@@ -22,19 +22,19 @@ import de.florianmichael.betapackets.base.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.base.PacketRegistryManager;
 
 public class BetaPackets {
-    private static BetaPacketsPlatform platform;
+    private static BetaPacketsPlatform<?> platform;
 
     private static BetaPacketsAPI api;
     private static PacketRegistryManager packetRegistryManager;
 
-    public static void init(final BetaPacketsPlatform platform) {
+    public static void init(final BetaPacketsPlatform<?> platform) {
         BetaPackets.platform = platform;
 
-        BetaPackets.api = new BetaPacketsAPI(platform);
+        BetaPackets.api = new BetaPacketsAPI();
         BetaPackets.packetRegistryManager = new PacketRegistryManager();
     }
 
-    public static BetaPacketsPlatform getPlatform() {
+    public static BetaPacketsPlatform<?> getPlatform() {
         return platform;
     }
 

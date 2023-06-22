@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.event.ClientboundPacketListener;
+import de.florianmichael.betapackets.event.PlayerEarlyJoinListener;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.packet.login.s2c.LoginSuccessS2CPacket;
@@ -44,7 +45,11 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         final LoginSuccessS2CPacket loginSuccessS2CPacket = new LoginSuccessS2CPacket(data);
 
         userConnection.setState(NetworkState.PLAY);
-        userConnection.setPlayer(loginSuccessS2CPacket.uuid);
+        BetaPackets.getAPI().getEventProvider().postInternal(new PlayerEarlyJoinListener.PlayerEarlyJoinEvent(
+                loginSuccessS2CPacket.uuid,
+                loginSuccessS2CPacket.username,
+                data.getProtocolVersion()
+        ));
 
         return loginSuccessS2CPacket;
     }
@@ -60,11 +65,11 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         } else {
             model = userConnection.getCurrentRegistry().createModel(NetworkSide.CLIENTBOUND, packetId, data);
         }
-        final ClientboundPacketListener.ClientboundPacketEvent<?> event = BetaPackets.getPlatform().getEventProvider().postInternal(new ClientboundPacketListener.ClientboundPacketEvent<>(
+        final ClientboundPacketListener.ClientboundPacketEvent<?> event = BetaPackets.getAPI().getEventProvider().postInternal(new ClientboundPacketListener.ClientboundPacketEvent<>(
                 userConnection,
                 userConnection.getState(),
                 model,
-                BetaPackets.getPlatform().getAPIBase().get(userConnection.getPlayer())
+                BetaPackets.getPlatform().getPlayer(userConnection.getPlayer())
         ));
         if (event.isCancelled()) {
             return;

@@ -17,22 +17,20 @@
 
 package de.florianmichael.betapackets.bungeecord;
 
-import de.florianmichael.betapackets.base.api.BetaPacketsAPIBase;
 import de.florianmichael.betapackets.base.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.bungeecord.injection.ReflectionInject;
 import de.florianmichael.betapackets.bungeecord.netty.BetaPacketsKickStringWriter;
-import de.florianmichael.betapackets.bungeecord.platform.BungeeCordAPIBase;
 import de.florianmichael.betapackets.bungeecord.util.JLoggerToSLF4J;
-import de.florianmichael.dietrichevents.DietrichEvents;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
-public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform {
+public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform<ProxiedPlayer> {
 
     private final static Logger logging = new JLoggerToSLF4J(LoggerFactory.getLogger("BetaPackets (BungeeCord)"));
-    private final static DietrichEvents events = DietrichEvents.createThreadSafe();
 
     @Override
     public void onLoad() {
@@ -46,13 +44,8 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform {
     }
 
     @Override
-    public BetaPacketsAPIBase<?> getAPIBase() {
-        return new BungeeCordAPIBase(getProxy());
-    }
-
-    @Override
-    public DietrichEvents getEventProvider() {
-        return events;
+    public ProxiedPlayer getPlayer(UUID uuid) {
+        return getProxy().getPlayer(uuid);
     }
 
     @Override

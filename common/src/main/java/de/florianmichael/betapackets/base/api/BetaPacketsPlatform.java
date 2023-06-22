@@ -20,9 +20,14 @@ package de.florianmichael.betapackets.base.api;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.dietrichevents.DietrichEvents;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
-public interface BetaPacketsPlatform {
+/**
+ * This class represents a BetaPackets platform implementation
+ * @param <T>
+ */
+public interface BetaPacketsPlatform<T> {
 
     default void loadPlatform() {
         BetaPackets.init(this);
@@ -34,7 +39,5 @@ public interface BetaPacketsPlatform {
     Logger getLogging();
     String getPlatformName();
 
-    BetaPacketsAPIBase<?> getAPIBase();
-
-    DietrichEvents getEventProvider();
+    T getPlayer(final UUID uuid);
 }

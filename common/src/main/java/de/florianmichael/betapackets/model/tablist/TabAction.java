@@ -15,11 +15,25 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.base.api;
+package de.florianmichael.betapackets.model.tablist;
 
-import java.util.UUID;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public interface BetaPacketsAPIBase<T> {
+public enum TabAction {
+    ADD_PLAYER,
+    UPDATE_GAME_MODE,
+    UPDATE_LATENCY,
+    UPDATE_DISPLAY_NAME,
+    REMOVE_PLAYER;
 
-    T get(final UUID uuid);
+    public static TabAction getById(final ProtocolCollection version, int id) {
+        for (TabAction value : values()) {
+            if (value.getId(version) == id) return value;
+        }
+        return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
+    }
 }

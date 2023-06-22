@@ -22,11 +22,13 @@ import de.florianmichael.betapackets.DebugMode;
 import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.event.PlayerEarlyJoinListener;
 import de.florianmichael.betapackets.event.ServerboundPacketListener;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.packet.handshake.HandshakeC2SPacket;
+import de.florianmichael.betapackets.packet.login.c2s.LoginStartC2SPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -61,11 +63,11 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         } else {
             model = userConnection.getCurrentRegistry().createModel(NetworkSide.SERVERBOUND, packetId, data);
         }
-        final ServerboundPacketListener.ServerboundPacketEvent<?> event = BetaPackets.getPlatform().getEventProvider().postInternal(new ServerboundPacketListener.ServerboundPacketEvent<>(
+        final ServerboundPacketListener.ServerboundPacketEvent<?> event = BetaPackets.getAPI().getEventProvider().postInternal(new ServerboundPacketListener.ServerboundPacketEvent<>(
                 userConnection,
                 userConnection.getState(),
                 model,
-                BetaPackets.getPlatform().getAPIBase().get(userConnection.getPlayer())
+                BetaPackets.getPlatform().getPlayer(userConnection.getPlayer())
         ));
         if (event.isCancelled()) {
             return;

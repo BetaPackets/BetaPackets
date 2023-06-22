@@ -17,23 +17,23 @@
 
 package de.florianmichael.betapackets.api;
 
-import de.florianmichael.betapackets.base.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.event.ClientboundPacketListener;
+import de.florianmichael.betapackets.event.PlayerEarlyJoinListener;
 import de.florianmichael.betapackets.event.ServerboundPacketListener;
+import de.florianmichael.dietrichevents.DietrichEvents;
 
+/**
+ * This class represents the user API for BetaPackets, it's using <a href="https://github.com/FlorianMichael/DietrichEvents">DietrichEvents</a> as event backend
+ */
 public class BetaPacketsAPI {
-    private final BetaPacketsPlatform platform;
-
-    public BetaPacketsAPI(BetaPacketsPlatform platform) {
-        this.platform = platform;
-    }
+    private final DietrichEvents eventProvider = DietrichEvents.createThreadSafe();
 
     public ServerboundPacketListener registerIncomingPacketListener(final ServerboundPacketListener listener) {
         return registerIncomingPacketListener(listener, 0);
     }
 
     public ServerboundPacketListener registerIncomingPacketListener(final ServerboundPacketListener listener, final int priority) {
-        return platform.getEventProvider().subscribe(ServerboundPacketListener.class, listener, priority);
+        return eventProvider.subscribe(ServerboundPacketListener.class, listener, priority);
     }
 
     public ClientboundPacketListener registerOutgoingPacketListener(final ClientboundPacketListener listener) {
@@ -41,6 +41,30 @@ public class BetaPacketsAPI {
     }
 
     public ClientboundPacketListener registerOutgoingPacketListener(final ClientboundPacketListener listener, final int priority) {
-        return platform.getEventProvider().subscribe(ClientboundPacketListener.class, listener, priority);
+        return eventProvider.subscribe(ClientboundPacketListener.class, listener, priority);
+    }
+
+    public PlayerEarlyJoinListener registerPlayerEarlyJoinListener(final PlayerEarlyJoinListener listener) {
+        return registerPlayerEarlyJoinListener(listener, 0);
+    }
+
+    public PlayerEarlyJoinListener registerPlayerEarlyJoinListener(final PlayerEarlyJoinListener listener, final int priority) {
+        return eventProvider.subscribe(PlayerEarlyJoinListener.class, listener, priority);
+    }
+
+    public void removeIncomingPacketListener(final ServerboundPacketListener listener) {
+        eventProvider.unsubscribeInternal(ServerboundPacketListener.class, listener);
+    }
+
+    public void removeOutgoingPacketListener(final ClientboundPacketListener listener) {
+        eventProvider.unsubscribeInternal(ClientboundPacketListener.class, listener);
+    }
+
+    public void removePlayerEarlyJoinListener(final PlayerEarlyJoinListener listener) {
+        eventProvider.unsubscribeInternal(PlayerEarlyJoinListener.class, listener);
+    }
+
+    public DietrichEvents getEventProvider() {
+        return eventProvider;
     }
 }

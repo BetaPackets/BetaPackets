@@ -6,40 +6,44 @@
 ## Why another protocol library?
 The idea of BetaPackets is to develop a protocol library that is not based on any platform, the BetaPackets core is based only on Netty and can be implemented on anything, this ensures that this protocol library works on any server software with the same API.
 
-## How to use?
-BetaPackets uses DietrichEvents as event library, so you have to include it to use BetaPackets, so the API consists only of events listed here:
+## Design ideology
+BetaPackets reads all packets and writes them exactly as they were read, which means that BetaPackets does not intercept invalid packets itself, but simply passes them on in the pipeline. BetaPackets tries to map everything possible into Java models, and gives the user the raw but also the model data.
 
-| Class Name                | When it is called                               | Parameter                                           | Cancellable |
-|---------------------------|-------------------------------------------------|-----------------------------------------------------|-------------|
-| ClientboundPacketListener | When the server sends a packet to a player      | UserConnection, NetworkState, Packet, Player object | yes         |
-| ServerboundPacketListener | When the server receives a packet from a player | UserConnection, NetworkState, Packet, Player object | yes         |
+Example:
+![Design1](.github/images/design1.png)
+Where **Animation.java** is an enum with all possible animations of the respective version, and the **Short** is simply the raw type that is in the vanilla package.
+
+## How to use?
+The BetaPacketsAPI has **3** listeners, **ClientboundPacketListener**, **ServerboundPacketListener** and **PlayerEarlyJoinPacketListener**.
+
+| Class Name                    | When it is called                                                                         | Parameter                                           | API-Access                                     |
+|-------------------------------|-------------------------------------------------------------------------------------------|-----------------------------------------------------|------------------------------------------------|
+| ClientboundPacketListener     | When the server sends a packet to a player                                                | UserConnection, NetworkState, Packet, Player object | BetaPacketsAPI#registerIncomingPacketListener  |
+| ServerboundPacketListener     | When the server receives a packet from a player                                           | UserConnection, NetworkState, Packet, Player object | BetaPacketsAPI#registerOutgoingPacketListener  |
+| PlayerEarlyJoinPacketListener | When a player has gone through the login process and the server sends the JoinGame packet | Player UUID, lLayer Name, Protocol Version          | BetaPacketsAPI#registerPlayerEarlyJoinListener |
+The API access methods return the listener as instance and can be called via **BetaPackets.getAPI()**. The BetaPackets API also has a remove method for all listeners where you have to specify the instance of the respective listener.
 
 ### Example java code
 ```java
-BetaPackets.getPlatform().getEventProvider().subscribe(ClientboundPacketListener.class, event -> {
+BetaPackets.getAPI().registerIncomingPacketListener(event -> {
     if (event.packet instanceof LoginSuccessS2CPacket) {
-        final LoginSuccessS2CPacket loginSuccess = (LoginSuccessS2CPacket) event.packet;
-        final Channel channel = event.userConnection.getChannel(); // User's netty channel
-        final Object player = event.player; // User's player object (depends on the platform)
-                
-        if (loginSuccess.getUsername().equals("Notch")) {
-            System.out.println("Notch joined the server!");
-        } else {
-            System.out.println("Someone else joined the server!");
-        }
-                
-        if (loginSuccess.getUsername().equals("Kevin")) {
-            event.cancel(); // Packet won't be processed
+        final LoginSuccessS2CPacket packet = (LoginSuccessS2CPacket) event.packet;
+
+        if (packet.username.equals("Kevin")) {
+            event.cancel(); // Packet won't be sent to the server/next element in the netty pipeline
         }
     }
 });
 ```
 
+## Dependencies
+| Dependency     | Download                                         |
+|----------------|--------------------------------------------------|
+| MC-Structs     | https://github.com/Lenni0451/MCStructs           |
+| DietrichEvents | https://github.com/FlorianMIchael/DietrichEvents |
+
 ## Supported versions
 - 1.8.x
-
-## Note
-BetaPackets uses for items and chat components [MCStructs](https://github.com/Lenni0451/MCStructs/tree/main)
 
 ## Contact
 If you encounter any issues, please report them on the
