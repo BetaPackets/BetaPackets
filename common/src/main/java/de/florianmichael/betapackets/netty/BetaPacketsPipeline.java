@@ -41,22 +41,32 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, createBetaPacketsEncoder(userConnection));
     }
 
+    public void addAutomaticallyReorderElement(final ChannelPipeline channelPipeline) {
+        channelPipeline.addLast(new ChannelOutboundHandlerAdapter() {
+            @Override
+            public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+                if (needsReorderPipeline(ctx.pipeline())) {
+                    ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent());
+                }
+                super.write(ctx, msg, promise);
+            }
+        });
+    }
+
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof ReorderPipelineEvent) {
             final ReorderPipelineEvent event = (ReorderPipelineEvent) evt;
             final ChannelPipeline pipeline = ctx.channel().pipeline();
 
-            if (needsReorderPipeline(pipeline)) {
-                final ChannelHandler decoder = pipeline.get(HANDLER_PACKET_DECODER_NAME);
-                final ChannelHandler encoder = pipeline.get(HANDLER_PACKET_ENCODER_NAME);
+            final ChannelHandler decoder = pipeline.get(HANDLER_PACKET_DECODER_NAME);
+            final ChannelHandler encoder = pipeline.get(HANDLER_PACKET_ENCODER_NAME);
 
-                pipeline.remove(decoder);
-                pipeline.remove(encoder);
+            pipeline.remove(decoder);
+            pipeline.remove(encoder);
 
-                pipeline.addAfter(getPacketDecompressName(), event.targetDecoder, decoder);
-                pipeline.addAfter(getPacketCompressName(), event.targetEncoder, encoder);
-            }
+            pipeline.addAfter(getPacketDecompressName(), event.targetDecoder, decoder);
+            pipeline.addAfter(getPacketCompressName(), event.targetEncoder, encoder);
         }
         super.userEventTriggered(ctx, evt);
     }
