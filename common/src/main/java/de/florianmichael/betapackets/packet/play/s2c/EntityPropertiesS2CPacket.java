@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.properties.EntityProperty;
 import de.florianmichael.betapackets.model.entity.properties.EntityPropertyModifier;
@@ -27,12 +28,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EntityPropertiesS2CPacket extends EntityS2CPacket {
+public class EntityPropertiesS2CPacket extends Packet {
 
+    public int entityId;
     public List<EntityProperty> entityProperties;
 
     public EntityPropertiesS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
+        this.entityId = buf.readVarInt();
         entityProperties = new ArrayList<>();
 
         final int size = buf.readInt();
@@ -55,15 +57,13 @@ public class EntityPropertiesS2CPacket extends EntityS2CPacket {
     }
 
     public EntityPropertiesS2CPacket(int entityId, List<EntityProperty> entityProperties) {
-        super(entityId);
-
+        this.entityId = entityId;
         this.entityProperties = entityProperties;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        super.write(buf);
-
+        buf.writeVarInt(this.entityId);
         buf.writeInt(entityProperties.size());
         for (EntityProperty entityProperty : entityProperties) {
             buf.writeString(entityProperty.key);

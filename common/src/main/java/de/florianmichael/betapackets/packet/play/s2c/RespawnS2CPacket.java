@@ -31,10 +31,10 @@ public class RespawnS2CPacket extends Packet {
     public int dimension;
     public ModelMapper<Short, Difficulty> difficulty = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, Difficulty::getById);
     public ModelMapper<Short, GameMode> gameMode = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, GameMode::getById);
-    public ModelMapper<String, LevelType> levelType = new ModelMapper<>(FunctionalByteBuf::readString, FunctionalByteBuf::writeString, LevelType::getByType);
+    public ModelMapper<String, LevelType> levelType = new ModelMapper<>(buf -> buf.readString(16), FunctionalByteBuf::writeString, LevelType::getByType);
 
     public RespawnS2CPacket(final FunctionalByteBuf buf) {
-        this.dimension = buf.readVarInt();
+        this.dimension = buf.readInt();
         this.difficulty.read(buf);
         this.gameMode.read(buf);
         this.levelType.read(buf);
@@ -53,7 +53,7 @@ public class RespawnS2CPacket extends Packet {
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(dimension);
+        buf.writeInt(dimension);
         this.difficulty.write(buf);
         this.gameMode.write(buf);
         this.levelType.write(buf);

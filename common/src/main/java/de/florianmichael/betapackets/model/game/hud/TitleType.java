@@ -15,21 +15,26 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model.game.hud;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum TitleType {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    TITLE,
+    SUBTITLE,
+    TIMES,
+    CLEAR,
+    RESET;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static TitleType getById(final ProtocolCollection version, final int id) {
+        for (TitleType value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
     }
 }

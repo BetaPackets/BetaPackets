@@ -17,39 +17,41 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
+import io.netty.buffer.Unpooled;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class PluginMessageS2CPacket extends Packet {
 
-    public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public String channel;
+    public FunctionalByteBuf data;
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public PluginMessageS2CPacket(final FunctionalByteBuf buf) {
+        this.channel = buf.readString(20);
+
+        final byte[] bytes = new byte[buf.readableBytes()];
+        buf.readBytes(bytes);
+        this.data = new FunctionalByteBuf(Unpooled.buffer().writeBytes(bytes), buf.getUserConnection());
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
-        this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+    public PluginMessageS2CPacket(String channel, FunctionalByteBuf data) {
+        this.channel = channel;
+        this.data = data;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        buf.writeString(this.channel);
+        buf.writeBytes(this.data.getBuffer().array());
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
-                "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+        return "PluginMessageS2CPacket{" +
+                "channel='" + channel + '\'' +
+                ", data=" + data +
                 '}';
     }
 
@@ -58,16 +60,16 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        PluginMessageS2CPacket that = (PluginMessageS2CPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        if (!Objects.equals(channel, that.channel)) return false;
+        return Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        int result = channel != null ? channel.hashCode() : 0;
+        result = 31 * result + (data != null ? data.hashCode() : 0);
         return result;
     }
 }

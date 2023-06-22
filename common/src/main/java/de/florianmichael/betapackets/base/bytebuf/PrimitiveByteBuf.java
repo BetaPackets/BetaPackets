@@ -108,13 +108,16 @@ public class PrimitiveByteBuf {
         int i = toEncodedStringLength(maxLength);
         int j = this.readVarInt();
 
-        if (j > i) throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i + ")");
-        if (j < 0) throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
+        if (j > i)
+            throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i + ")");
+        if (j < 0)
+            throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
 
         final String string = this.toString(this.readerIndex(), j, StandardCharsets.UTF_8);
         this.readerIndex(this.readerIndex() + j);
 
-        if (string.length() > maxLength) throw new DecoderException("The received string length is longer than maximum allowed (" + string.length() + " > " + maxLength + ")");
+        if (string.length() > maxLength)
+            throw new DecoderException("The received string length is longer than maximum allowed (" + string.length() + " > " + maxLength + ")");
         return string;
     }
 
@@ -153,13 +156,36 @@ public class PrimitiveByteBuf {
     }
 
     public void writeVarInt(int input) {
-        while ((input & -128) != 0)
-        {
+        while ((input & -128) != 0) {
             this.writeByte(input & 127 | 128);
             input >>>= 7;
         }
 
         this.writeByte(input);
+    }
+
+    public long readVarLong() {
+        long i = 0L;
+        int j = 0;
+
+        while (true) {
+            byte b0 = this.readByte();
+            i |= (long) (b0 & 127) << j++ * 7;
+
+            if (j > 10) throw new RuntimeException("VarLong too big");
+            if ((b0 & 128) != 128) break;
+        }
+
+        return i;
+    }
+
+    public void writeVarLong(long value) {
+        while ((value & -128L) != 0L) {
+            this.writeByte((int)(value & 127L) | 128);
+            value >>>= 7;
+        }
+
+        this.writeByte((int)value);
     }
 
     public short readUnsignedByte() {

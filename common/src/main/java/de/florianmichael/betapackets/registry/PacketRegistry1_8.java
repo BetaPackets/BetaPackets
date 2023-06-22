@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.registry;
 import de.florianmichael.betapackets.base.registry.PacketRegistry;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.betapackets.packet.play.c2s.AnimationC2SPacket;
+import de.florianmichael.betapackets.packet.play.c2s.*;
 import de.florianmichael.betapackets.packet.play.s2c.*;
 
 public class PacketRegistry1_8 extends PacketRegistry {
@@ -95,8 +95,44 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x3C, UpdateScoreS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x3D, DisplayScoreboardS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x3E, TeamsS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x3F, PluginMessageS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x40, DisconnectS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x41, ServerDifficultyS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x42, CombatEventS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x43, CameraS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x44, WorldBorderS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x45, TitleS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x46, SetCompressionS2CPacket_P.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x47, PlayerListHeaderFooterS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x48, ResourcePackSendS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x49, UpdateEntityNBTS2CPacket.class);
 
         // C -> S
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x00, KeepAliveC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x01, ChatMessageC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x02, UseEntityC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x03, PlayerC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x04, PlayerPositionC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x05, PlayerLookC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x06, PlayerPositionAndLookC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x07, PlayerDiggingC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x08, PlayerBlockPlacementC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x09, HeldItemChangeC2SPacket.class);
         this.registerPacket(NetworkSide.SERVERBOUND, 0x0A, AnimationC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x0B, EntityActionC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x0C, SteerVehicleC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x0D, CloseWindowC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x0E, ClickWindowC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x0F, ConfirmTransactionC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x10, CreativeInventoryActionC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x11, EnchantItemC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x12, UpdateSignC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x13, PlayerAbilitiesC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x14, TabCompleteC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x15, ClientSettingsC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x16, ClientStatusC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x17, PluginMessageC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x18, SpectateC2SPacket.class);
+        this.registerPacket(NetworkSide.SERVERBOUND, 0x19, ResourcePackStatusC2SPacket.class);
     }
 }

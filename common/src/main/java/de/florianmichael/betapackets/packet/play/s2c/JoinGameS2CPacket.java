@@ -35,7 +35,7 @@ public class JoinGameS2CPacket extends Packet {
         return GameMode.getById(version, (short) (value & -9));
     });
     public int dimension;
-    public ModelMapper<Short, Difficulty> difficulty = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, Difficulty::getById);;
+    public ModelMapper<Short, Difficulty> difficulty = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, Difficulty::getById);
     public int maxPlayers;
     public ModelMapper<String, LevelType> levelType = new ModelMapper<>(buf -> buf.readString(16), FunctionalByteBuf::writeString, LevelType::getByType);
     public boolean reducedDebugInfo;

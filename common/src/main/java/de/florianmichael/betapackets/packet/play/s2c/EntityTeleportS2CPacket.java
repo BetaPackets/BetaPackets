@@ -17,9 +17,12 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public class EntityTeleportS2CPacket extends EntityS2CPacket {
+public class EntityTeleportS2CPacket extends Packet {
+
+    public int entityId;
 
     public int x;
     public int y;
@@ -31,7 +34,7 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
     public boolean onGround;
 
     public EntityTeleportS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
+        this.entityId = buf.readVarInt();
 
         this.x = buf.readInt();
         this.y = buf.readInt();
@@ -44,7 +47,7 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
     }
 
     public EntityTeleportS2CPacket(int entityId, int x, int y, int z, byte yaw, byte pitch, boolean onGround) {
-        super(entityId);
+        this.entityId = entityId;
 
         this.x = x;
         this.y = y;
@@ -58,7 +61,7 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        super.write(buf);
+        buf.writeVarInt(this.entityId);
 
         buf.writeInt(x);
         buf.writeInt(y);
@@ -73,13 +76,13 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
     @Override
     public String toString() {
         return "EntityTeleportS2CPacket{" +
-                "x=" + x +
+                "entityId=" + entityId +
+                ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +
                 ", yaw=" + yaw +
                 ", pitch=" + pitch +
                 ", onGround=" + onGround +
-                ", entityId=" + entityId +
                 '}';
     }
 
@@ -87,10 +90,10 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         EntityTeleportS2CPacket that = (EntityTeleportS2CPacket) o;
 
+        if (entityId != that.entityId) return false;
         if (x != that.x) return false;
         if (y != that.y) return false;
         if (z != that.z) return false;
@@ -101,7 +104,7 @@ public class EntityTeleportS2CPacket extends EntityS2CPacket {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = entityId;
         result = 31 * result + x;
         result = 31 * result + y;
         result = 31 * result + z;

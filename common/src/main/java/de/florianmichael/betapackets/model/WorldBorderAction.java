@@ -15,21 +15,27 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum WorldBorderAction {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    SET_SIZE,
+    LERP_SIZE,
+    SET_CENTER,
+    INITIALIZE,
+    SET_WARNING_TIME,
+    SET_WARNING_BLOCKS;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static WorldBorderAction getById(final ProtocolCollection version, final int id) {
+        for (WorldBorderAction value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
     }
 }

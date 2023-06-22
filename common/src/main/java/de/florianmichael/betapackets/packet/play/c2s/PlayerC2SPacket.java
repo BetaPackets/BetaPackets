@@ -15,37 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public class EntityHeadLookS2CPacket extends Packet {
+public class PlayerC2SPacket extends Packet {
 
-    public int entityId;
-    public byte yaw;
+    public boolean onGround;
 
-    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.yaw = buf.readByte();
+    public PlayerC2SPacket(final FunctionalByteBuf buf) {
+        this(buf.readUnsignedByte() != 0);
     }
 
-    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
-        this.entityId = entityId;
-        this.yaw = yaw;
+    public PlayerC2SPacket(boolean onGround) {
+        this.onGround = onGround;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        buf.writeByte(this.yaw);
+        buf.writeByte(this.onGround ? 1 : 0);
     }
 
     @Override
     public String toString() {
-        return "EntityHeadLookS2CPacket{" +
-                "entityId=" + entityId +
-                ", yaw=" + yaw +
+        return "PlayerC2SPacket{" +
+                "onGround=" + onGround +
                 '}';
     }
 
@@ -54,16 +49,13 @@ public class EntityHeadLookS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+        PlayerC2SPacket that = (PlayerC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return yaw == that.yaw;
+        return onGround == that.onGround;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (int) yaw;
-        return result;
+        return (onGround ? 1 : 0);
     }
 }

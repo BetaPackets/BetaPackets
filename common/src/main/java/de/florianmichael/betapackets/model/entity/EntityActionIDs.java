@@ -15,21 +15,29 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model.entity;
 
+import de.florianmichael.betapackets.model.WorldBorderAction;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum EntityActionIDs {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    START_SNEAKING,
+    STOP_SNEAKING,
+    LEAVE_BED,
+    START_SPRINTING,
+    STOP_SPRINTING,
+    JUMP_WITH_HORSE,
+    OPEN_RIDDEN_HORSE_INVENTORY;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static EntityActionIDs getById(final ProtocolCollection version, final int id) {
+        for (EntityActionIDs value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
     }
 }

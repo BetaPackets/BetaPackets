@@ -17,39 +17,37 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class ResourcePackSendS2CPacket extends Packet {
 
-    public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public String url;
+    public String hash;
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public ResourcePackSendS2CPacket(final FunctionalByteBuf buf) {
+        this.url = buf.readString(32767);
+        this.hash = buf.readString(40);
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
-        this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+    public ResourcePackSendS2CPacket(String url, String hash) {
+        this.url = url;
+        this.hash = hash;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        buf.writeString(this.url);
+        buf.writeString(this.hash);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
-                "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+        return "ResourcePackSendS2CPacket{" +
+                "url='" + url + '\'' +
+                ", hash='" + hash + '\'' +
                 '}';
     }
 
@@ -58,16 +56,16 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        ResourcePackSendS2CPacket that = (ResourcePackSendS2CPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        if (!Objects.equals(url, that.url)) return false;
+        return Objects.equals(hash, that.hash);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (hash != null ? hash.hashCode() : 0);
         return result;
     }
 }

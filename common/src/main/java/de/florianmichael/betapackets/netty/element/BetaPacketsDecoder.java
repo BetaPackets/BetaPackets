@@ -72,7 +72,7 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         if (event.isCancelled()) {
             return;
         }
-        DebugMode.printPacket(userConnection.getState(), NetworkSide.CLIENTBOUND, model);
+        DebugMode.printPacket(userConnection.getState(), NetworkSide.SERVERBOUND, model);
 
         out.add(ctx.alloc().buffer().writeBytes(msg).retain());
     }

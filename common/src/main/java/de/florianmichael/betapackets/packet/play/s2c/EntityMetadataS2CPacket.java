@@ -17,39 +17,39 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 
 import java.util.List;
 import java.util.Objects;
 
-public class EntityMetadataS2CPacket extends EntityS2CPacket {
+public class EntityMetadataS2CPacket extends Packet {
+
+    public int entityId;
     public List<Metadata> metadata;
 
     public EntityMetadataS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
-
+        this.entityId = buf.readVarInt();
         this.metadata = buf.readMetadata();
     }
 
     public EntityMetadataS2CPacket(int entityId, List<Metadata> metadata) {
-        super(entityId);
-
+        this.entityId = entityId;
         this.metadata = metadata;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        super.write(buf);
-
+        buf.writeVarInt(this.entityId);
         buf.writeMetadata(metadata);
     }
 
     @Override
     public String toString() {
         return "EntityMetadataS2CPacket{" +
-                "metadata=" + metadata +
-                ", entityId=" + entityId +
+                "entityId=" + entityId +
+                ", metadata=" + metadata +
                 '}';
     }
 
@@ -60,11 +60,14 @@ public class EntityMetadataS2CPacket extends EntityS2CPacket {
 
         EntityMetadataS2CPacket that = (EntityMetadataS2CPacket) o;
 
+        if (entityId != that.entityId) return false;
         return Objects.equals(metadata, that.metadata);
     }
 
     @Override
     public int hashCode() {
-        return metadata != null ? metadata.hashCode() : 0;
+        int result = entityId;
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        return result;
     }
 }

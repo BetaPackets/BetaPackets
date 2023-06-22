@@ -15,37 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public class EntityHeadLookS2CPacket extends Packet {
+public class KeepAliveC2SPacket extends Packet {
 
-    public int entityId;
-    public byte yaw;
+    public int keepAliveId;
 
-    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.yaw = buf.readByte();
+    public KeepAliveC2SPacket(final FunctionalByteBuf buf) {
+        this(buf.readVarInt());
     }
 
-    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
-        this.entityId = entityId;
-        this.yaw = yaw;
+    public KeepAliveC2SPacket(int keepAliveId) {
+        this.keepAliveId = keepAliveId;
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        buf.writeByte(this.yaw);
+    public void write(FunctionalByteBuf buf) {
+        buf.writeVarInt(keepAliveId);
     }
 
     @Override
     public String toString() {
-        return "EntityHeadLookS2CPacket{" +
-                "entityId=" + entityId +
-                ", yaw=" + yaw +
+        return "KeepAliveC2SPacket{" +
+                "keepAliveId=" + keepAliveId +
                 '}';
     }
 
@@ -54,16 +49,13 @@ public class EntityHeadLookS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+        KeepAliveC2SPacket that = (KeepAliveC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return yaw == that.yaw;
+        return keepAliveId == that.keepAliveId;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (int) yaw;
-        return result;
+        return keepAliveId;
     }
 }

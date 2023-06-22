@@ -15,37 +15,40 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public class EntityHeadLookS2CPacket extends Packet {
+public class ConfirmTransactionC2SPacket extends Packet {
 
-    public int entityId;
-    public byte yaw;
+    public int windowId;
+    public short uid;
+    public boolean accepted;
 
-    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.yaw = buf.readByte();
+    public ConfirmTransactionC2SPacket(final FunctionalByteBuf buf) {
+        this(buf.readByte(), buf.readShort(), buf.readByte() != 0);
     }
 
-    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
-        this.entityId = entityId;
-        this.yaw = yaw;
+    public ConfirmTransactionC2SPacket(int windowId, short uid, boolean accepted) {
+        this.windowId = windowId;
+        this.uid = uid;
+        this.accepted = accepted;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        buf.writeByte(this.yaw);
+        buf.writeByte(this.windowId);
+        buf.writeShort(this.uid);
+        buf.writeByte(this.accepted ? 1 : 0);
     }
 
     @Override
     public String toString() {
-        return "EntityHeadLookS2CPacket{" +
-                "entityId=" + entityId +
-                ", yaw=" + yaw +
+        return "ConfirmTransactionC2SPacket{" +
+                "windowId=" + windowId +
+                ", uid=" + uid +
+                ", accepted=" + accepted +
                 '}';
     }
 
@@ -54,16 +57,18 @@ public class EntityHeadLookS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+        ConfirmTransactionC2SPacket that = (ConfirmTransactionC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return yaw == that.yaw;
+        if (windowId != that.windowId) return false;
+        if (uid != that.uid) return false;
+        return accepted == that.accepted;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (int) yaw;
+        int result = windowId;
+        result = 31 * result + (int) uid;
+        result = 31 * result + (accepted ? 1 : 0);
         return result;
     }
 }

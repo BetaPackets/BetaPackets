@@ -19,17 +19,20 @@ package de.florianmichael.betapackets.model.game;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum ClientStatus {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    PERFORM_RESPAWN,
+    REQUEST_STATS,
+    TAKING_INVENTORY_ACHIEVEMENT;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static ClientStatus getById(final ProtocolCollection version, final int id) {
+        for (ClientStatus value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
     }
 }

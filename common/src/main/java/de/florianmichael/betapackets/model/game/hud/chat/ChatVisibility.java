@@ -15,20 +15,19 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model.game.hud.chat;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum ChatVisibility {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    FULL,
+    SYSTEM,
+    HIDDEN;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static ChatVisibility getById(final ProtocolCollection version, final byte id) {
+        for (ChatVisibility value : values()) {
+            if (value.ordinal() == id) return value;
         }
         return null;
     }

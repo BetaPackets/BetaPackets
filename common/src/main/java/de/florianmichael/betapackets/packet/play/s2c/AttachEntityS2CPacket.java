@@ -17,31 +17,28 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public class AttachEntityS2CPacket extends EntityS2CPacket {
+public class AttachEntityS2CPacket extends Packet {
 
+    public int entityId;
     public int vehicleId;
     public int leash;
 
     public AttachEntityS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
-
-        this.vehicleId = buf.readInt();
-        this.leash = buf.readUnsignedByte();
+        this(buf.readInt(), buf.readInt(), buf.readUnsignedByte());
     }
 
     public AttachEntityS2CPacket(int entityId, int vehicleId, int leash) {
-        super(entityId);
-
+        this.entityId = entityId;
         this.vehicleId = vehicleId;
         this.leash = leash;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        super.write(buf);
-
+        buf.writeInt(entityId);
         buf.writeInt(vehicleId);
         buf.writeByte(leash);
     }
@@ -53,9 +50,9 @@ public class AttachEntityS2CPacket extends EntityS2CPacket {
     @Override
     public String toString() {
         return "AttachEntityS2CPacket{" +
-                "vehicleId=" + vehicleId +
+                "entityId=" + entityId +
+                ", vehicleId=" + vehicleId +
                 ", leash=" + leash +
-                ", entityId=" + entityId +
                 '}';
     }
 
@@ -66,13 +63,15 @@ public class AttachEntityS2CPacket extends EntityS2CPacket {
 
         AttachEntityS2CPacket that = (AttachEntityS2CPacket) o;
 
+        if (entityId != that.entityId) return false;
         if (vehicleId != that.vehicleId) return false;
         return leash == that.leash;
     }
 
     @Override
     public int hashCode() {
-        int result = vehicleId;
+        int result = entityId;
+        result = 31 * result + vehicleId;
         result = 31 * result + leash;
         return result;
     }

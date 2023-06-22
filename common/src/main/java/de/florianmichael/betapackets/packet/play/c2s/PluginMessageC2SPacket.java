@@ -15,37 +15,43 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import io.netty.buffer.Unpooled;
 
-public class EntityHeadLookS2CPacket extends Packet {
+import java.util.Objects;
 
-    public int entityId;
-    public byte yaw;
+public class PluginMessageC2SPacket extends Packet {
 
-    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.yaw = buf.readByte();
+    public String channel;
+    public FunctionalByteBuf data;
+
+    public PluginMessageC2SPacket(final FunctionalByteBuf buf) {
+        this.channel = buf.readString(20);
+
+        final byte[] bytes = new byte[buf.readableBytes()];
+        buf.readBytes(bytes);
+        this.data = new FunctionalByteBuf(Unpooled.buffer().writeBytes(bytes), buf.getUserConnection());
     }
 
-    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
-        this.entityId = entityId;
-        this.yaw = yaw;
+    public PluginMessageC2SPacket(String channel, FunctionalByteBuf data) {
+        this.channel = channel;
+        this.data = data;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        buf.writeByte(this.yaw);
+        buf.writeString(this.channel);
+        buf.writeBytes(this.data.getBuffer().array());
     }
 
     @Override
     public String toString() {
-        return "EntityHeadLookS2CPacket{" +
-                "entityId=" + entityId +
-                ", yaw=" + yaw +
+        return "PluginMessageC2SPacket{" +
+                "channel='" + channel + '\'' +
+                ", data=" + data +
                 '}';
     }
 
@@ -54,16 +60,16 @@ public class EntityHeadLookS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+        PluginMessageC2SPacket that = (PluginMessageC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return yaw == that.yaw;
+        if (!Objects.equals(channel, that.channel)) return false;
+        return Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (int) yaw;
+        int result = channel != null ? channel.hashCode() : 0;
+        result = 31 * result + (data != null ? data.hashCode() : 0);
         return result;
     }
 }

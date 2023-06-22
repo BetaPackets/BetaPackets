@@ -19,17 +19,20 @@ package de.florianmichael.betapackets.model.game;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum CombatEvent {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    ENTER_COMBAT,
+    END_COMBAT,
+    ENTITY_DIED;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static CombatEvent getById(final ProtocolCollection version, final int id) {
+        for (CombatEvent value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
     }
 }

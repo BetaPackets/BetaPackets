@@ -15,41 +15,41 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
+import de.florianmichael.betapackets.model.game.ResourcePackAction;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class ResourcePackStatusC2SPacket extends Packet {
 
-    public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public String hash;
+    public ModelMapper<Integer, ResourcePackAction> status = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, ResourcePackAction::getById);
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public ResourcePackStatusC2SPacket(final FunctionalByteBuf buf) {
+        this.hash = buf.readString(40);
+        this.status.read(buf);
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
-        this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+    public ResourcePackStatusC2SPacket(String hash, ResourcePackAction status) {
+        this.hash = hash;
+        this.status = new ModelMapper<>(FunctionalByteBuf::writeVarInt, status);
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        buf.writeString(this.hash);
+        this.status.write(buf);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
-                "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+        return "ResourcePackStatusC2SPacket{" +
+                "hash='" + hash + '\'' +
+                ", status=" + status +
                 '}';
     }
 
@@ -58,16 +58,16 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        ResourcePackStatusC2SPacket that = (ResourcePackStatusC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        if (!Objects.equals(hash, that.hash)) return false;
+        return Objects.equals(status, that.status);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        int result = hash != null ? hash.hashCode() : 0;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 }

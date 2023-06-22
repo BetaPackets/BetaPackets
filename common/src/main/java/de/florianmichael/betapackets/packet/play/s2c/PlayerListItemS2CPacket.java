@@ -42,7 +42,8 @@ public class PlayerListItemS2CPacket extends Packet {
             final AddPlayerData addPlayerData = new AddPlayerData();
             addPlayerData.gameProfile = new GameProfile(buf.readUUID(), null);
 
-            switch (action.mappedValue) {
+            if (this.action.getValue() == null) return;
+            switch (action.getValue()) {
                 case ADD_PLAYER:
                     addPlayerData.gameProfile.name = buf.readString(16);
 
@@ -90,8 +91,8 @@ public class PlayerListItemS2CPacket extends Packet {
         buf.writeVarInt(this.players.size());
         for (AddPlayerData player : players) {
             buf.writeUUID(player.gameProfile.uuid);
-            switch (action.value) {
-                case 0: // ADD_PLAYER
+            switch (action.getValue()) {
+                case ADD_PLAYER:
                     buf.writeString(player.gameProfile.name);
 
                     buf.writeVarInt(player.gameProfile.profileProperties.size());
@@ -114,13 +115,13 @@ public class PlayerListItemS2CPacket extends Packet {
                         buf.writeBoolean(false);
                     }
                     break;
-                case 1: // UPDATE_GAME_MODE
+                case UPDATE_GAME_MODE:
                     player.gameMode.write(buf);
                     break;
-                case 2: // UPDATE_LATENCY
+                case UPDATE_LATENCY:
                     buf.writeVarInt(player.ping);
                     break;
-                case 3: // UPDATE_DISPLAY_NAME
+                case UPDATE_DISPLAY_NAME:
                     if (player.displayName != null) {
                         buf.writeBoolean(true);
                         buf.writeComponent(player.displayName);

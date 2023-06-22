@@ -17,39 +17,37 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
+import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class PlayerListHeaderFooterS2CPacket extends Packet {
 
-    public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public ATextComponent header;
+    public ATextComponent footer;
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public PlayerListHeaderFooterS2CPacket(final FunctionalByteBuf buf) {
+        this(buf.readComponent(), buf.readComponent());
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
-        this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+    public PlayerListHeaderFooterS2CPacket(ATextComponent header, ATextComponent footer) {
+        this.header = header;
+        this.footer = footer;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        buf.writeComponent(header);
+        buf.writeComponent(footer);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
-                "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+        return "PlayerListHeaderFooterS2CPacket{" +
+                "header=" + header +
+                ", footer=" + footer +
                 '}';
     }
 
@@ -58,16 +56,16 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        PlayerListHeaderFooterS2CPacket that = (PlayerListHeaderFooterS2CPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        if (!Objects.equals(header, that.header)) return false;
+        return Objects.equals(footer, that.footer);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        int result = header != null ? header.hashCode() : 0;
+        result = 31 * result + (footer != null ? footer.hashCode() : 0);
         return result;
     }
 }

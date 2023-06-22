@@ -15,37 +15,39 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 
-public class EntityHeadLookS2CPacket extends Packet {
+import java.util.Objects;
 
-    public int entityId;
-    public byte yaw;
+public class CreativeInventoryActionC2SPacket extends Packet {
 
-    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.yaw = buf.readByte();
+    public int slotId;
+    public ItemStackV1_3 itemStack;
+
+    public CreativeInventoryActionC2SPacket(final FunctionalByteBuf buf) {
+        this(buf.readShort(), buf.readItemStack());
     }
 
-    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
-        this.entityId = entityId;
-        this.yaw = yaw;
+    public CreativeInventoryActionC2SPacket(int slotId, ItemStackV1_3 itemStack) {
+        this.slotId = slotId;
+        this.itemStack = itemStack;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        buf.writeByte(this.yaw);
+        buf.writeShort(this.slotId);
+        buf.writeItemStack(this.itemStack);
     }
 
     @Override
     public String toString() {
-        return "EntityHeadLookS2CPacket{" +
-                "entityId=" + entityId +
-                ", yaw=" + yaw +
+        return "CreativeInventoryActionC2SPacket{" +
+                "slotId=" + slotId +
+                ", itemStack=" + itemStack +
                 '}';
     }
 
@@ -54,16 +56,16 @@ public class EntityHeadLookS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+        CreativeInventoryActionC2SPacket that = (CreativeInventoryActionC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return yaw == that.yaw;
+        if (slotId != that.slotId) return false;
+        return Objects.equals(itemStack, that.itemStack);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (int) yaw;
+        int result = slotId;
+        result = 31 * result + (itemStack != null ? itemStack.hashCode() : 0);
         return result;
     }
 }

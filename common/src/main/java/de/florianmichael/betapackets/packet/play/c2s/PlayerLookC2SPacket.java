@@ -15,37 +15,39 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
-import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public class EntityHeadLookS2CPacket extends Packet {
+public class PlayerLookC2SPacket extends PlayerC2SPacket {
 
-    public int entityId;
-    public byte yaw;
+    public float yaw;
+    public float pitch;
 
-    public EntityHeadLookS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.yaw = buf.readByte();
+    public PlayerLookC2SPacket(FunctionalByteBuf buf) {
+        this(buf.readBoolean(), buf.readFloat(), buf.readFloat());
     }
 
-    public EntityHeadLookS2CPacket(int entityId, byte yaw) {
-        this.entityId = entityId;
+    public PlayerLookC2SPacket(boolean onGround, float yaw, float pitch) {
+        super(onGround);
         this.yaw = yaw;
+        this.pitch = pitch;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        buf.writeByte(this.yaw);
+        buf.writeFloat(this.yaw);
+        buf.writeFloat(this.pitch);
+
+        super.write(buf);
     }
 
     @Override
     public String toString() {
-        return "EntityHeadLookS2CPacket{" +
-                "entityId=" + entityId +
-                ", yaw=" + yaw +
+        return "PlayerLookC2SPacket{" +
+                "yaw=" + yaw +
+                ", pitch=" + pitch +
+                ", onGround=" + onGround +
                 '}';
     }
 
@@ -53,17 +55,19 @@ public class EntityHeadLookS2CPacket extends Packet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
-        EntityHeadLookS2CPacket that = (EntityHeadLookS2CPacket) o;
+        PlayerLookC2SPacket that = (PlayerLookC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return yaw == that.yaw;
+        if (Float.compare(that.yaw, yaw) != 0) return false;
+        return Float.compare(that.pitch, pitch) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (int) yaw;
+        int result = super.hashCode();
+        result = 31 * result + (yaw != +0.0f ? Float.floatToIntBits(yaw) : 0);
+        result = 31 * result + (pitch != +0.0f ? Float.floatToIntBits(pitch) : 0);
         return result;
     }
 }

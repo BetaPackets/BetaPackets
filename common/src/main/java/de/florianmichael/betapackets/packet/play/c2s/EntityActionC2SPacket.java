@@ -15,41 +15,45 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
+import de.florianmichael.betapackets.model.entity.EntityActionIDs;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
-
+public class EntityActionC2SPacket extends Packet {
     public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public ModelMapper<Integer, EntityActionIDs> entityAction = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, EntityActionIDs::getById);
+    public int auxValue;
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
+    public EntityActionC2SPacket(final FunctionalByteBuf buf) {
         this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+        this.entityAction.read(buf);
+        this.auxValue = buf.readVarInt();
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
+    public EntityActionC2SPacket(int entityId, EntityActionIDs entityAction, int auxValue) {
         this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+        this.entityAction = new ModelMapper<>(FunctionalByteBuf::writeVarInt, entityAction);
+        this.auxValue = auxValue;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        this.entityAction.write(buf);
+        buf.writeVarInt(this.auxValue);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
+        return "EntityActionC2SPacket{" +
                 "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+                ", entityAction=" + entityAction +
+                ", auxValue=" + auxValue +
                 '}';
     }
 
@@ -58,16 +62,18 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        EntityActionC2SPacket that = (EntityActionC2SPacket) o;
 
         if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        if (auxValue != that.auxValue) return false;
+        return Objects.equals(entityAction, that.entityAction);
     }
 
     @Override
     public int hashCode() {
         int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        result = 31 * result + (entityAction != null ? entityAction.hashCode() : 0);
+        result = 31 * result + auxValue;
         return result;
     }
 }

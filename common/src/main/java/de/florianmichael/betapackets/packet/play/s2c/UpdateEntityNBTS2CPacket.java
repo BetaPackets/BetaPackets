@@ -17,39 +17,37 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
+import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class UpdateEntityNBTS2CPacket extends Packet {
 
     public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public CompoundTag tag;
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public UpdateEntityNBTS2CPacket(final FunctionalByteBuf buf) {
+        this(buf.readVarInt(), buf.readCompoundTag());
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
+    public UpdateEntityNBTS2CPacket(int entityId, CompoundTag tag) {
         this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+        this.tag = tag;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        buf.writeCompoundTag(this.tag);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
+        return "UpdateEntityNBTS2CPacket{" +
                 "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+                ", tag=" + tag +
                 '}';
     }
 
@@ -58,16 +56,16 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        UpdateEntityNBTS2CPacket that = (UpdateEntityNBTS2CPacket) o;
 
         if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        return Objects.equals(tag, that.tag);
     }
 
     @Override
     public int hashCode() {
         int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
+        result = 31 * result + (tag != null ? tag.hashCode() : 0);
         return result;
     }
 }

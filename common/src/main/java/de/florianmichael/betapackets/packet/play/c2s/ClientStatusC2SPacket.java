@@ -15,41 +15,36 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.play.s2c;
+package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
+import de.florianmichael.betapackets.model.game.ClientStatus;
 
 import java.util.Objects;
 
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class ClientStatusC2SPacket extends Packet {
 
-    public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public ModelMapper<Integer, ClientStatus> status = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, ClientStatus::getById);
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public ClientStatusC2SPacket(final FunctionalByteBuf buf) {
+        this.status.read(buf);
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
-        this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
+    public ClientStatusC2SPacket(ClientStatus status) {
+        this.status = new ModelMapper<>(FunctionalByteBuf::writeVarInt, status);
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        this.status.write(buf);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
-                "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
+        return "ClientStatusC2SPacket{" +
+                "status=" + status +
                 '}';
     }
 
@@ -58,16 +53,13 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        ClientStatusC2SPacket that = (ClientStatusC2SPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        return Objects.equals(status, that.status);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
-        return result;
+        return status != null ? status.hashCode() : 0;
     }
 }

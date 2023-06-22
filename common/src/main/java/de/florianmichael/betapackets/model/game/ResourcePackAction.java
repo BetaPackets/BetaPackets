@@ -19,17 +19,21 @@ package de.florianmichael.betapackets.model.game;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum ResourcePackAction {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    SUCCESSFULLY_LOADED,
+    DECLINED,
+    FAILED_DOWNLOAD,
+    ACCEPTED;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static ResourcePackAction getById(final ProtocolCollection version, final int id) {
+        for (ResourcePackAction value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return ordinal();
     }
 }

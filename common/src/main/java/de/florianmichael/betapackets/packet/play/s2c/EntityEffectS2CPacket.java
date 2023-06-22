@@ -18,21 +18,22 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.ModelMapper;
+import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
 
 import java.util.Objects;
 
-public class EntityEffectS2CPacket extends EntityS2CPacket {
+public class EntityEffectS2CPacket extends Packet {
 
+    public int entityId;
     public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
     public byte amplifier;
     public int duration;
     public byte hideParticles;
 
     public EntityEffectS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
-
+        this.entityId = buf.readVarInt();
         this.entityEffect.read(buf);
         this.amplifier = buf.readByte();
         this.duration = buf.readVarInt();
@@ -40,8 +41,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     }
 
     public EntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect, byte amplifier, int duration, byte hideParticles) {
-        super(entityId);
-
+        this.entityId = entityId;
         this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
         this.amplifier = amplifier;
         this.duration = duration;
@@ -50,8 +50,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        super.write(buf);
-
+        buf.writeVarInt(this.entityId);
         entityEffect.write(buf);
         buf.writeByte(amplifier);
         buf.writeVarInt(duration);
@@ -61,11 +60,11 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
     @Override
     public String toString() {
         return "EntityEffectS2CPacket{" +
-                "entityEffect=" + entityEffect +
+                "entityId=" + entityId +
+                ", entityEffect=" + entityEffect +
                 ", amplifier=" + amplifier +
                 ", duration=" + duration +
                 ", hideParticles=" + hideParticles +
-                ", entityId=" + entityId +
                 '}';
     }
 
@@ -76,6 +75,7 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
 
         EntityEffectS2CPacket that = (EntityEffectS2CPacket) o;
 
+        if (entityId != that.entityId) return false;
         if (amplifier != that.amplifier) return false;
         if (duration != that.duration) return false;
         if (hideParticles != that.hideParticles) return false;
@@ -84,7 +84,8 @@ public class EntityEffectS2CPacket extends EntityS2CPacket {
 
     @Override
     public int hashCode() {
-        int result = entityEffect != null ? entityEffect.hashCode() : 0;
+        int result = entityId;
+        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
         result = 31 * result + (int) amplifier;
         result = 31 * result + duration;
         result = 31 * result + (int) hideParticles;

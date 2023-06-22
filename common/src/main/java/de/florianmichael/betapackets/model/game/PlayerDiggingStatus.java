@@ -19,17 +19,23 @@ package de.florianmichael.betapackets.model.game;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum Difficulty {
+public enum PlayerDiggingStatus {
 
-    PEACEFUL,
-    EASY,
-    NORMAL,
-    HARD;
+    START,
+    CANCEL,
+    FINISH,
+    DROP_ITEM_STACK,
+    DROP_ITEM,
+    SHOOT_ARROW_OR_FINISH_EATING;
 
-    public static Difficulty getById(final ProtocolCollection version, final short id) {
-        for (Difficulty value : values()) {
-            if (value.ordinal() == (id % values().length)) return value;
+    public static PlayerDiggingStatus getById(final ProtocolCollection version, final int id) {
+        for (PlayerDiggingStatus value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return ordinal();
     }
 }

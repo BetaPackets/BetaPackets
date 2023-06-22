@@ -17,39 +17,30 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.potion.PotionEffectTypes;
 
-import java.util.Objects;
-
-public class RemoveEntityEffectS2CPacket extends Packet {
+public class CameraS2CPacket extends Packet {
 
     public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
 
-    public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
-        this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+    public CameraS2CPacket(final FunctionalByteBuf buf) {
+        this(buf.readVarInt());
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
+    public CameraS2CPacket(final int entityId) {
         this.entityId = entityId;
-        this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
     }
 
     @Override
     public String toString() {
-        return "RemoveEntityEffectS2CPacket{" +
+        return "CameraS2CPacket{" +
                 "entityId=" + entityId +
-                ", entityEffect=" + entityEffect +
                 '}';
     }
 
@@ -58,16 +49,13 @@ public class RemoveEntityEffectS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RemoveEntityEffectS2CPacket that = (RemoveEntityEffectS2CPacket) o;
+        CameraS2CPacket that = (CameraS2CPacket) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityEffect, that.entityEffect);
+        return entityId == that.entityId;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityEffect != null ? entityEffect.hashCode() : 0);
-        return result;
+        return entityId;
     }
 }

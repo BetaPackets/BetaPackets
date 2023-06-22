@@ -17,39 +17,30 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.entity.EntityStatusOpCodes;
 
-import java.util.Objects;
+// This packet is completely broken and has been removed in the 1.9 snapshots.
+public class SetCompressionS2CPacket_P extends Packet {
+    public int threshold;
 
-public class EntityStatusS2CPacket extends Packet {
-
-    public int entityId;
-    public ModelMapper<Byte, EntityStatusOpCodes> entityStatus = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, EntityStatusOpCodes::getById);
-
-    public EntityStatusS2CPacket(FunctionalByteBuf buf) {
-        this.entityId = buf.readInt();
-        this.entityStatus.read(buf);
+    public SetCompressionS2CPacket_P(final FunctionalByteBuf buf) {
+        this(buf.readVarInt());
     }
 
-    public EntityStatusS2CPacket(int entityId, EntityStatusOpCodes entityStatus) {
-        this.entityId = entityId;
-        this.entityStatus = new ModelMapper<>(FunctionalByteBuf::writeByte, entityStatus);
+    public SetCompressionS2CPacket_P(int threshold) {
+        this.threshold = threshold;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeInt(this.entityId);
-        this.entityStatus.write(buf);
+        buf.writeVarInt(this.threshold);
     }
 
     @Override
     public String toString() {
-        return "EntityStatusS2CPacket{" +
-                "entityId=" + entityId +
-                ", entityStatus=" + entityStatus +
+        return "SetCompressionS2CPacket_P{" +
+                "threshold=" + threshold +
                 '}';
     }
 
@@ -58,16 +49,13 @@ public class EntityStatusS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityStatusS2CPacket that = (EntityStatusS2CPacket) o;
+        SetCompressionS2CPacket_P that = (SetCompressionS2CPacket_P) o;
 
-        if (entityId != that.entityId) return false;
-        return Objects.equals(entityStatus, that.entityStatus);
+        return threshold == that.threshold;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + (entityStatus != null ? entityStatus.hashCode() : 0);
-        return result;
+        return threshold;
     }
 }

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.model.auth;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +28,7 @@ public class GameProfile {
     public List<ProfileProperty> profileProperties;
 
     public GameProfile(UUID uuid, String name) {
-        this(uuid, name, new ArrayList<>());
+        this(uuid, name, new LinkedList<>());
     }
 
     public GameProfile(UUID uuid, String name, List<ProfileProperty> profileProperties) {
