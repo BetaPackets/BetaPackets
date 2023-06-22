@@ -19,9 +19,9 @@ package de.florianmichael.betapackets.base.bytebuf;
 
 import de.florianmichael.betapackets.base.api.UserConnection;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.item.ItemStackV1_3;
-import de.florianmichael.betapackets.model.metadata.Metadata;
-import de.florianmichael.betapackets.model.metadata.MetadataTypes;
+import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.entity.metadata.Metadata;
+import de.florianmichael.betapackets.model.entity.metadata.MetadataTypes;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;

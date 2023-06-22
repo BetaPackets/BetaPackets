@@ -88,6 +88,13 @@ public class PacketRegistry1_8 extends PacketRegistry {
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x35, UpdateBlockEntityS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x36, OpenSignEditorS2CPacket.class);
         this.registerPacket(NetworkSide.CLIENTBOUND, 0x37, StatisticsS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x38, PlayerListItemS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x39, PlayerAbilitiesS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x3A, TabCompleteS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x3B, ScoreboardObjectiveS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x3C, UpdateScoreS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x3D, DisplayScoreboardS2CPacket.class);
+        this.registerPacket(NetworkSide.CLIENTBOUND, 0x3E, TeamsS2CPacket.class);
 
         // C -> S
         this.registerPacket(NetworkSide.SERVERBOUND, 0x0A, AnimationC2SPacket.class);

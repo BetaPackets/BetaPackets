@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.ping;
+package de.florianmichael.betapackets.model.base.ping;
 
 import java.util.Objects;
 

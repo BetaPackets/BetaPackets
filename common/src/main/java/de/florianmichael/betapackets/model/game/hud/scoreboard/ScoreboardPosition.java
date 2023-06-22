@@ -15,23 +15,24 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.chat;
+package de.florianmichael.betapackets.model.game.hud.scoreboard;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum ChatPosition {
-    CHAT,
-    SYSTEM_MESSAGE,
-    ABOVE_HOTBAR;
+public enum ScoreboardPosition {
 
-    public boolean isChatBox() {
-        return this == CHAT || this == SYSTEM_MESSAGE;
-    }
+    LIST,
+    SIDEBAR,
+    BELOW_NAME;
 
-    public static ChatPosition getById(final ProtocolCollection version, final byte id) {
-        for (ChatPosition value : values()) {
-            if (value.ordinal() == id) return value;
+    public static ScoreboardPosition getById(final ProtocolCollection version, final byte id) {
+        for (ScoreboardPosition value : values()) {
+            if (value.getId(version) == id) return value;
         }
         return null;
+    }
+
+    public int getId(final ProtocolCollection version) {
+        return this.ordinal();
     }
 }

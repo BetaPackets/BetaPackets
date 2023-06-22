@@ -15,28 +15,40 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.ping;
+package de.florianmichael.betapackets.packet.play.s2c;
+
+import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
 import java.util.Arrays;
 
-public class Players {
+public class TabCompleteS2CPacket extends Packet {
 
-    public int max;
-    public int online;
-    public Player[] sample;
+    public String[] matches;
 
-    public Players(int max, int online, Player[] sample) {
-        this.max = max;
-        this.online = online;
-        this.sample = sample;
+    public TabCompleteS2CPacket(final FunctionalByteBuf buf) {
+        matches = new String[buf.readVarInt()];
+        for (int i = 0; i < matches.length; i++) {
+            matches[i] = buf.readString(32767);
+        }
+    }
+
+    public TabCompleteS2CPacket(String[] matches) {
+        this.matches = matches;
+    }
+
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeVarInt(matches.length);
+        for (String match : matches) {
+            buf.writeString(match);
+        }
     }
 
     @Override
     public String toString() {
-        return "Players{" +
-                "max=" + max +
-                ", online=" + online +
-                ", sample=" + Arrays.toString(sample) +
+        return "TabCompleteS2CPacket{" +
+                "matches=" + Arrays.toString(matches) +
                 '}';
     }
 
@@ -45,19 +57,14 @@ public class Players {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Players players = (Players) o;
+        TabCompleteS2CPacket that = (TabCompleteS2CPacket) o;
 
-        if (max != players.max) return false;
-        if (online != players.online) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(sample, players.sample);
+        return Arrays.equals(matches, that.matches);
     }
 
     @Override
     public int hashCode() {
-        int result = max;
-        result = 31 * result + online;
-        result = 31 * result + Arrays.hashCode(sample);
-        return result;
+        return Arrays.hashCode(matches);
     }
 }

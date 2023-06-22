@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 
 import java.util.Objects;
 

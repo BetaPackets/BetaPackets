@@ -1,5 +1,5 @@
 # BetaPackets
-(WIP!) Standalone Minecraft protocol library for Spigot, Paper, Bukkit, BungeeCord and Velocity
+The ultimate standalone Minecraft protocol library for all platforms and all Minecraft versions
 
 ### Note: This project is in very early development and not ready for production use!
 
@@ -11,7 +11,7 @@ BetaPackets reads all packets and writes them exactly as they were read, which m
 
 Example:
 ![Design1](.github/images/design1.png)
-Where **Animation.java** is an enum with all possible animations of the respective version, and the **Short** is simply the raw type that is in the vanilla package.
+Where **Animation.java** is an enum with all possible animations of the respective version, and the **Short** is simply the raw type that is in the vanilla packet.
 
 ## How to use?
 The BetaPacketsAPI has **3** listeners, **ClientboundPacketListener**, **ServerboundPacketListener** and **PlayerEarlyJoinPacketListener**.

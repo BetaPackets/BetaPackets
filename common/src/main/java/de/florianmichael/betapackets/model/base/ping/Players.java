@@ -15,24 +15,28 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.ping;
+package de.florianmichael.betapackets.model.base.ping;
 
-import java.util.Objects;
+import java.util.Arrays;
 
-public class Version {
-    public String name;
-    public String protocol;
+public class Players {
 
-    public Version(String name, String protocol) {
-        this.name = name;
-        this.protocol = protocol;
+    public int max;
+    public int online;
+    public Player[] sample;
+
+    public Players(int max, int online, Player[] sample) {
+        this.max = max;
+        this.online = online;
+        this.sample = sample;
     }
 
     @Override
     public String toString() {
-        return "Version{" +
-                "name='" + name + '\'' +
-                ", protocol='" + protocol + '\'' +
+        return "Players{" +
+                "max=" + max +
+                ", online=" + online +
+                ", sample=" + Arrays.toString(sample) +
                 '}';
     }
 
@@ -41,16 +45,19 @@ public class Version {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Version version = (Version) o;
+        Players players = (Players) o;
 
-        if (!Objects.equals(name, version.name)) return false;
-        return Objects.equals(protocol, version.protocol);
+        if (max != players.max) return false;
+        if (online != players.online) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(sample, players.sample);
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
+        int result = max;
+        result = 31 * result + online;
+        result = 31 * result + Arrays.hashCode(sample);
         return result;
     }
 }

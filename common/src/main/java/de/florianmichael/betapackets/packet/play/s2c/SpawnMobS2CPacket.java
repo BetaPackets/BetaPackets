@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.model.metadata.Metadata;
+import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 
 import java.util.List;
 import java.util.Objects;

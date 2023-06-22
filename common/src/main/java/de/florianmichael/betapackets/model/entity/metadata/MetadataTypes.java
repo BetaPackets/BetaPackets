@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.metadata;
+package de.florianmichael.betapackets.model.entity.metadata;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 import de.florianmichael.betapackets.model.position.Rotations;
 import de.florianmichael.betapackets.model.position.BlockPos;
 

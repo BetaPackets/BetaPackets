@@ -15,26 +15,24 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.ping;
+package de.florianmichael.betapackets.model.base.ping;
 
 import java.util.Objects;
-import java.util.UUID;
 
-public class Player {
-
+public class Version {
     public String name;
-    public UUID uuid;
+    public String protocol;
 
-    public Player(String name, UUID uuid) {
+    public Version(String name, String protocol) {
         this.name = name;
-        this.uuid = uuid;
+        this.protocol = protocol;
     }
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "Version{" +
                 "name='" + name + '\'' +
-                ", uuid=" + uuid +
+                ", protocol='" + protocol + '\'' +
                 '}';
     }
 
@@ -43,16 +41,16 @@ public class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Player player = (Player) o;
+        Version version = (Version) o;
 
-        if (!Objects.equals(name, player.name)) return false;
-        return Objects.equals(uuid, player.uuid);
+        if (!Objects.equals(name, version.name)) return false;
+        return Objects.equals(protocol, version.protocol);
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
+        result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
         return result;
     }
 }

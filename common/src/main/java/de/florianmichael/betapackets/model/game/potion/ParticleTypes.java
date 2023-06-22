@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.potion;
+package de.florianmichael.betapackets.model.game.potion;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 

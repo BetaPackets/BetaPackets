@@ -15,25 +15,30 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.tablist;
+package de.florianmichael.betapackets.model.auth;
 
-import de.florianmichael.betapackets.model.base.ProtocolCollection;
+public class ProfileProperty {
 
-public enum TabAction {
-    ADD_PLAYER,
-    UPDATE_GAME_MODE,
-    UPDATE_LATENCY,
-    UPDATE_DISPLAY_NAME,
-    REMOVE_PLAYER;
+    public String name;
+    public String value;
+    public String signature;
 
-    public static TabAction getById(final ProtocolCollection version, int id) {
-        for (TabAction value : values()) {
-            if (value.getId(version) == id) return value;
-        }
-        return null;
+    public ProfileProperty(String name, String value) {
+        this(name, value, null);
     }
 
-    public int getId(final ProtocolCollection version) {
-        return this.ordinal();
+    public ProfileProperty(String name, String value, String signature) {
+        this.name = name;
+        this.value = value;
+        this.signature = signature;
+    }
+
+    @Override
+    public String toString() {
+        return "ProfileProperty{" +
+                "name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                ", signature='" + signature + '\'' +
+                '}';
     }
 }

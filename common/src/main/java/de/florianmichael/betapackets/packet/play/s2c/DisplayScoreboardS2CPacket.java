@@ -18,39 +18,38 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.model.game.hud.chat.ChatPosition;
-import net.lenni0451.mcstructs.text.ATextComponent;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.game.hud.scoreboard.ScoreboardPosition;
 
 import java.util.Objects;
 
-public class ChatMessageS2CPacket extends Packet {
+public class DisplayScoreboardS2CPacket extends Packet {
 
-    public ATextComponent textComponent;
-    public ModelMapper<Byte, ChatPosition> position = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, ChatPosition::getById);
+    public ModelMapper<Byte, ScoreboardPosition> position = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, ScoreboardPosition::getById);
+    public String scoreName;
 
-    public ChatMessageS2CPacket(final FunctionalByteBuf buf) {
-        this.textComponent = buf.readComponent();
+    public DisplayScoreboardS2CPacket(final FunctionalByteBuf buf) {
         this.position.read(buf);
+        this.scoreName = buf.readString(16);
     }
 
-    public ChatMessageS2CPacket(final ATextComponent textComponent, final ChatPosition position) {
-        this.textComponent = textComponent;
+    public DisplayScoreboardS2CPacket(ScoreboardPosition position, String scoreName) {
         this.position = new ModelMapper<>(FunctionalByteBuf::writeByte, position);
+        this.scoreName = scoreName;
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
-        buf.writeComponent(this.textComponent);
+    public void write(FunctionalByteBuf buf) throws Exception {
         this.position.write(buf);
+        buf.writeString(this.scoreName);
     }
 
     @Override
     public String toString() {
-        return "ChatMessageS2CPacket{" +
-                "textComponent=" + textComponent +
-                ", position=" + position +
+        return "DisplayScoreboardS2CPacket{" +
+                "position=" + position +
+                ", scoreName='" + scoreName + '\'' +
                 '}';
     }
 
@@ -59,17 +58,16 @@ public class ChatMessageS2CPacket extends Packet {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ChatMessageS2CPacket that = (ChatMessageS2CPacket) o;
+        DisplayScoreboardS2CPacket that = (DisplayScoreboardS2CPacket) o;
 
-        if (!Objects.equals(textComponent, that.textComponent))
-            return false;
-        return Objects.equals(position, that.position);
+        if (!Objects.equals(position, that.position)) return false;
+        return Objects.equals(scoreName, that.scoreName);
     }
 
     @Override
     public int hashCode() {
-        int result = textComponent != null ? textComponent.hashCode() : 0;
-        result = 31 * result + (position != null ? position.hashCode() : 0);
+        int result = position != null ? position.hashCode() : 0;
+        result = 31 * result + (scoreName != null ? scoreName.hashCode() : 0);
         return result;
     }
 }

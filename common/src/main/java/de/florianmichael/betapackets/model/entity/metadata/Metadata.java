@@ -15,33 +15,30 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.item;
+package de.florianmichael.betapackets.model.entity.metadata;
 
-import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
 import java.util.Objects;
 
-public class ItemStackV1_3 {
+public class Metadata {
 
-    public int itemId;
-    public int count;
-    public int damage;
-    public CompoundTag tag;
+    public int index;
+    public MetadataTypes metadataType;
+    public Object value;
 
-    public ItemStackV1_3(int itemId, int count, int damage, CompoundTag tag) {
-        this.itemId = itemId;
-        this.count = count;
-        this.damage = damage;
-        this.tag = tag;
+    public Metadata(int index, MetadataTypes metadataType, FunctionalByteBuf transformer) {
+        this.index = index;
+        this.metadataType = metadataType;
+        this.value = metadataType.getReader().apply(transformer);
     }
 
     @Override
     public String toString() {
-        return "ItemStackV1_3{" +
-                "itemId=" + itemId +
-                ", count=" + count +
-                ", damage=" + damage +
-                ", tag='" + tag + '\'' +
+        return "Metadata{" +
+                "index=" + index +
+                ", metadataType=" + metadataType +
+                ", value=" + value +
                 '}';
     }
 
@@ -50,20 +47,18 @@ public class ItemStackV1_3 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ItemStackV1_3 that = (ItemStackV1_3) o;
+        Metadata metadata = (Metadata) o;
 
-        if (itemId != that.itemId) return false;
-        if (count != that.count) return false;
-        if (damage != that.damage) return false;
-        return Objects.equals(tag, that.tag);
+        if (index != metadata.index) return false;
+        if (metadataType != metadata.metadataType) return false;
+        return Objects.equals(value, metadata.value);
     }
 
     @Override
     public int hashCode() {
-        int result = itemId;
-        result = 31 * result + count;
-        result = 31 * result + damage;
-        result = 31 * result + (tag != null ? tag.hashCode() : 0);
+        int result = index;
+        result = 31 * result + (metadataType != null ? metadataType.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
 }

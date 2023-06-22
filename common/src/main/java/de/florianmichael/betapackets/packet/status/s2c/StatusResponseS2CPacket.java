@@ -20,10 +20,10 @@ package de.florianmichael.betapackets.packet.status.s2c;
 import com.google.gson.*;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.Packet;
-import de.florianmichael.betapackets.model.ping.PingResponse;
-import de.florianmichael.betapackets.model.ping.Player;
-import de.florianmichael.betapackets.model.ping.Players;
-import de.florianmichael.betapackets.model.ping.Version;
+import de.florianmichael.betapackets.model.base.ping.PingResponse;
+import de.florianmichael.betapackets.model.base.ping.Player;
+import de.florianmichael.betapackets.model.base.ping.Players;
+import de.florianmichael.betapackets.model.base.ping.Version;
 
 import java.util.Objects;
 import java.util.UUID;
