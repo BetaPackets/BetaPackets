@@ -17,12 +17,9 @@
 
 package de.florianmichael.betapackets.bungeecord.netty;
 
-import de.florianmichael.betapackets.base.api.UserConnection;
-import de.florianmichael.betapackets.netty.BetaPacketsPipeline;
-import de.florianmichael.betapackets.netty.event.ReorderPipelineEvent;
+import de.florianmichael.betapackets.api.netty.BetaPacketsPipeline;
+import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOutboundHandlerAdapter;
-import io.netty.channel.ChannelPromise;
 
 public class BungeeCordBetaPacketsPipeline extends BetaPacketsPipeline {
 

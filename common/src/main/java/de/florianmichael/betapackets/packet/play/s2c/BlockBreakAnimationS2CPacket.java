@@ -18,7 +18,8 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
 import java.util.Objects;
@@ -29,11 +30,11 @@ public class BlockBreakAnimationS2CPacket extends Packet {
     public BlockPos blockPos;
     public int progress;
 
-    public BlockBreakAnimationS2CPacket(final FunctionalByteBuf transformer) {
+    public BlockBreakAnimationS2CPacket(final FunctionalByteBuf buf) {
         this(
-                transformer.readVarInt(),
-                BlockPos.fromLong(transformer.readLong()),
-                transformer.readVarInt()
+                buf.readVarInt(),
+                BlockPos.fromLong(buf.readLong()),
+                buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9) ? buf.readByte() : buf.readVarInt()
         );
     }
 
@@ -47,7 +48,11 @@ public class BlockBreakAnimationS2CPacket extends Packet {
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(breakerEntityId);
         buf.writeLong(blockPos.toLong());
-        buf.writeVarInt(progress);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeByte(progress);
+        }  else {
+            buf.writeVarInt(progress);
+        }
     }
 
     @Override

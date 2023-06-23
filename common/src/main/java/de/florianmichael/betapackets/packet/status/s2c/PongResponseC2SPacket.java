@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.packet.status.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 
 public class PongResponseC2SPacket extends Packet {
     public long payload;

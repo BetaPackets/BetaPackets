@@ -7,16 +7,22 @@ configurations {
     api.extendsFrom projectInclude
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "Jitpack"
-        url = "https://jitpack.io"
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "Jitpack"
+            url = "https://jitpack.io"
+        }
     }
 }
 
 dependencies {
+    // Base
     projectInclude project(":common")
+    projectInclude project(":api")
+
+    // Platform implementations
     projectInclude project(":bungeecord")
 }
 

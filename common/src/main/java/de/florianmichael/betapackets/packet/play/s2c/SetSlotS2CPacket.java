@@ -17,10 +17,11 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class SetSlotS2CPacket extends Packet {
@@ -29,7 +30,7 @@ public class SetSlotS2CPacket extends Packet {
     public int slot;
     public ItemStackV1_3 itemStack;
 
-    public SetSlotS2CPacket(final FunctionalByteBuf buf) {
+    public SetSlotS2CPacket(final FunctionalByteBuf buf) throws IOException {
         this(buf.readByte(), buf.readShort(), buf.readItemStack());
     }
 

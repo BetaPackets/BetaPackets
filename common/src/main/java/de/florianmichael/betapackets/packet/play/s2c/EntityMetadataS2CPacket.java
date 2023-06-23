@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 
@@ -29,7 +29,7 @@ public class EntityMetadataS2CPacket extends Packet {
     public int entityId;
     public List<Metadata> metadata;
 
-    public EntityMetadataS2CPacket(FunctionalByteBuf buf) {
+    public EntityMetadataS2CPacket(FunctionalByteBuf buf) throws Exception {
         this.entityId = buf.readVarInt();
         this.metadata = buf.readMetadata();
     }

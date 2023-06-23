@@ -17,37 +17,38 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.game.hud.InventorySlot;
 import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class EntityEquipmentS2CPacket extends Packet {
 
     public int entityId;
-    public int slot;
+    public ModelMapper<Short, InventorySlot> slot = new ModelMapper<>(FunctionalByteBuf::readShort, FunctionalByteBuf::writeShort, InventorySlot::getById);
     public ItemStackV1_3 item;
 
-    public EntityEquipmentS2CPacket(final FunctionalByteBuf transformer) throws IOException {
-        this(
-                transformer.readVarInt(),
-                transformer.readShort(),
-                transformer.readItemStack()
-        );
+    public EntityEquipmentS2CPacket(final FunctionalByteBuf buf) throws IOException {
+        this.entityId = buf.readVarInt();
+        this.slot.read(buf);
+        this.item = buf.readItemStack();
     }
 
-    public EntityEquipmentS2CPacket(int entityId, int slot, ItemStackV1_3 item) {
+    public EntityEquipmentS2CPacket(int entityId, InventorySlot slot, ItemStackV1_3 item) {
         this.entityId = entityId;
-        this.slot = slot;
+        this.slot = new ModelMapper<>(FunctionalByteBuf::writeShort, slot);
         this.item = item;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
-        buf.writeShort(this.slot);
+        this.slot.write(buf);
         buf.writeItemStack(this.item);
     }
 
@@ -68,14 +69,14 @@ public class EntityEquipmentS2CPacket extends Packet {
         EntityEquipmentS2CPacket that = (EntityEquipmentS2CPacket) o;
 
         if (entityId != that.entityId) return false;
-        if (slot != that.slot) return false;
+        if (!Objects.equals(slot, that.slot)) return false;
         return Objects.equals(item, that.item);
     }
 
     @Override
     public int hashCode() {
         int result = entityId;
-        result = 31 * result + slot;
+        result = 31 * result + (slot != null ? slot.hashCode() : 0);
         result = 31 * result + (item != null ? item.hashCode() : 0);
         return result;
     }

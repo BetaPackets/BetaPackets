@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
 // This packet is completely broken and has been removed in the 1.9 snapshots.

@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.base.bytebuf;
 
-import de.florianmichael.betapackets.base.api.UserConnection;
+import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
@@ -35,6 +35,7 @@ import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FunctionalByteBuf extends PrimitiveByteBuf {
 
@@ -45,72 +46,67 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         this.userConnection = userConnection;
     }
 
-    public ItemStackV1_3 readItemStack() {
-        try {
-            int id = this.readShort();
+    public ItemStackV1_3 readItemStack() throws IOException {
+        int id = this.readShort();
 
-            if (id >= 0) {
-                final int count = this.readByte();
-                final int damage = this.readShort();
+        if (id >= 0) {
+            final int count = this.readByte();
+            final int damage = this.readShort();
 
-                return new ItemStackV1_3(id, count, damage, this.readCompoundTag());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            return new ItemStackV1_3(id, count, damage, this.readCompoundTag());
         }
         return null;
     }
 
-    public void writeItemStack(ItemStackV1_3 stack) {
-        try {
-            if (stack == null) {
-                this.writeShort(-1);
-            } else {
-                this.writeShort(stack.itemId);
-                this.writeByte(stack.count);
-                this.writeShort(stack.damage);
-                this.writeCompoundTag(stack.tag);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void writeItemStack(ItemStackV1_3 stack) throws IOException {
+        if (stack == null) {
+            this.writeShort(-1);
+        } else {
+            this.writeShort(stack.itemId);
+            this.writeByte(stack.count);
+            this.writeShort(stack.damage);
+            this.writeCompoundTag(stack.tag);
         }
     }
 
-    public CompoundTag readCompoundTag() {
-        try {
-            final DataInput dataInput = new DataInputStream(new ByteBufInputStream(getBuffer()));
-            final INbtTag tag = NbtIO.JAVA.read(dataInput, NbtReadTracker.unlimited());
-            if (tag instanceof CompoundTag) {
-                return (CompoundTag) tag;
-            }
+    public CompoundTag readCompoundTag() throws IOException {
+        if (readableBytes() == 0 || readByte() == 0) {
             return null;
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        final DataInputStream dataInputStream = new DataInputStream(new ByteBufInputStream(getBuffer()));
+        final INbtTag tag = NbtIO.JAVA.read(dataInputStream, getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9), NbtReadTracker.unlimited());
+        if (tag instanceof CompoundTag) {
+            return (CompoundTag) tag;
         }
         return null;
     }
 
-    public void writeCompoundTag(final CompoundTag tag) {
-        try {
-            final DataOutput dataOutput = new DataOutputStream(new ByteBufOutputStream(getBuffer()));
-            NbtIO.JAVA.getWriter().write(dataOutput, tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void writeCompoundTag(final CompoundTag tag) throws IOException {
+        if (tag == null) return;
+
+        final DataOutputStream dataOutputStream = new DataOutputStream(new ByteBufOutputStream(getBuffer()));
+        NbtIO.JAVA.write(dataOutputStream, "", tag, getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9));
     }
 
-    public List<Metadata> readMetadata() {
+    public List<Metadata> readMetadata() throws Exception {
         final List<Metadata> list = new ArrayList<>();
-        for (int i = readByte(); i != Byte.MAX_VALUE; i = readByte()) {
-            list.add(new Metadata(i & 31, MetadataTypes.getById(getProtocolVersion(), (i & 224) >> 5), this));
+        if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            int i;
+            while ((i = readUnsignedByte()) != 255) {
+                list.add(new Metadata(i, Objects.requireNonNull(MetadataTypes.getById(getProtocolVersion(), readUnsignedByte())), this));
+            }
+        } else {
+            for (int i = readByte(); i != Byte.MAX_VALUE; i = readByte()) {
+                list.add(new Metadata(i & 31, Objects.requireNonNull(MetadataTypes.getById(getProtocolVersion(), (i & 224) >> 5)), this));
+            }
         }
         return list;
     }
 
-    public void writeMetadata(final List<Metadata> metadata) {
+    public void writeMetadata(final List<Metadata> metadata) throws Exception {
         for (Metadata metadatum : metadata) {
             this.writeByte((metadatum.metadataType.getId(getProtocolVersion()) << 5 | metadatum.index & 31));
-            metadatum.metadataType.getWriter().accept(this, metadatum);
+            metadatum.metadataType.getWriter().accept(this, metadatum.value);
         }
     }
 
@@ -118,8 +114,8 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         final String text = readString(32767);
         if (getProtocolVersion() == ProtocolCollection.R1_8) {
             return TextComponentSerializer.V1_8.deserialize(text);
-        } else if (getProtocolVersion().isNewerThan(ProtocolCollection.R1_9)) {
-            return TextComponentSerializer.V1_9.deserializeReader(text);
+        } else if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            return TextComponentSerializer.V1_9.deserialize(text);
         }
         return null;
     }
@@ -127,7 +123,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     public void writeComponent(final ATextComponent component) {
         if (getProtocolVersion() == ProtocolCollection.R1_8) {
             writeString(TextComponentSerializer.V1_8.serialize(component));
-        } else if (getProtocolVersion().isNewerThan(ProtocolCollection.R1_9)) {
+        } else if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             writeString(TextComponentSerializer.V1_9.serialize(component));
         }
     }

@@ -17,8 +17,10 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
+import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.game.PositionFlags;
 
 import java.util.Objects;
@@ -32,22 +34,25 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
     public float yaw;
     public float pitch;
 
-    public Set<PositionFlags> positionFlags;
+    public ModelMapper<Short, Set<PositionFlags>> positionFlags = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, PositionFlags::getFlags);
 
-    public PlayerPositionAndLookS2CPacket(final FunctionalByteBuf transformer) {
-        this(
-                transformer.readDouble(),
-                transformer.readDouble(),
-                transformer.readDouble(),
+    public int teleportId1_9;
 
-                transformer.readFloat(),
-                transformer.readFloat(),
+    public PlayerPositionAndLookS2CPacket(final FunctionalByteBuf buf) {
+        this.x = buf.readDouble();
+        this.y = buf.readDouble();
+        this.z = buf.readDouble();
 
-                PositionFlags.getFlags(transformer.readUnsignedByte())
-        );
+        this.yaw = buf.readFloat();
+        this.pitch = buf.readFloat();
+
+        this.positionFlags.read(buf);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.teleportId1_9 = buf.readVarInt();
+        }
     }
 
-    public PlayerPositionAndLookS2CPacket(double x, double y, double z, float yaw, float pitch,  Set<PositionFlags> positionFlags) {
+    public PlayerPositionAndLookS2CPacket(double x, double y, double z, float yaw, float pitch, Set<PositionFlags> positionFlags) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -55,7 +60,19 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
         this.yaw = yaw;
         this.pitch = pitch;
 
-        this.positionFlags = positionFlags;
+        this.positionFlags = new ModelMapper<>(FunctionalByteBuf::writeByte, positionFlags);
+    }
+
+    public PlayerPositionAndLookS2CPacket(double x, double y, double z, float yaw, float pitch, Set<PositionFlags> positionFlags, int teleportId) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+
+        this.yaw = yaw;
+        this.pitch = pitch;
+
+        this.positionFlags = new ModelMapper<>(FunctionalByteBuf::writeByte, positionFlags);
+        this.teleportId1_9 = teleportId;
     }
 
     @Override
@@ -67,7 +84,10 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
         buf.writeFloat(this.yaw);
         buf.writeFloat(this.pitch);
 
-        buf.writeByte(PositionFlags.merge(this.positionFlags));
+        this.positionFlags.write(buf);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeVarInt(this.teleportId1_9);
+        }
     }
 
     @Override
@@ -79,6 +99,7 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
                 ", yaw=" + yaw +
                 ", pitch=" + pitch +
                 ", positionFlags=" + positionFlags +
+                ", teleportId1_9=" + teleportId1_9 +
                 '}';
     }
 
@@ -94,6 +115,7 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
         if (Double.compare(that.z, z) != 0) return false;
         if (Float.compare(that.yaw, yaw) != 0) return false;
         if (Float.compare(that.pitch, pitch) != 0) return false;
+        if (teleportId1_9 != that.teleportId1_9) return false;
         return Objects.equals(positionFlags, that.positionFlags);
     }
 
@@ -110,6 +132,7 @@ public class PlayerPositionAndLookS2CPacket extends Packet {
         result = 31 * result + (yaw != +0.0f ? Float.floatToIntBits(yaw) : 0);
         result = 31 * result + (pitch != +0.0f ? Float.floatToIntBits(pitch) : 0);
         result = 31 * result + (positionFlags != null ? positionFlags.hashCode() : 0);
+        result = 31 * result + teleportId1_9;
         return result;
     }
 }

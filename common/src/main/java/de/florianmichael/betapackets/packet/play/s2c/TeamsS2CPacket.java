@@ -18,10 +18,13 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.ClassicChatFormattings;
-import de.florianmichael.betapackets.model.game.hud.TeamsMode;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.model.game.hud.teams.CollisionRule1_9;
+import de.florianmichael.betapackets.model.game.hud.teams.TeamsMode;
+import de.florianmichael.betapackets.model.game.hud.teams.TeamsVisible;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,7 +38,8 @@ public class TeamsS2CPacket extends Packet {
     public String teamPrefix;
     public String teamSuffix;
     public int friendlyFire;
-    public String nameTagVisibility;
+    public ModelMapper<String, TeamsVisible> nameTagVisibility = new ModelMapper<>(buf -> buf.readString(32), FunctionalByteBuf::writeString, TeamsVisible::getByName);
+    public ModelMapper<String, CollisionRule1_9> collisionRule1_9 = new ModelMapper<>(buf -> buf.readString(32), FunctionalByteBuf::writeString, CollisionRule1_9::getByName);
     public ModelMapper<Byte, ClassicChatFormattings> color = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, ClassicChatFormattings::getById);
 
     public String[] players;
@@ -49,7 +53,10 @@ public class TeamsS2CPacket extends Packet {
             this.teamPrefix = buf.readString(16);
             this.teamSuffix = buf.readString(16);
             this.friendlyFire = buf.readByte();
-            this.nameTagVisibility = buf.readString(32);
+            this.nameTagVisibility.read(buf);
+            if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+                this.collisionRule1_9.read(buf);
+            }
             this.color.read(buf);
         }
 
@@ -59,6 +66,31 @@ public class TeamsS2CPacket extends Packet {
                 players[i] = buf.readString(40);
             }
         }
+    }
+
+    public TeamsS2CPacket(String teamName, TeamsMode mode, String teamDisplayName, String teamPrefix, String teamSuffix, int friendlyFire, TeamsVisible nameTagVisibility, ClassicChatFormattings color, String[] players) {
+        this.teamName = teamName;
+        this.mode = new ModelMapper<>(FunctionalByteBuf::writeByte, mode);
+        this.teamDisplayName = teamDisplayName;
+        this.teamPrefix = teamPrefix;
+        this.teamSuffix = teamSuffix;
+        this.friendlyFire = friendlyFire;
+        this.nameTagVisibility = new ModelMapper<>(FunctionalByteBuf::writeString, nameTagVisibility);
+        this.color = new ModelMapper<>(FunctionalByteBuf::writeByte, color);
+        this.players = players;
+    }
+
+    public TeamsS2CPacket(String teamName, TeamsMode mode, String teamDisplayName, String teamPrefix, String teamSuffix, int friendlyFire, TeamsVisible nameTagVisibility, CollisionRule1_9 collisionRule, ClassicChatFormattings color, String[] players) {
+        this.teamName = teamName;
+        this.mode = new ModelMapper<>(FunctionalByteBuf::writeByte, mode);
+        this.teamDisplayName = teamDisplayName;
+        this.teamPrefix = teamPrefix;
+        this.teamSuffix = teamSuffix;
+        this.friendlyFire = friendlyFire;
+        this.nameTagVisibility = new ModelMapper<>(FunctionalByteBuf::writeString, nameTagVisibility);
+        this.collisionRule1_9 = new ModelMapper<>(FunctionalByteBuf::writeString, collisionRule);
+        this.color = new ModelMapper<>(FunctionalByteBuf::writeByte, color);
+        this.players = players;
     }
 
     @Override
@@ -71,7 +103,10 @@ public class TeamsS2CPacket extends Packet {
             buf.writeString(this.teamPrefix);
             buf.writeString(this.teamSuffix);
             buf.writeByte(this.friendlyFire);
-            buf.writeString(this.nameTagVisibility);
+            this.nameTagVisibility.write(buf);
+            if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+                this.collisionRule1_9.write(buf);
+            }
             this.color.write(buf);
         }
 

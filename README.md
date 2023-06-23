@@ -37,6 +37,15 @@ BetaPackets.getAPI().registerIncomingPacketListener(event -> {
 });
 ```
 
+## Project structure
+BetaPackets is divided into three major sections, common, api and all the platform implementations.
+
+|                  | common                                                                                                                                                                    | api                                                                                                                                                             | platform implementations (bungeecord)                       |
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| What does it do? | Contains all Packet Models and the corresponding Data Structures, but also all ByteBuffers as well as the UserConnection and all Packet Registries and the Base for them. | Contains the BetaPacketsPlatform base for the platform implementations, the Netty elements, converters and utils as well as the BetaPacketsAPI with all events. | Contains the API implementation for the respective platform |
+| Dependencies     | netty                                                                                                                                                                     | common, netty                                                                                                                                                   | common, api, platform plugin api                            |
+
+
 ## Implementing BetaPackets in your own software/platform
 BetaPackets is implemented by default on all major server platforms, in case you want to use this library in your own proxy or include it in a new server software, you need to do the following:
 ```java
@@ -111,8 +120,11 @@ ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent("target-decoder",
 | MC-Structs     | https://github.com/Lenni0451/MCStructs           |
 | DietrichEvents | https://github.com/FlorianMichael/DietrichEvents |
 
-## Supported versions
-- 1.8.x
+## TODO - LIST
+- [x] 1.8 packets and models
+- [ ] chunks and effect translations
+- [x] 1.9 packets and models
+- [ ] proper BungeeCord implementation and Spigot implementation
 
 ## Contact
 If you encounter any issues, please report them on the

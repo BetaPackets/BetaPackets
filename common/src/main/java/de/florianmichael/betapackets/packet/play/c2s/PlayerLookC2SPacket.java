@@ -24,11 +24,11 @@ public class PlayerLookC2SPacket extends PlayerC2SPacket {
     public float yaw;
     public float pitch;
 
-    public PlayerLookC2SPacket(FunctionalByteBuf buf) {
-        this(buf.readBoolean(), buf.readFloat(), buf.readFloat());
+    public PlayerLookC2SPacket(final FunctionalByteBuf buf) {
+        this(buf.readFloat(), buf.readFloat(), buf.readBoolean());
     }
 
-    public PlayerLookC2SPacket(boolean onGround, float yaw, float pitch) {
+    public PlayerLookC2SPacket(float yaw, float pitch, boolean onGround) {
         super(onGround);
         this.yaw = yaw;
         this.pitch = pitch;

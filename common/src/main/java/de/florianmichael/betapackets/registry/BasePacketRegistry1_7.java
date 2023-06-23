@@ -46,26 +46,6 @@ public class BasePacketRegistry1_7 {
         }
     }
 
-    public static class PacketRegistryLogin1_7 extends PacketRegistry {
-
-        public PacketRegistryLogin1_7() {
-            super(NetworkState.LOGIN);
-        }
-
-        @Override
-        public void init() {
-            // C -> S
-            this.registerPacket(NetworkSide.SERVERBOUND, 0x00, LoginStartC2SPacket.class);
-            this.registerPacket(NetworkSide.SERVERBOUND, 0x01, EncryptionResponseC2SPacket.class);
-
-            // S -> C
-            this.registerPacket(NetworkSide.CLIENTBOUND, 0x00, LoginDisconnectS2CPacket.class);
-            this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, EncryptionRequestS2CPacket.class);
-            this.registerPacket(NetworkSide.CLIENTBOUND, 0x02, LoginSuccessS2CPacket.class);
-            this.registerPacket(NetworkSide.CLIENTBOUND, 0x03, SetCompressionS2CPacket.class);
-        }
-    }
-
     public static class PacketRegistryStatus1_7 extends PacketRegistry {
 
         public PacketRegistryStatus1_7() {
@@ -74,13 +54,13 @@ public class BasePacketRegistry1_7 {
 
         @Override
         public void init() {
-            // C -> S
-            this.registerPacket(NetworkSide.SERVERBOUND, 0x00, StatusRequestC2SPacket.class);
-            this.registerPacket(NetworkSide.SERVERBOUND, 0x01, PingRequestC2SPacket.class);
-
             // S -> C
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x00, StatusResponseS2CPacket.class);
             this.registerPacket(NetworkSide.CLIENTBOUND, 0x01, PongResponseC2SPacket.class);
+
+            // C -> S
+            this.registerPacket(NetworkSide.SERVERBOUND, 0x00, StatusRequestC2SPacket.class);
+            this.registerPacket(NetworkSide.SERVERBOUND, 0x01, PingRequestC2SPacket.class);
         }
     }
 }

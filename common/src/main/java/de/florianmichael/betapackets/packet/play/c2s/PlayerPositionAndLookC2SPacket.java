@@ -29,10 +29,10 @@ public class PlayerPositionAndLookC2SPacket extends PlayerC2SPacket {
     public float pitch;
 
     public PlayerPositionAndLookC2SPacket(FunctionalByteBuf buf) {
-        this(buf.readBoolean(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readFloat(), buf.readFloat());
+        this(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readFloat(), buf.readFloat(), buf.readBoolean());
     }
 
-    public PlayerPositionAndLookC2SPacket(boolean onGround, double x, double y, double z, float yaw, float pitch) {
+    public PlayerPositionAndLookC2SPacket(double x, double y, double z, float yaw, float pitch, boolean onGround) {
         super(onGround);
         this.x = x;
         this.y = y;

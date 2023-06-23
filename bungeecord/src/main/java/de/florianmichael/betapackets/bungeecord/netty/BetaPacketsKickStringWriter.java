@@ -17,7 +17,8 @@
 
 package de.florianmichael.betapackets.bungeecord.netty;
 
-import de.florianmichael.betapackets.base.api.UserConnection;
+import de.florianmichael.betapackets.api.BetaPackets;
+import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.ChannelHandlerContext;
 import net.md_5.bungee.protocol.KickStringWriter;
 
@@ -25,6 +26,9 @@ public class BetaPacketsKickStringWriter extends KickStringWriter {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        ctx.pipeline().addFirst(new BungeeCordBetaPacketsPipeline(new UserConnection(ctx.channel())));
+        ctx.pipeline().addFirst(new BungeeCordBetaPacketsPipeline(new UserConnection(
+                ctx.channel(),
+                BetaPackets.getPacketRegistryManager()
+        )));
     }
 }

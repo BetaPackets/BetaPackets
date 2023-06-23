@@ -18,12 +18,13 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
 
-    public byte deltaX;
-    public byte deltaY;
-    public byte deltaZ;
+    public short deltaX;
+    public short deltaY;
+    public short deltaZ;
 
     public byte yaw;
     public byte pitch;
@@ -33,9 +34,15 @@ public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
     public EntityLookAndRelativeMoveS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
-        this.deltaX = buf.readByte();
-        this.deltaY = buf.readByte();
-        this.deltaZ = buf.readByte();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.deltaX = buf.readShort();
+            this.deltaY = buf.readShort();
+            this.deltaZ = buf.readShort();
+        } else {
+            this.deltaX = buf.readByte();
+            this.deltaY = buf.readByte();
+            this.deltaZ = buf.readByte();
+        }
 
         this.yaw = buf.readByte();
         this.pitch = buf.readByte();
@@ -43,7 +50,7 @@ public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
         this.onGround = buf.readBoolean();
     }
 
-    public EntityLookAndRelativeMoveS2CPacket(int entityId, byte deltaX, byte deltaY, byte deltaZ, byte yaw, byte pitch, boolean onGround) {
+    public EntityLookAndRelativeMoveS2CPacket(int entityId, short deltaX, short deltaY, short deltaZ, byte yaw, byte pitch, boolean onGround) {
         super(entityId);
 
         this.deltaX = deltaX;
@@ -60,9 +67,15 @@ public class EntityLookAndRelativeMoveS2CPacket extends EntityS2CPacket {
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(deltaX);
-        buf.writeByte(deltaY);
-        buf.writeByte(deltaZ);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeShort(deltaX);
+            buf.writeShort(deltaY);
+            buf.writeShort(deltaZ);
+        } else {
+            buf.writeByte(deltaX);
+            buf.writeByte(deltaY);
+            buf.writeByte(deltaZ);
+        }
 
         buf.writeByte(yaw);
         buf.writeByte(pitch);

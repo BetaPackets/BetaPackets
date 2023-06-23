@@ -17,29 +17,33 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public class SpawnGlobalEntityS2CPacket extends Packet {
 
     public int entityId;
     public int type;
-
-    public int x;
-    public int y;
-    public int z;
+    public double x;
+    public double y;
+    public double z;
 
     public SpawnGlobalEntityS2CPacket(final FunctionalByteBuf buf) {
-        this(
-                buf.readVarInt(),
-                buf.readByte(),
-                buf.readInt(),
-                buf.readInt(),
-                buf.readInt()
-        );
+        this.entityId = buf.readVarInt();
+        this.type = buf.readByte();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.x = buf.readDouble();
+            this.y = buf.readDouble();
+            this.z = buf.readDouble();
+        } else {
+            this.x = buf.readInt();
+            this.y = buf.readInt();
+            this.z = buf.readInt();
+        }
     }
 
-    public SpawnGlobalEntityS2CPacket(int entityId, int type, int x, int y, int z) {
+    public SpawnGlobalEntityS2CPacket(int entityId, int type, double x, double y, double z) {
         this.entityId = entityId;
         this.type = type;
         this.x = x;
@@ -51,9 +55,15 @@ public class SpawnGlobalEntityS2CPacket extends Packet {
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
         buf.writeByte(type);
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeDouble(x);
+            buf.writeDouble(y);
+            buf.writeDouble(z);
+        } else {
+            buf.writeInt((int) x);
+            buf.writeInt((int) y);
+            buf.writeInt((int) z);
+        }
     }
 
     @Override
@@ -76,18 +86,23 @@ public class SpawnGlobalEntityS2CPacket extends Packet {
 
         if (entityId != that.entityId) return false;
         if (type != that.type) return false;
-        if (x != that.x) return false;
-        if (y != that.y) return false;
-        return z == that.z;
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        return Double.compare(that.z, z) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
+        int result;
+        long temp;
+        result = entityId;
         result = 31 * result + type;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 }

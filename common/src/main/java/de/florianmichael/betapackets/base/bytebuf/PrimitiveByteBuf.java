@@ -83,6 +83,10 @@ public class PrimitiveByteBuf {
         buffer.writeShort(input);
     }
 
+    public void writeShort(final short input) {
+        buffer.writeShort(input);
+    }
+
     public boolean readBoolean() {
         return buffer.readBoolean();
     }
@@ -210,6 +214,21 @@ public class PrimitiveByteBuf {
     public void writeByteArray(byte[] array) {
         this.writeVarInt(array.length);
         this.writeBytes(array);
+    }
+
+    public int[] readVarIntArray() {
+        final int[] varIntArray = new int[this.readVarInt()];
+        for (int i = 0; i < varIntArray.length; ++i) {
+            varIntArray[i] = this.readVarInt();
+        }
+        return varIntArray;
+    }
+
+    public void writeVarIntArray(int[] array) {
+        this.writeVarInt(array.length);
+        for (int j : array) {
+            this.writeVarInt(j);
+        }
     }
 
     public void readBytes(byte[] bytes) {

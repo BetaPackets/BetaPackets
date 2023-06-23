@@ -18,12 +18,13 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.game.MetadataAction;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class UpdateBlockEntityS2CPacket extends Packet {
@@ -32,7 +33,7 @@ public class UpdateBlockEntityS2CPacket extends Packet {
     public ModelMapper<Short, MetadataAction> metadata = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, MetadataAction::getById);
     public CompoundTag nbtData;
 
-    public UpdateBlockEntityS2CPacket(final FunctionalByteBuf buf) {
+    public UpdateBlockEntityS2CPacket(final FunctionalByteBuf buf) throws IOException {
         this.blockPos = BlockPos.fromLong(buf.readLong());
         this.metadata.read(buf);
         this.nbtData = buf.readCompoundTag();

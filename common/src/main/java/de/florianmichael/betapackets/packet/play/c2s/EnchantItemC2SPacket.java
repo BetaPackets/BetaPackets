@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.c2s;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
 public class EnchantItemC2SPacket extends Packet {

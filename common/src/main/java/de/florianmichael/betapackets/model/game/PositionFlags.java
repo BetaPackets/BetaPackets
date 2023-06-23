@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.game;
 
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -36,7 +38,7 @@ public enum PositionFlags {
         return (inputId & this.getId()) == this.getId();
     }
 
-    public static Set<PositionFlags> getFlags(int flags) {
+    public static Set<PositionFlags> getFlags(final ProtocolCollection version, final short flags) {
         final Set<PositionFlags> set = EnumSet.noneOf(PositionFlags.class);
         for (PositionFlags positionFlag : values()) {
             if (positionFlag.isSameID(flags)) set.add(positionFlag);

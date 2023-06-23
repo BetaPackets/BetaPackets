@@ -17,13 +17,11 @@
 
 package de.florianmichael.betapackets.base.registry;
 
-import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.base.NetworkSide;
 import de.florianmichael.betapackets.model.base.NetworkState;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,40 +40,18 @@ public abstract class PacketRegistry {
     public void registerPacket(final NetworkSide side, final int id, final Class<? extends Packet> packet) {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
 
-        if (packets.containsKey(id)) {
-            BetaPackets.getPlatform().getLogging().warning("Packet " + id + "already registered in " + getClass().getSimpleName() + ", overwriting current packet!");
-        }
         packets.put(id, packet);
-    }
-
-    public void changePacketID(final NetworkSide side, final int id, final int newId) {
-        final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
-
-        if (!packets.containsKey(id)) {
-            BetaPackets.getPlatform().getLogging().severe("Packet " + id + " doesn't exist, ignoring redirect to " + newId + "!");
-            return;
-        }
-        packets.put(newId, packets.get(id));
     }
 
     public Map<Integer, Class<? extends Packet>> getPackets(final NetworkSide side) {
         return side == NetworkSide.CLIENTBOUND ? clientboundPackets : serverboundPackets;
     }
 
-    public Packet createModel(final NetworkSide side, final int packetId, final FunctionalByteBuf buf) {
+    public Packet createModel(final NetworkSide side, final int packetId, final FunctionalByteBuf buf) throws Exception {
         final Map<Integer, Class<? extends Packet>> packets = getPackets(side);
 
         if (!packets.containsKey(packetId)) return null;
-
-        try {
-            final Class<? extends Packet> clazz = packets.get(packetId);
-
-            return clazz.getConstructor(FunctionalByteBuf.class).newInstance(buf);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            BetaPackets.getPlatform().getLogging().severe("Couldn't create packet " + packetId + " in " + getClass().getSimpleName() + "!");
-            e.printStackTrace();
-        }
-        return null;
+        return packets.get(packetId).getConstructor(FunctionalByteBuf.class).newInstance(buf);
     }
 
     public NetworkState getNetworkState() {

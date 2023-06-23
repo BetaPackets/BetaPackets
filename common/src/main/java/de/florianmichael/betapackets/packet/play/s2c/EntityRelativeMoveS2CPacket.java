@@ -18,26 +18,33 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public class EntityRelativeMoveS2CPacket extends EntityS2CPacket {
 
-    public byte deltaX;
-    public byte deltaY;
-    public byte deltaZ;
+    public short deltaX;
+    public short deltaY;
+    public short deltaZ;
 
     public boolean onGround;
 
     public EntityRelativeMoveS2CPacket(FunctionalByteBuf buf) {
         super(buf);
 
-        this.deltaX = buf.readByte();
-        this.deltaY = buf.readByte();
-        this.deltaZ = buf.readByte();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.deltaX = buf.readShort();
+            this.deltaY = buf.readShort();
+            this.deltaZ = buf.readShort();
+        } else {
+            this.deltaX = buf.readByte();
+            this.deltaY = buf.readByte();
+            this.deltaZ = buf.readByte();
+        }
 
         this.onGround = buf.readBoolean();
     }
 
-    public EntityRelativeMoveS2CPacket(int entityId, byte deltaX, byte deltaY, byte deltaZ, boolean onGround) {
+    public EntityRelativeMoveS2CPacket(int entityId, short deltaX, short deltaY, short deltaZ, boolean onGround) {
         super(entityId);
 
         this.deltaX = deltaX;
@@ -51,9 +58,15 @@ public class EntityRelativeMoveS2CPacket extends EntityS2CPacket {
     public void write(FunctionalByteBuf buf) throws Exception {
         super.write(buf);
 
-        buf.writeByte(deltaX);
-        buf.writeByte(deltaY);
-        buf.writeByte(deltaZ);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeShort(deltaX);
+            buf.writeShort(deltaY);
+            buf.writeShort(deltaZ);
+        } else {
+            buf.writeByte(deltaX);
+            buf.writeByte(deltaY);
+            buf.writeByte(deltaZ);
+        }
 
         buf.writeBoolean(onGround);
     }

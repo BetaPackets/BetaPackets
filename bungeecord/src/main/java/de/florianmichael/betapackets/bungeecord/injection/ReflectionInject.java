@@ -17,7 +17,6 @@
 
 package de.florianmichael.betapackets.bungeecord.injection;
 
-import de.florianmichael.betapackets.BetaPackets;
 import net.md_5.bungee.protocol.KickStringWriter;
 
 import java.lang.reflect.Field;

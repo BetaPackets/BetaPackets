@@ -20,6 +20,8 @@ package de.florianmichael.betapackets.model.game.potion;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public enum ParticleTypes {
+
+    // v1.8
     EXPLOSION_NORMAL("explode", true),
     EXPLOSION_LARGE("largeexplode", true),
     EXPLOSION_HUGE("hugeexplosion", true),
@@ -61,7 +63,13 @@ public enum ParticleTypes {
     BLOCK_DUST("blockdust_", false, 1),
     WATER_DROP("droplet", false),
     ITEM_TAKE("take", false),
-    MOB_APPEARANCE("mobappearance", true);
+    MOB_APPEARANCE("mobappearance", true),
+
+    //v1.9
+    DRAGON_BREATH("dragonbreath", false),
+    END_ROD("endRod", false),
+    DAMAGE_INDICATOR("damageIndicator", false),
+    SWEEP_ATTACK("sweepAttack", false);
 
     public final String particleName;
     public final boolean shouldIgnoreRange;
@@ -86,5 +94,14 @@ public enum ParticleTypes {
 
     public int getId(final ProtocolCollection version) {
         return ordinal();
+    }
+
+    public String getParticleName(final ProtocolCollection version) {
+        if (version.isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            if (this == ITEM_CRACK || this == BLOCK_CRACK || this == BLOCK_DUST) {
+                return particleName.replace("_", "");
+            }
+        }
+        return particleName;
     }
 }

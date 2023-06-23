@@ -17,36 +17,37 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public class EntityTeleportS2CPacket extends Packet {
 
     public int entityId;
-
-    public int x;
-    public int y;
-    public int z;
-
+    public double x;
+    public double y;
+    public double z;
     public byte yaw;
     public byte pitch;
-
     public boolean onGround;
 
     public EntityTeleportS2CPacket(FunctionalByteBuf buf) {
         this.entityId = buf.readVarInt();
-
-        this.x = buf.readInt();
-        this.y = buf.readInt();
-        this.z = buf.readInt();
-
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.x = buf.readDouble();
+            this.y = buf.readDouble();
+            this.z = buf.readDouble();
+        } else {
+            this.x = buf.readInt();
+            this.y = buf.readInt();
+            this.z = buf.readInt();
+        }
         this.yaw = buf.readByte();
         this.pitch = buf.readByte();
-
         this.onGround = buf.readBoolean();
     }
 
-    public EntityTeleportS2CPacket(int entityId, int x, int y, int z, byte yaw, byte pitch, boolean onGround) {
+    public EntityTeleportS2CPacket(int entityId, double x, double y, double z, byte yaw, byte pitch, boolean onGround) {
         this.entityId = entityId;
 
         this.x = x;
@@ -62,14 +63,17 @@ public class EntityTeleportS2CPacket extends Packet {
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
-
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
-
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeDouble(x);
+            buf.writeDouble(y);
+            buf.writeDouble(z);
+        } else {
+            buf.writeInt((int) x);
+            buf.writeInt((int) y);
+            buf.writeInt((int) z);
+        }
         buf.writeByte(yaw);
         buf.writeByte(pitch);
-
         buf.writeBoolean(onGround);
     }
 
@@ -94,9 +98,9 @@ public class EntityTeleportS2CPacket extends Packet {
         EntityTeleportS2CPacket that = (EntityTeleportS2CPacket) o;
 
         if (entityId != that.entityId) return false;
-        if (x != that.x) return false;
-        if (y != that.y) return false;
-        if (z != that.z) return false;
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        if (Double.compare(that.z, z) != 0) return false;
         if (yaw != that.yaw) return false;
         if (pitch != that.pitch) return false;
         return onGround == that.onGround;
@@ -104,10 +108,15 @@ public class EntityTeleportS2CPacket extends Packet {
 
     @Override
     public int hashCode() {
-        int result = entityId;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        int result;
+        long temp;
+        result = entityId;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (int) yaw;
         result = 31 * result + (int) pitch;
         result = 31 * result + (onGround ? 1 : 0);

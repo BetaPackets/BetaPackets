@@ -18,8 +18,10 @@
 package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
 import de.florianmichael.betapackets.model.game.hud.chat.ChatVisibility;
 
 import java.util.Objects;
@@ -33,9 +35,10 @@ public class ClientSettingsC2SPacket extends Packet {
 
     /**
      * You can use the SkinPartsFlagsConverter class to get these fields
-     * @see de.florianmichael.betapackets.converter.SkinPartsFlagsConverter
+     * @see de.florianmichael.betapackets.api.converter.SkinPartsFlagsConverter
      */
     public int modelPartFlags;
+    public ModelMapper<Integer, Hand1_9> hand1_9 = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, Hand1_9::getById);
 
     public ClientSettingsC2SPacket(final FunctionalByteBuf buf) {
         this.lang = buf.readString(7);
@@ -43,6 +46,9 @@ public class ClientSettingsC2SPacket extends Packet {
         this.chatVisibility.read(buf);
         this.enableColors = buf.readBoolean();
         this.modelPartFlags = buf.readUnsignedByte();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.hand1_9.read(buf);
+        }
     }
 
     public ClientSettingsC2SPacket(String lang, int view, ChatVisibility chatVisibility, boolean enableColors, int modelPartFlags) {
@@ -53,6 +59,15 @@ public class ClientSettingsC2SPacket extends Packet {
         this.modelPartFlags = modelPartFlags;
     }
 
+    public ClientSettingsC2SPacket(String lang, int view, ChatVisibility chatVisibility, boolean enableColors, int modelPartFlags, Hand1_9 hand1_9) {
+        this.lang = lang;
+        this.view = view;
+        this.chatVisibility = new ModelMapper<>(FunctionalByteBuf::writeByte, chatVisibility);
+        this.enableColors = enableColors;
+        this.modelPartFlags = modelPartFlags;
+        this.hand1_9 = new ModelMapper<>(FunctionalByteBuf::writeVarInt, hand1_9);
+    }
+
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeString(this.lang);
@@ -60,6 +75,9 @@ public class ClientSettingsC2SPacket extends Packet {
         this.chatVisibility.write(buf);
         buf.writeBoolean(this.enableColors);
         buf.writeByte(this.modelPartFlags);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.hand1_9.write(buf);
+        }
     }
 
     @Override
@@ -70,6 +88,7 @@ public class ClientSettingsC2SPacket extends Packet {
                 ", chatVisibility=" + chatVisibility +
                 ", enableColors=" + enableColors +
                 ", modelPartFlags=" + modelPartFlags +
+                ", hand1_9=" + hand1_9 +
                 '}';
     }
 
@@ -84,7 +103,9 @@ public class ClientSettingsC2SPacket extends Packet {
         if (enableColors != that.enableColors) return false;
         if (modelPartFlags != that.modelPartFlags) return false;
         if (!Objects.equals(lang, that.lang)) return false;
-        return Objects.equals(chatVisibility, that.chatVisibility);
+        if (!Objects.equals(chatVisibility, that.chatVisibility))
+            return false;
+        return Objects.equals(hand1_9, that.hand1_9);
     }
 
     @Override
@@ -94,6 +115,7 @@ public class ClientSettingsC2SPacket extends Packet {
         result = 31 * result + (chatVisibility != null ? chatVisibility.hashCode() : 0);
         result = 31 * result + (enableColors ? 1 : 0);
         result = 31 * result + modelPartFlags;
+        result = 31 * result + (hand1_9 != null ? hand1_9.hashCode() : 0);
         return result;
     }
 }

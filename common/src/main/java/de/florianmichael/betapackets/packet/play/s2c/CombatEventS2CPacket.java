@@ -18,9 +18,12 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.game.CombatEvent;
+import net.lenni0451.mcstructs.text.ATextComponent;
+import net.lenni0451.mcstructs.text.components.StringComponent;
 
 import java.util.Objects;
 
@@ -30,7 +33,7 @@ public class CombatEventS2CPacket extends Packet {
     public int duration;
     public int playerId;
     public int entityId;
-    public String deathMessage;
+    public ATextComponent deathMessage;
 
     public CombatEventS2CPacket(final FunctionalByteBuf buf) {
         this.event.read(buf);
@@ -43,7 +46,11 @@ public class CombatEventS2CPacket extends Packet {
         if (this.event.value == 2 /* Entity Died */) {
             this.playerId = buf.readVarInt();
             this.entityId = buf.readInt();
-            this.deathMessage = buf.readString();
+            if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+                this.deathMessage = buf.readComponent();
+            } else {
+                this.deathMessage = new StringComponent(buf.readString());
+            }
         }
     }
 
@@ -58,13 +65,21 @@ public class CombatEventS2CPacket extends Packet {
     }
 
     public CombatEventS2CPacket(int playerId, int entityId, String deathMessage) {
+        this(playerId, entityId, new StringComponent(deathMessage));
+    }
+
+    public CombatEventS2CPacket(CombatEvent event, int duration, int playerId, int entityId, String deathMessage) {
+        this(event, duration, playerId, entityId, new StringComponent(deathMessage));
+    }
+
+    public CombatEventS2CPacket(int playerId, int entityId, ATextComponent deathMessage) {
         this.event = new ModelMapper<>(FunctionalByteBuf::writeVarInt, CombatEvent.ENTITY_DIED);
         this.playerId = playerId;
         this.entityId = entityId;
         this.deathMessage = deathMessage;
     }
 
-    public CombatEventS2CPacket(CombatEvent event, int duration, int playerId, int entityId, String deathMessage) {
+    public CombatEventS2CPacket(CombatEvent event, int duration, int playerId, int entityId, ATextComponent deathMessage) {
         this.event = new ModelMapper<>(FunctionalByteBuf::writeVarInt, event);
         this.duration = duration;
         this.playerId = playerId;
@@ -83,7 +98,11 @@ public class CombatEventS2CPacket extends Packet {
         if (this.event.value == 2 /* Entity Died */) {
             buf.writeVarInt(this.playerId);
             buf.writeInt(this.entityId);
-            buf.writeString(this.deathMessage);
+            if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+                buf.writeComponent(this.deathMessage);
+            } else {
+                buf.writeString(this.deathMessage.asSingleString());
+            }
         }
     }
 

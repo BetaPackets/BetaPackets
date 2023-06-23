@@ -26,10 +26,10 @@ public class PlayerPositionC2SPacket extends PlayerC2SPacket {
     public double z;
 
     public PlayerPositionC2SPacket(FunctionalByteBuf buf) {
-        this(buf.readBoolean(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+        this(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readBoolean());
     }
 
-    public PlayerPositionC2SPacket(boolean onGround, double x, double y, double z) {
+    public PlayerPositionC2SPacket(double x, double y, double z, boolean onGround) {
         super(onGround);
         this.x = x;
         this.y = y;

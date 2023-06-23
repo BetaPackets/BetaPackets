@@ -18,7 +18,8 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.position.BlockPos;
 
 import java.util.Objects;
@@ -28,8 +29,8 @@ public class UseBedS2CPacket extends Packet {
     public int entityId;
     public BlockPos position;
 
-    public UseBedS2CPacket(final FunctionalByteBuf transformer) {
-        this(transformer.readInt(), BlockPos.fromLong(transformer.readLong()));
+    public UseBedS2CPacket(final FunctionalByteBuf buf) {
+        this(buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9) ? buf.readVarInt() : buf.readInt(), BlockPos.fromLong(buf.readLong()));
     }
 
     public UseBedS2CPacket(int entityId, BlockPos position) {
@@ -39,7 +40,11 @@ public class UseBedS2CPacket extends Packet {
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeInt(entityId);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeVarInt(entityId);
+        } else {
+            buf.writeInt(entityId);
+        }
         buf.writeLong(position.toLong());
     }
 

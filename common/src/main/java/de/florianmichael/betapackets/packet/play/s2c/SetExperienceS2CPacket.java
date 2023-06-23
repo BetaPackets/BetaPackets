@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 
 public class SetExperienceS2CPacket extends Packet {
 
@@ -26,11 +26,11 @@ public class SetExperienceS2CPacket extends Packet {
     public int level;
     public int totalExperience;
 
-    public SetExperienceS2CPacket(final FunctionalByteBuf transformer) {
+    public SetExperienceS2CPacket(final FunctionalByteBuf buf) {
         this(
-                transformer.readFloat(),
-                transformer.readVarInt(),
-                transformer.readVarInt()
+                buf.readFloat(),
+                buf.readVarInt(),
+                buf.readVarInt()
         );
     }
 

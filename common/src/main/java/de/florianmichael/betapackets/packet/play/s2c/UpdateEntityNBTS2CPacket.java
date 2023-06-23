@@ -17,10 +17,11 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class UpdateEntityNBTS2CPacket extends Packet {
@@ -28,7 +29,7 @@ public class UpdateEntityNBTS2CPacket extends Packet {
     public int entityId;
     public CompoundTag tag;
 
-    public UpdateEntityNBTS2CPacket(final FunctionalByteBuf buf) {
+    public UpdateEntityNBTS2CPacket(final FunctionalByteBuf buf) throws IOException {
         this(buf.readVarInt(), buf.readCompoundTag());
     }
 

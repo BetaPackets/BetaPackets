@@ -21,12 +21,16 @@ import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public enum PlayerDiggingStatus {
 
-    START,
-    CANCEL,
-    FINISH,
+    // v1.8
+    START_DESTROY_BLOCK,
+    CANCEL_DESTROY_BLOCK,
+    FINISH_DESTROY_BLOCK,
     DROP_ITEM_STACK,
     DROP_ITEM,
-    SHOOT_ARROW_OR_FINISH_EATING;
+    RELEASE_USE_ITEM,
+
+    // v1.9
+    SWAP_HELD_ITEMS;
 
     public static PlayerDiggingStatus getById(final ProtocolCollection version, final int id) {
         for (PlayerDiggingStatus value : values()) {

@@ -17,34 +17,46 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public class AttachEntityS2CPacket extends Packet {
 
     public int entityId;
     public int vehicleId;
-    public int leash;
+    public int leash_1_8;
 
     public AttachEntityS2CPacket(FunctionalByteBuf buf) {
-        this(buf.readInt(), buf.readInt(), buf.readUnsignedByte());
+        this.entityId = buf.readInt();
+        this.vehicleId = buf.readInt();
+        if (buf.getProtocolVersion().isOlderThanOrEqualTo(ProtocolCollection.R1_8)) {
+            this.leash_1_8 = buf.readUnsignedByte();
+        }
+    }
+
+    public AttachEntityS2CPacket(int entityId, int vehicleId) {
+        this.entityId = entityId;
+        this.vehicleId = vehicleId;
     }
 
     public AttachEntityS2CPacket(int entityId, int vehicleId, int leash) {
         this.entityId = entityId;
         this.vehicleId = vehicleId;
-        this.leash = leash;
+        this.leash_1_8 = leash;
     }
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeInt(entityId);
         buf.writeInt(vehicleId);
-        buf.writeByte(leash);
+        if (buf.getProtocolVersion().isOlderThanOrEqualTo(ProtocolCollection.R1_8)) {
+            buf.writeByte(leash_1_8);
+        }
     }
 
     public boolean shouldLeashed() {
-        return leash == 1;
+        return leash_1_8 == 1;
     }
 
     @Override
@@ -52,7 +64,7 @@ public class AttachEntityS2CPacket extends Packet {
         return "AttachEntityS2CPacket{" +
                 "entityId=" + entityId +
                 ", vehicleId=" + vehicleId +
-                ", leash=" + leash +
+                ", leash=" + leash_1_8 +
                 '}';
     }
 
@@ -65,14 +77,14 @@ public class AttachEntityS2CPacket extends Packet {
 
         if (entityId != that.entityId) return false;
         if (vehicleId != that.vehicleId) return false;
-        return leash == that.leash;
+        return leash_1_8 == that.leash_1_8;
     }
 
     @Override
     public int hashCode() {
         int result = entityId;
         result = 31 * result + vehicleId;
-        result = 31 * result + leash;
+        result = 31 * result + leash_1_8;
         return result;
     }
 }

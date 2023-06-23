@@ -43,10 +43,14 @@ public enum PotionEffectTypes {
     HEALTH_BOOST,
     ABSORPTION,
     SATURATION,
+
+    // v1.9
     GLOWING,
     LEVITATION,
     LUCK,
     UNLUCK,
+
+    // unknown (will be corrected when updating BetaPackets)
     SLOW_FALLING,
     CONDUIT_POWER,
     DOLPHINS_GRACE,

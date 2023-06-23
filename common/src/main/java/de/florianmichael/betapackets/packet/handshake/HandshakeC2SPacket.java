@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.packet.handshake;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.base.NetworkState;
 
 import java.util.Objects;

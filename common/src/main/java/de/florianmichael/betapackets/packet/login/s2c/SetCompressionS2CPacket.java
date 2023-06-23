@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.packet.login.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 
 public class SetCompressionS2CPacket extends Packet {
     public int threshold;

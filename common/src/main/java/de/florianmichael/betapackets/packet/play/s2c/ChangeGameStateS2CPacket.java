@@ -17,9 +17,13 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.DemoMode;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.model.game.FadeValue;
+import de.florianmichael.betapackets.model.game.GameMode;
 import de.florianmichael.betapackets.model.game.GameStateTypes;
 
 import java.util.Objects;
@@ -47,6 +51,27 @@ public class ChangeGameStateS2CPacket extends Packet {
 
     public GameStateTypes getReason() {
         return reason.getValue();
+    }
+
+    public GameMode getGameMode(final ProtocolCollection version) {
+        if (reason.getValue() == GameStateTypes.CHANGE_GAMEMODE) {
+            return GameMode.getById(version, (short) this.value);
+        }
+        return null;
+    }
+
+    public DemoMode getDemoMode(final ProtocolCollection version) {
+        if (reason.getValue() == GameStateTypes.DEMO_MESSAGE) {
+            return DemoMode.getById(version, (short) this.value);
+        }
+        return null;
+    }
+
+    public FadeValue getFadeValue(final ProtocolCollection version) {
+        if (reason.getValue() == GameStateTypes.FADE_VALUE) {
+            return FadeValue.getById(version, (short) this.value);
+        }
+        return null;
     }
 
     @Override

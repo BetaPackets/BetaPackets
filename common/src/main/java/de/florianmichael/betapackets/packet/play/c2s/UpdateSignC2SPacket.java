@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.packet.play.c2s;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import net.lenni0451.mcstructs.text.ATextComponent;

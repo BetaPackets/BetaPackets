@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.packet.status.s2c;
 
 import com.google.gson.*;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.base.ping.PingResponse;
 import de.florianmichael.betapackets.model.base.ping.Player;
 import de.florianmichael.betapackets.model.base.ping.Players;

@@ -27,7 +27,7 @@ public class Metadata {
     public MetadataTypes metadataType;
     public Object value;
 
-    public Metadata(int index, MetadataTypes metadataType, FunctionalByteBuf transformer) {
+    public Metadata(int index, MetadataTypes metadataType, FunctionalByteBuf transformer) throws Exception {
         this.index = index;
         this.metadataType = metadataType;
         this.value = metadataType.getReader().apply(transformer);

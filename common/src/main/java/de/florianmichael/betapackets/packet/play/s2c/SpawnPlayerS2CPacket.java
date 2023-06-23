@@ -18,7 +18,8 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 
 import java.util.List;
@@ -29,37 +30,34 @@ public class SpawnPlayerS2CPacket extends Packet {
 
     public int entityId;
     public UUID playerId;
-
-    public int x;
-    public int y;
-    public int z;
-
+    public double x;
+    public double y;
+    public double z;
     public byte yaw;
     public byte pitch;
-
     public int currentItem;
 
     public List<Metadata> metadata;
 
-    public SpawnPlayerS2CPacket(final FunctionalByteBuf transformer) {
-        this(
-                transformer.readVarInt(),
-                transformer.readUUID(),
-
-                transformer.readInt(),
-                transformer.readInt(),
-                transformer.readInt(),
-
-                transformer.readByte(),
-                transformer.readByte(),
-
-                transformer.readShort(),
-
-                transformer.readMetadata()
-        );
+    public SpawnPlayerS2CPacket(final FunctionalByteBuf buf) throws Exception {
+        this.entityId = buf.readVarInt();
+        this.playerId = buf.readUUID();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.x = buf.readDouble();
+            this.y = buf.readDouble();
+            this.z = buf.readDouble();
+        } else {
+            this.x = buf.readInt();
+            this.y = buf.readInt();
+            this.z = buf.readInt();
+        }
+        this.yaw = buf.readByte();
+        this.pitch = buf.readByte();
+        this.currentItem = buf.readShort();
+        this.metadata = buf.readMetadata();
     }
 
-    public SpawnPlayerS2CPacket(int entityId, UUID playerId, int x, int y, int z, byte yaw, byte pitch, int currentItem, List<Metadata> metadata) {
+    public SpawnPlayerS2CPacket(int entityId, UUID playerId, double x, double y, double z, byte yaw, byte pitch, int currentItem, List<Metadata> metadata) {
         this.entityId = entityId;
         this.playerId = playerId;
 
@@ -81,9 +79,15 @@ public class SpawnPlayerS2CPacket extends Packet {
 
         buf.writeUUID(playerId);
 
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeDouble(x);
+            buf.writeDouble(y);
+            buf.writeDouble(z);
+        } else {
+            buf.writeInt((int) x);
+            buf.writeInt((int) y);
+            buf.writeInt((int) z);
+        }
 
         buf.writeByte(yaw);
         buf.writeByte(pitch);
@@ -116,9 +120,9 @@ public class SpawnPlayerS2CPacket extends Packet {
         SpawnPlayerS2CPacket that = (SpawnPlayerS2CPacket) o;
 
         if (entityId != that.entityId) return false;
-        if (x != that.x) return false;
-        if (y != that.y) return false;
-        if (z != that.z) return false;
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        if (Double.compare(that.z, z) != 0) return false;
         if (yaw != that.yaw) return false;
         if (pitch != that.pitch) return false;
         if (currentItem != that.currentItem) return false;
@@ -128,11 +132,16 @@ public class SpawnPlayerS2CPacket extends Packet {
 
     @Override
     public int hashCode() {
-        int result = entityId;
+        int result;
+        long temp;
+        result = entityId;
         result = 31 * result + (playerId != null ? playerId.hashCode() : 0);
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (int) yaw;
         result = 31 * result + (int) pitch;
         result = 31 * result + currentItem;

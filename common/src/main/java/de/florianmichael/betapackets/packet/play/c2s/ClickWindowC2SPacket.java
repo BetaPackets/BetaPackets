@@ -17,10 +17,13 @@
 
 package de.florianmichael.betapackets.packet.play.c2s;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.ModelMapper;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.ClickTypes;
 import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class ClickWindowC2SPacket extends Packet {
@@ -29,19 +32,24 @@ public class ClickWindowC2SPacket extends Packet {
     public int slotId;
     public int usedButton;
     public short actionNumber;
-    public int mode;
+    public ModelMapper<Byte, ClickTypes> mode = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, ClickTypes::getById);
     public ItemStackV1_3 clickedItem;
 
-    public ClickWindowC2SPacket(final FunctionalByteBuf buf) {
-        this(buf.readByte(), buf.readShort(), buf.readByte(), buf.readShort(), buf.readByte(), buf.readItemStack());
+    public ClickWindowC2SPacket(final FunctionalByteBuf buf) throws IOException {
+        this.windowId = buf.readByte();
+        this.slotId = buf.readShort();
+        this.usedButton = buf.readByte();
+        this.actionNumber = buf.readShort();
+        this.mode.read(buf);
+        this.clickedItem = buf.readItemStack();
     }
 
-    public ClickWindowC2SPacket(int windowId, int slotId, int usedButton, short actionNumber, int mode, ItemStackV1_3 clickedItem) {
+    public ClickWindowC2SPacket(int windowId, int slotId, int usedButton, short actionNumber, ClickTypes mode, ItemStackV1_3 clickedItem) {
         this.windowId = windowId;
         this.slotId = slotId;
         this.usedButton = usedButton;
         this.actionNumber = actionNumber;
-        this.mode = mode;
+        this.mode = new ModelMapper<>(FunctionalByteBuf::writeByte, mode);
         this.clickedItem = clickedItem;
     }
 
@@ -51,7 +59,7 @@ public class ClickWindowC2SPacket extends Packet {
         buf.writeShort(this.slotId);
         buf.writeByte(this.usedButton);
         buf.writeShort(this.actionNumber);
-        buf.writeByte(this.mode);
+        this.mode.write(buf);
         buf.writeItemStack(this.clickedItem);
     }
 
@@ -78,7 +86,7 @@ public class ClickWindowC2SPacket extends Packet {
         if (slotId != that.slotId) return false;
         if (usedButton != that.usedButton) return false;
         if (actionNumber != that.actionNumber) return false;
-        if (mode != that.mode) return false;
+        if (!Objects.equals(mode, that.mode)) return false;
         return Objects.equals(clickedItem, that.clickedItem);
     }
 
@@ -88,7 +96,7 @@ public class ClickWindowC2SPacket extends Packet {
         result = 31 * result + slotId;
         result = 31 * result + usedButton;
         result = 31 * result + (int) actionNumber;
-        result = 31 * result + mode;
+        result = 31 * result + (mode != null ? mode.hashCode() : 0);
         result = 31 * result + (clickedItem != null ? clickedItem.hashCode() : 0);
         return result;
     }

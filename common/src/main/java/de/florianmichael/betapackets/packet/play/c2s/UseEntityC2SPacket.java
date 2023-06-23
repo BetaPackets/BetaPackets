@@ -18,9 +18,10 @@
 package de.florianmichael.betapackets.packet.play.c2s;
 
 import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
 import de.florianmichael.betapackets.model.position.Vec3;
 
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class UseEntityC2SPacket extends Packet {
     public int entityId;
     public ModelMapper<Integer, TAction> action = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, TAction::getById);
     public Vec3 hitVec;
+    public ModelMapper<Integer, Hand1_9> hand1_9 = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, Hand1_9::getById);
 
     public UseEntityC2SPacket(final FunctionalByteBuf buf) {
         this.entityId = buf.readVarInt();
@@ -38,12 +40,22 @@ public class UseEntityC2SPacket extends Packet {
         if (this.action.getValue() == TAction.INTERACT_AT) {
             this.hitVec = new Vec3((double)buf.readFloat(), (double)buf.readFloat(), (double)buf.readFloat());
         }
+        if (this.action.getValue() == TAction.INTERACT || this.action.getValue() == TAction.INTERACT_AT) {
+            this.hand1_9.read(buf);
+        }
     }
 
     public UseEntityC2SPacket(int entityId, TAction action, Vec3 hitVec) {
         this.entityId = entityId;
         this.action = new ModelMapper<>(FunctionalByteBuf::writeVarInt, action);
         this.hitVec = hitVec;
+    }
+
+    public UseEntityC2SPacket(int entityId, TAction action, Vec3 hitVec, Hand1_9 hand1_9) {
+        this.entityId = entityId;
+        this.action = new ModelMapper<>(FunctionalByteBuf::writeVarInt, action);
+        this.hitVec = hitVec;
+        this.hand1_9 = new ModelMapper<>(FunctionalByteBuf::writeVarInt, hand1_9);
     }
 
     @Override
@@ -56,6 +68,9 @@ public class UseEntityC2SPacket extends Packet {
             buf.writeFloat((float)this.hitVec.y);
             buf.writeFloat((float)this.hitVec.z);
         }
+        if (this.action.getValue() == TAction.INTERACT || this.action.getValue() == TAction.INTERACT_AT) {
+            this.hand1_9.write(buf);
+        }
     }
 
     @Override
@@ -64,6 +79,7 @@ public class UseEntityC2SPacket extends Packet {
                 "entityId=" + entityId +
                 ", action=" + action +
                 ", hitVec=" + hitVec +
+                ", hand1_9=" + hand1_9 +
                 '}';
     }
 
@@ -76,7 +92,8 @@ public class UseEntityC2SPacket extends Packet {
 
         if (entityId != that.entityId) return false;
         if (!Objects.equals(action, that.action)) return false;
-        return Objects.equals(hitVec, that.hitVec);
+        if (!Objects.equals(hitVec, that.hitVec)) return false;
+        return Objects.equals(hand1_9, that.hand1_9);
     }
 
     @Override
@@ -84,6 +101,7 @@ public class UseEntityC2SPacket extends Packet {
         int result = entityId;
         result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (hitVec != null ? hitVec.hashCode() : 0);
+        result = 31 * result + (hand1_9 != null ? hand1_9.hashCode() : 0);
         return result;
     }
 

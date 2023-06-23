@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public enum EntityStatusOpCodes {
 
+    // v1.8
     RESET_MOB_SPAWN_MINE_CART_TIMER_OR_RABBIT_JUMP_ANIMATION,
     LIVING_ENTITY_HURT,
     LIVING_ENTITY_DEAD,
@@ -43,7 +44,14 @@ public enum EntityStatusOpCodes {
     SPAWN_EXPLOSION_PARTICLE_WORKS_FOR_SOME_LIVING_ENTITIES,
     PLAY_GUARDIAN_SOUND_WORKS_FOR_ONLY_GUARDIANS,
     ENABLES_REDUCED_DEBUG_FOR_PLAYERS,
-    DISABLES_REDUCED_DEBUG_FOR_PLAYERS;
+    DISABLES_REDUCED_DEBUG_FOR_PLAYERS,
+
+    // v1.9
+    SET_OP_PERMISSION_LEVEL_0_FOR_PLAYERS,
+    SET_OP_PERMISSION_LEVEL_1_FOR_PLAYERS,
+    SET_OP_PERMISSION_LEVEL_2_FOR_PLAYERS,
+    SET_OP_PERMISSION_LEVEL_3_FOR_PLAYERS,
+    SET_OP_PERMISSION_LEVEL_4_FOR_PLAYERS;
 
     public static EntityStatusOpCodes getById(final ProtocolCollection version, final byte id) {
         for (EntityStatusOpCodes value : values()) {

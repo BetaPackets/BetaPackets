@@ -18,42 +18,49 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+
+import java.util.Objects;
+import java.util.UUID;
 
 public class SpawnObjectS2CPacket extends Packet {
 
     public int entityId;
+    public UUID objectUUID_1_9;
     public int type;
-
-    public int x;
-    public int y;
-    public int z;
-
+    public double x;
+    public double y;
+    public double z;
     public int pitch;
     public int yaw;
-
     public int data;
-
     public int speedX;
     public int speedY;
     public int speedZ;
 
-    public SpawnObjectS2CPacket(final FunctionalByteBuf transformer) {
-        this.entityId = transformer.readVarInt();
-        this.type = transformer.readByte();
-
-        this.x = transformer.readInt();
-        this.y = transformer.readInt();
-        this.z = transformer.readInt();
-
-        this.pitch = transformer.readByte();
-        this.yaw = transformer.readByte();
-
-        this.data = transformer.readInt();
+    public SpawnObjectS2CPacket(final FunctionalByteBuf buf) {
+        this.entityId = buf.readVarInt();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.objectUUID_1_9 = buf.readUUID();
+        }
+        this.type = buf.readByte();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.x = buf.readDouble();
+            this.y = buf.readDouble();
+            this.z = buf.readDouble();
+        } else {
+            this.x = buf.readInt();
+            this.y = buf.readInt();
+            this.z = buf.readInt();
+        }
+        this.pitch = buf.readByte();
+        this.yaw = buf.readByte();
+        this.data = buf.readInt();
         if (this.data > 0) {
-            this.speedX = transformer.readShort();
-            this.speedY = transformer.readShort();
-            this.speedZ = transformer.readShort();
+            this.speedX = buf.readShort();
+            this.speedY = buf.readShort();
+            this.speedZ = buf.readShort();
         }
     }
 
@@ -74,17 +81,22 @@ public class SpawnObjectS2CPacket extends Packet {
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeUUID(objectUUID_1_9);
+        }
         buf.writeByte(type);
-
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
-
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeDouble(x);
+            buf.writeDouble(y);
+            buf.writeDouble(z);
+        } else {
+            buf.writeInt((int) x);
+            buf.writeInt((int) y);
+            buf.writeInt((int) z);
+        }
         buf.writeByte(pitch);
         buf.writeByte(yaw);
-
         buf.writeInt(data);
-
         if (data > 0) {
             buf.writeShort(speedX);
             buf.writeShort(speedY);
@@ -96,6 +108,7 @@ public class SpawnObjectS2CPacket extends Packet {
     public String toString() {
         return "SpawnObjectS2CPacket{" +
                 "entityId=" + entityId +
+                ", objectUUID_1_9=" + objectUUID_1_9 +
                 ", type=" + type +
                 ", x=" + x +
                 ", y=" + y +
@@ -118,24 +131,31 @@ public class SpawnObjectS2CPacket extends Packet {
 
         if (entityId != that.entityId) return false;
         if (type != that.type) return false;
-        if (x != that.x) return false;
-        if (y != that.y) return false;
-        if (z != that.z) return false;
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        if (Double.compare(that.z, z) != 0) return false;
         if (pitch != that.pitch) return false;
         if (yaw != that.yaw) return false;
         if (data != that.data) return false;
         if (speedX != that.speedX) return false;
         if (speedY != that.speedY) return false;
-        return speedZ == that.speedZ;
+        if (speedZ != that.speedZ) return false;
+        return Objects.equals(objectUUID_1_9, that.objectUUID_1_9);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
+        int result;
+        long temp;
+        result = entityId;
+        result = 31 * result + (objectUUID_1_9 != null ? objectUUID_1_9.hashCode() : 0);
         result = 31 * result + type;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + pitch;
         result = 31 * result + yaw;
         result = 31 * result + data;

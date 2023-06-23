@@ -17,27 +17,46 @@
 
 package de.florianmichael.betapackets.model.entity;
 
-import de.florianmichael.betapackets.model.WorldBorderAction;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public enum EntityActionIDs {
 
-    START_SNEAKING,
-    STOP_SNEAKING,
-    LEAVE_BED,
-    START_SPRINTING,
-    STOP_SPRINTING,
-    JUMP_WITH_HORSE,
-    OPEN_RIDDEN_HORSE_INVENTORY;
+    // v1.8
+    START_SNEAKING(0, 0),
+    STOP_SNEAKING(1, 1),
+    LEAVE_BED(2, -1),
+    START_SPRINTING(3, 3),
+    STOP_SPRINTING(4, 4),
+    JUMP_WITH_HORSE(5, -1),
+    OPEN_RIDDEN_HORSE_INVENTORY(6, 7),
+
+    // v1.9
+    STOP_SLEEPING(-1, 2),
+    START_RIDING_JUMP(-1, 5),
+    STOP_RIDING_JUMP(-1, 6),
+    START_FALL_FLYING(-1, 8);
+
+    private final int v1_8Id;
+    private final int v1_9Id;
+
+    EntityActionIDs(int v1_8Id, int v1_9Id) {
+        this.v1_8Id = v1_8Id;
+        this.v1_9Id = v1_9Id;
+    }
 
     public static EntityActionIDs getById(final ProtocolCollection version, final int id) {
         for (EntityActionIDs value : values()) {
-            if (value.getId(version) == id) return value;
+            final int fieldId = value.getId(version);
+            if (fieldId == -1) continue;
+            if (fieldId == id) return value;
         }
         return null;
     }
 
     public int getId(final ProtocolCollection version) {
-        return this.ordinal();
+        if (version.isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            return v1_9Id;
+        }
+        return v1_8Id;
     }
 }

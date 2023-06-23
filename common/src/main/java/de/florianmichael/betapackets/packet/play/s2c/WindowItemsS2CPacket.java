@@ -17,10 +17,11 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class WindowItemsS2CPacket extends Packet {
@@ -28,7 +29,7 @@ public class WindowItemsS2CPacket extends Packet {
     public int windowId;
     public ItemStackV1_3[] itemStacks;
 
-    public WindowItemsS2CPacket(final FunctionalByteBuf buf) {
+    public WindowItemsS2CPacket(final FunctionalByteBuf buf) throws IOException {
         this.windowId = buf.readUnsignedByte();
 
         this.itemStacks = new ItemStackV1_3[buf.readShort()];

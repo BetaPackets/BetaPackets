@@ -18,54 +18,64 @@
 package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.Packet;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SpawnMobS2CPacket extends Packet {
 
     public int entityId;
+    public UUID uuid_1_9;
     public int type;
-
-    public int x;
-    public int y;
-    public int z;
-
+    public double x;
+    public double y;
+    public double z;
     public byte yaw;
     public byte pitch;
     public byte headPitch;
-
     public int velocityX;
     public int velocityY;
     public int velocityZ;
 
     public List<Metadata> metadata;
 
-    public SpawnMobS2CPacket(final FunctionalByteBuf transformer) {
-        this(
-                transformer.readVarInt(),
-                transformer.readByte() & 255,
-
-                transformer.readInt(),
-                transformer.readInt(),
-                transformer.readInt(),
-
-                transformer.readByte(),
-                transformer.readByte(),
-                transformer.readByte(),
-
-                transformer.readShort(),
-                transformer.readShort(),
-                transformer.readShort(),
-
-                transformer.readMetadata()
-        );
+    public SpawnMobS2CPacket(final FunctionalByteBuf buf) throws Exception {
+        this.entityId = buf.readVarInt();
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.uuid_1_9 = buf.readUUID();
+        }
+        this.type = buf.readByte() & 255;
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            this.x = buf.readDouble();
+            this.y = buf.readDouble();
+            this.z = buf.readDouble();
+        } else {
+            this.x = buf.readInt();
+            this.y = buf.readInt();
+            this.z = buf.readInt();
+        }
+        this.yaw = buf.readByte();
+        this.pitch = buf.readByte();
+        this.headPitch = buf.readByte();
+        this.velocityX = buf.readShort();
+        this.velocityY = buf.readShort();
+        this.velocityZ = buf.readShort();
+        this.metadata = buf.readMetadata();
     }
 
-    public SpawnMobS2CPacket(int entityId, int type, int x, int y, int z, byte yaw, byte pitch, byte headPitch, int velocityX, int velocityY, int velocityZ, List<Metadata> metadata) {
+    // 1.8 constructor
+    public SpawnMobS2CPacket(int entityId, int type, double x, double y, double z, byte yaw, byte pitch, byte headPitch, int velocityX, int velocityY, int velocityZ, List<Metadata> metadata) {
+        this(entityId, null, type, x, y, z, yaw, pitch, headPitch, velocityX, velocityY, velocityZ, metadata);
+    }
+
+    // 1.9+ constructor
+    public SpawnMobS2CPacket(int entityId, UUID uuid_1_9, int type, double x, double y, double z, byte yaw, byte pitch, byte headPitch, int velocityX, int velocityY, int velocityZ, List<Metadata> metadata) {
         this.entityId = entityId;
+        this.uuid_1_9 = uuid_1_9;
         this.type = type;
         this.x = x;
         this.y = y;
@@ -82,20 +92,25 @@ public class SpawnMobS2CPacket extends Packet {
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(entityId);
-        buf.writeByte(type);
-
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
-
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeUUID(uuid_1_9);
+        }
+        buf.writeByte(type & 255);
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            buf.writeDouble(x);
+            buf.writeDouble(y);
+            buf.writeDouble(z);
+        } else {
+            buf.writeInt((int) x);
+            buf.writeInt((int) y);
+            buf.writeInt((int) z);
+        }
         buf.writeByte(yaw);
         buf.writeByte(pitch);
         buf.writeByte(headPitch);
-
         buf.writeShort(velocityX);
         buf.writeShort(velocityY);
         buf.writeShort(velocityZ);
-
         buf.writeMetadata(metadata);
     }
 
@@ -103,6 +118,7 @@ public class SpawnMobS2CPacket extends Packet {
     public String toString() {
         return "SpawnMobS2CPacket{" +
                 "entityId=" + entityId +
+                ", uuid_1_9=" + uuid_1_9 +
                 ", type=" + type +
                 ", x=" + x +
                 ", y=" + y +
@@ -126,25 +142,32 @@ public class SpawnMobS2CPacket extends Packet {
 
         if (entityId != that.entityId) return false;
         if (type != that.type) return false;
-        if (x != that.x) return false;
-        if (y != that.y) return false;
-        if (z != that.z) return false;
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        if (Double.compare(that.z, z) != 0) return false;
         if (yaw != that.yaw) return false;
         if (pitch != that.pitch) return false;
         if (headPitch != that.headPitch) return false;
         if (velocityX != that.velocityX) return false;
         if (velocityY != that.velocityY) return false;
         if (velocityZ != that.velocityZ) return false;
+        if (!Objects.equals(uuid_1_9, that.uuid_1_9)) return false;
         return Objects.equals(metadata, that.metadata);
     }
 
     @Override
     public int hashCode() {
-        int result = entityId;
+        int result;
+        long temp;
+        result = entityId;
+        result = 31 * result + (uuid_1_9 != null ? uuid_1_9.hashCode() : 0);
         result = 31 * result + type;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (int) yaw;
         result = 31 * result + (int) pitch;
         result = 31 * result + (int) headPitch;

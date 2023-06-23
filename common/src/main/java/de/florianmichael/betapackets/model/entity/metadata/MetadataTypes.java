@@ -19,59 +19,63 @@ package de.florianmichael.betapackets.model.entity.metadata;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
-import de.florianmichael.betapackets.model.position.Rotations;
-import de.florianmichael.betapackets.model.position.BlockPos;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public enum MetadataTypes {
-    BYTE(FunctionalByteBuf::readByte, (byteBuf, value) -> byteBuf.writeByte((Integer) value)),
-    SHORT(FunctionalByteBuf::readShort, (byteBuf, value) -> byteBuf.writeShort((Integer) value)),
-    INT(FunctionalByteBuf::readInt, (byteBuf, value) -> byteBuf.writeInt((Integer) value)),
-    FLOAT(FunctionalByteBuf::readFloat, (byteBuf, value) -> byteBuf.writeFloat((Float) value)),
-    STRING(FunctionalByteBuf::readString, (byteBuf, value) -> byteBuf.writeString((String) value)),
-    ITEM_STACK(FunctionalByteBuf::readItemStack, (byteBuf, value) -> byteBuf.writeItemStack((ItemStackV1_3) value)),
-    BLOCK_POS(byteBuf -> new BlockPos(byteBuf.readInt(), byteBuf.readInt(), byteBuf.readInt()), (byteBuf, value) -> {
-        final BlockPos pos = (BlockPos) value;
+public enum MetadataTypes implements IMetadataWriter {
+    // v1.8
+    BYTE(new MetadataWriter1_8.ByteMetadataWriter(), 0, 0),
+    SHORT(new MetadataWriter1_8.ShortMetadataWriter(), 1, -1),
+    INT(new MetadataWriter1_8.IntMetadataWriter(), 2, -1),
+    FLOAT(new MetadataWriter1_8.FloatMetadataWriter(), 3, 2),
+    STRING(new MetadataWriter1_8.StringMetadataWriter(), 4, 3),
+    SLOT(new MetadataWriter1_8.ItemStackMetadataWriter(), 5, 5),
+    BLOCK_POS(new MetadataWriter1_8.BlockPosMetadataWriter(), 6, 8),
+    ROTATIONS(new MetadataWriter1_8.RotationsMetadataWriter(), 7, 7),
 
-        byteBuf.writeInt(pos.x);
-        byteBuf.writeInt(pos.y);
-        byteBuf.writeInt(pos.z);
-    }),
-    ROTATIONS(byteBuf -> new Rotations(byteBuf.readFloat(), byteBuf.readFloat(), byteBuf.readFloat()), (byteBuf, value) -> {
-        final Rotations rotations = (Rotations) value;
+    // v1.9
+    VAR_INT(new MetadataWriter1_9.VarIntMetadataWriter(), -1, 1),
+    CHAT(new MetadataWriter1_9.ChatMetadataWriter(), -1, 4),
+    BOOLEAN(new MetadataWriter1_9.BooleanMetadataWriter(), -1, 6),
+    OPTIONAL_BLOCK_POS(new MetadataWriter1_9.OptionalBlockPosMetadataWriter(), -1, 9),
+    FACING(new MetadataWriter1_9.FacingMetadataWriter(), -1, 10),
+    OPTIONAL_UUID(new MetadataWriter1_9.OptionalUUIDMetadataWriter(), -1, 11),
+    BLOCK_ID(new MetadataWriter1_9.VarIntMetadataWriter(), -1, 12);
 
-        byteBuf.writeFloat(rotations.x);
-        byteBuf.writeFloat(rotations.y);
-        byteBuf.writeFloat(rotations.z);
-    });
+    public final IMetadataWriter rewriter;
+    public final int v1_8Id;
+    public final int v1_9Id;
 
-    public final Function<FunctionalByteBuf, Object> reader;
-    public final BiConsumer<FunctionalByteBuf, Object> writer;
-
-    MetadataTypes(Function<FunctionalByteBuf, Object> reader, BiConsumer<FunctionalByteBuf, Object> writer) {
-        this.reader = reader;
-        this.writer = writer;
+    MetadataTypes(IMetadataWriter rewriter, int v1_8Id, int v1_9Id) {
+        this.rewriter = rewriter;
+        this.v1_8Id = v1_8Id;
+        this.v1_9Id = v1_9Id;
     }
 
-    public Function<FunctionalByteBuf, Object> getReader() {
-        return this.reader;
+    @Override
+    public Function<FunctionalByteBuf, Object> getReader() throws Exception {
+        return rewriter.getReader();
     }
 
-    public BiConsumer<FunctionalByteBuf, Object> getWriter() {
-        return writer;
+    @Override
+    public BiConsumer<FunctionalByteBuf, Object> getWriter() throws Exception {
+        return rewriter.getWriter();
     }
 
     public static MetadataTypes getById(final ProtocolCollection version, final int id) {
         for (MetadataTypes value : values()) {
-            if (value.getId(version) == id) return value;
+            final int fieldId = value.getId(version);
+            if (fieldId == -1) continue;
+            if (fieldId == id) return value;
         }
         return null;
     }
 
     public int getId(final ProtocolCollection version) {
-        return ordinal();
+        if (version.isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            return v1_9Id;
+        }
+        return v1_8Id;
     }
 }

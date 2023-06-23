@@ -98,26 +98,18 @@ public enum ProtocolCollection {
     }
 
     public boolean isOlderThan(final ProtocolCollection other) {
-        return this.ordinal() < other.ordinal();
-    }
-
-    public boolean isOlderThanOrEqualTo(final ProtocolCollection other) {
-        return this.ordinal() <= other.ordinal();
-    }
-
-    public boolean isNewerThan(final ProtocolCollection other) {
         return this.ordinal() > other.ordinal();
     }
 
-    public boolean isNewerThanOrEqualTo(final ProtocolCollection other) {
+    public boolean isOlderThanOrEqualTo(final ProtocolCollection other) {
         return this.ordinal() >= other.ordinal();
     }
 
-    public boolean isBetweenInclusive(final ProtocolCollection min, final ProtocolCollection max) {
-        return this.isNewerThanOrEqualTo(min) && this.isOlderThanOrEqualTo(max);
+    public boolean isNewerThan(final ProtocolCollection other) {
+        return this.ordinal() < other.ordinal();
     }
 
-    public boolean isBetweenExclusive(final ProtocolCollection min, final ProtocolCollection max) {
-        return this.isNewerThan(min) && this.isOlderThan(max);
+    public boolean isNewerThanOrEqualTo(final ProtocolCollection other) {
+        return this.ordinal() <= other.ordinal();
     }
 }
