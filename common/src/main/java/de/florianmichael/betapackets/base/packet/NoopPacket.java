@@ -24,15 +24,7 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
  */
 public class NoopPacket extends Packet {
 
-    public byte[] data;
-
-    public NoopPacket(final FunctionalByteBuf buf) {
-        this.data = new byte[buf.readableBytes()];
-        buf.readBytes(this.data);
-    }
-
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
-        buf.writeBytes(this.data);
     }
 }

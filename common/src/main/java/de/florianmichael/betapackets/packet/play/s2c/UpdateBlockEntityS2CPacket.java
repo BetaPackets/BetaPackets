@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.MetadataAction;
+import de.florianmichael.betapackets.model.entity.metadata.MetadataAction;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 

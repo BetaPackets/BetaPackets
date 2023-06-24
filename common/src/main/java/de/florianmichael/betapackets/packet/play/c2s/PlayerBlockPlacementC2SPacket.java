@@ -22,7 +22,7 @@ import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
-import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import de.florianmichael.betapackets.model.position.Facing;
 

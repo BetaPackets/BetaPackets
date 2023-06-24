@@ -20,11 +20,11 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.ClassicChatFormattings;
+import de.florianmichael.betapackets.model.hud.ClassicChatFormattings;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.game.hud.teams.CollisionRule1_9;
-import de.florianmichael.betapackets.model.game.hud.teams.TeamsMode;
-import de.florianmichael.betapackets.model.game.hud.teams.TeamsVisible;
+import de.florianmichael.betapackets.model.hud.teams.CollisionRule1_9;
+import de.florianmichael.betapackets.model.hud.teams.TeamsMode;
+import de.florianmichael.betapackets.model.hud.teams.TeamsVisible;
 
 import java.util.Arrays;
 import java.util.Objects;

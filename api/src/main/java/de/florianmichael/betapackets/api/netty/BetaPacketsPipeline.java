@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.api.netty;
 
+import de.florianmichael.betapackets.api.BetaPackets;
 import de.florianmichael.betapackets.api.netty.element.BetaPacketsDecoder;
 import de.florianmichael.betapackets.api.netty.element.BetaPacketsEncoder;
 import de.florianmichael.betapackets.api.netty.event.ReorderPipelineEvent;
@@ -31,6 +32,8 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     public BetaPacketsPipeline(final UserConnection userConnection) {
         this.userConnection = userConnection;
+
+        BetaPackets.getConnectionMap().addConnection(userConnection.getChannel(), userConnection);
     }
 
     @Override
@@ -39,6 +42,13 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
         pipeline.addBefore(getPacketDecoderName(), HANDLER_PACKET_DECODER_NAME, createBetaPacketsDecoder(userConnection));
         pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, createBetaPacketsEncoder(userConnection));
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+
+        BetaPackets.getConnectionMap().removeConnection(ctx.channel());
     }
 
     public void addAutomaticallyReorderElement(final ChannelPipeline channelPipeline) {

@@ -20,9 +20,9 @@ package de.florianmichael.betapackets.packet.play.s2c.v1_9;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.hud.bossbar.BossInfoColor1_9;
-import de.florianmichael.betapackets.model.game.hud.bossbar.BossInfoOverlay1_9;
-import de.florianmichael.betapackets.model.game.hud.bossbar.BossbarOperation1_9;
+import de.florianmichael.betapackets.model.hud.bossbar.BossInfoColor1_9;
+import de.florianmichael.betapackets.model.hud.bossbar.BossInfoOverlay1_9;
+import de.florianmichael.betapackets.model.hud.bossbar.BossbarOperation1_9;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.util.Objects;

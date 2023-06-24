@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.Statistic;
+import de.florianmichael.betapackets.model.world.Statistic;
 
 import java.util.ArrayList;
 import java.util.List;

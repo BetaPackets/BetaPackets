@@ -51,9 +51,14 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final FunctionalByteBuf data = new FunctionalByteBuf(msg.copy(), userConnection);
+        final FunctionalByteBuf data = new FunctionalByteBuf(msg, userConnection);
         try {
             final int packetId = data.readVarInt();
+
+            if (packetId == 0x17) {
+                out.add(ctx.alloc().buffer().writeBytes(msg).retain());
+                return;
+            }
 
             Packet model;
             if (!userConnection.hasLoaded() && packetId == 0x00 /* C -> S, HANDSHAKE, HANDSHAKE */) {
@@ -71,6 +76,11 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
                 return;
             }
             BetaPackets.getPlatform().getLogging().info("SERVERBOUND -> " + userConnection.getState() + ": " + model);
+
+            final FunctionalByteBuf output = new FunctionalByteBuf(ctx.alloc().buffer(), userConnection);
+            output.writeVarInt(packetId);
+            model.write(output);
+            out.add(output.getBuffer().retain());
         } catch (Exception e) {
             // In case reading failed
             ctx.fireExceptionCaught(e);
@@ -78,8 +88,6 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
             e.printStackTrace();
             return;
         }
-
-        out.add(ctx.alloc().buffer().writeBytes(msg).retain());
     }
 
     public UserConnection getUserConnection() {

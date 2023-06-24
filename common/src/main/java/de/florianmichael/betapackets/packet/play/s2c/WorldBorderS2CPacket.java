@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.WorldBorderAction;
+import de.florianmichael.betapackets.model.world.WorldBorderAction;
 
 import java.util.Objects;
 

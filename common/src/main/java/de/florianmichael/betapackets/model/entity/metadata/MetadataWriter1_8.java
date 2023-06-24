@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.model.entity.metadata;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import de.florianmichael.betapackets.model.position.Rotations;
 

@@ -20,11 +20,10 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.game.hud.InventorySlot;
-import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.hud.InventorySlot;
+import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class EntityEquipmentS2CPacket extends Packet {

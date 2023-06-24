@@ -17,13 +17,82 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.packet.NoopPacket;
-import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.base.packet.Packet;
+import de.florianmichael.betapackets.model.world.chunk.Chunk;
+import de.florianmichael.betapackets.model.world.chunk.ChunkData;
 
-public class MapChunkBulkS2CPacket extends NoopPacket {
+import java.util.Arrays;
 
-    public MapChunkBulkS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
+public class MapChunkBulkS2CPacket extends Packet {
+
+    public boolean isOverWorld;
+    public int[] xPositions;
+    public int[] zPositions;
+    public ChunkData[] chunksData;
+
+    // Model data
+    public Chunk[] chunks;
+
+    public MapChunkBulkS2CPacket(final FunctionalByteBuf buf) {
+        this.isOverWorld = buf.readBoolean();
+        final int chunkCount = buf.readVarInt();
+
+        this.xPositions = new int[chunkCount];
+        this.zPositions = new int[chunkCount];
+        this.chunksData = new ChunkData[chunkCount];
+
+        this.chunks = new Chunk[chunkCount];
+
+        for (int i = 0; i < chunkCount; ++i) {
+            this.xPositions[i] = buf.readInt();
+            this.zPositions[i] = buf.readInt();
+
+            final int dataSize = buf.readShort() & 65535;
+            this.chunksData[i] = new ChunkData(dataSize, new byte[Chunk.calculateStackSize(Integer.bitCount(dataSize), this.isOverWorld, true)]);
+        }
+
+        for (int i = 0; i < chunkCount; ++i) {
+            buf.readBytes(this.chunksData[i].data);
+
+            this.chunks[i] = new Chunk(this.xPositions[i], this.zPositions[i]);
+            this.chunks[i].fillDepth(this.chunksData[i], this.isOverWorld, true);
+        }
+    }
+
+    public MapChunkBulkS2CPacket(int[] xPositions, int[] zPositions, ChunkData[] chunksData, boolean isOverWorld) {
+        this.xPositions = xPositions;
+        this.zPositions = zPositions;
+        this.chunksData = chunksData;
+        this.isOverWorld = isOverWorld;
+    }
+
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeBoolean(this.isOverWorld);
+        buf.writeVarInt(this.chunksData.length);
+
+        for (int i = 0; i < this.chunksData.length; ++i) {
+            buf.writeInt(this.xPositions[i]);
+            buf.writeInt(this.zPositions[i]);
+
+            this.chunksData[i] = this.chunks[i].writeToData();
+            buf.writeShort((short) (this.chunksData[i].dataSize & 65535));
+        }
+
+        for (ChunkData chunksDatum : this.chunksData) {
+            buf.writeBytes(chunksDatum.data);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "MapChunkBulkS2CPacket{" +
+                "isOverWorld=" + isOverWorld +
+                ", xPositions=" + Arrays.toString(xPositions) +
+                ", zPositions=" + Arrays.toString(zPositions) +
+                ", chunksData=" + Arrays.toString(chunksData) +
+                ", chunks=" + Arrays.toString(chunks) +
+                '}';
     }
 }

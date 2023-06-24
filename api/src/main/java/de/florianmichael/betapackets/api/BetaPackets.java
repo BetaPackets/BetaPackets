@@ -19,18 +19,21 @@ package de.florianmichael.betapackets.api;
 
 import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
 import de.florianmichael.betapackets.PacketRegistryManager;
+import de.florianmichael.betapackets.api.base.ConnectionMap;
 
 public class BetaPackets {
     private static BetaPacketsPlatform<?> platform;
 
     private static BetaPacketsAPI api;
     private static PacketRegistryManager packetRegistryManager;
+    private static ConnectionMap connectionMap;
 
     public static void init(final BetaPacketsPlatform<?> platform) {
         BetaPackets.platform = platform;
 
         BetaPackets.api = new BetaPacketsAPI();
         BetaPackets.packetRegistryManager = new PacketRegistryManager();
+        BetaPackets.connectionMap = new ConnectionMap(BetaPackets.api);
     }
 
     public static BetaPacketsPlatform<?> getPlatform() {
@@ -43,5 +46,9 @@ public class BetaPackets {
 
     public static PacketRegistryManager getPacketRegistryManager() {
         return packetRegistryManager;
+    }
+
+    public static ConnectionMap getConnectionMap() {
+        return connectionMap;
     }
 }

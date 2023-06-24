@@ -20,9 +20,10 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.game.Difficulty;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.model.world.Difficulty;
 import de.florianmichael.betapackets.model.game.GameMode;
-import de.florianmichael.betapackets.model.game.LevelType;
+import de.florianmichael.betapackets.model.world.LevelType;
 
 import java.util.Objects;
 
@@ -30,8 +31,15 @@ public class JoinGameS2CPacket extends Packet {
 
     public int entityId;
     public boolean hardcore;
-    public ModelMapper<Short, GameMode> gameMode = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, (buf, value) -> buf.writeByte(this.hardcore ? value | 8 : value), (version, value) -> {
-        this.hardcore = (value & 8) == 0;
+    public ModelMapper<Integer, GameMode> gameMode = new ModelMapper<>(buf -> {
+        if (buf.getProtocolVersion().isOlderThanOrEqualTo(ProtocolCollection.R1_9)) {
+            return (int) buf.readUnsignedByte();
+        } else {
+            return buf.readInt();
+        }
+    }, (buf, value) -> buf.writeByte(this.hardcore ? value | 8 : value), (version, value) -> {
+        this.hardcore = (value & 8) == 8;
+
         return GameMode.getById(version, (short) (value & -9));
     });
     public int dimension;

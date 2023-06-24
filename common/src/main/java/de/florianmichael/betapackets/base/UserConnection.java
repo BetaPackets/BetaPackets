@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class UserConnection {
+    public final TrackingData trackingData = new TrackingData();
     private final Channel channel;
     private final PacketRegistryManager packetRegistryManager;
 
@@ -61,6 +62,13 @@ public class UserConnection {
                 }
             }
         }
+    }
+
+    /**
+     * Tracking data for the user connection, has to be updated by the implementation of the UserConnection
+     */
+    public static class TrackingData {
+        public boolean isInOverWorld = false;
     }
 
     public void setPlayer(UUID player) {

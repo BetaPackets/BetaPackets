@@ -20,8 +20,8 @@ package de.florianmichael.betapackets.packet.play.c2s;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.ClickTypes;
-import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.game.ClickTypes;
+import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
 
 import java.io.IOException;
 import java.util.Objects;

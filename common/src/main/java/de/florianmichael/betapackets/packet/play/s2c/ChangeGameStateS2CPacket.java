@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.DemoMode;
+import de.florianmichael.betapackets.model.game.DemoMode;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.game.FadeValue;
 import de.florianmichael.betapackets.model.game.GameMode;

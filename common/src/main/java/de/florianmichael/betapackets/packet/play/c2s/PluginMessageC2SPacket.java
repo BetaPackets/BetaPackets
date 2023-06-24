@@ -44,7 +44,7 @@ public class PluginMessageC2SPacket extends Packet {
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeString(this.channel);
-        buf.writeBytes(this.data.getBuffer().array());
+        buf.getBuffer().writeBytes(this.data.getBuffer());
     }
 
     @Override

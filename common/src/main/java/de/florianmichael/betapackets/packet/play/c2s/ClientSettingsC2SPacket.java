@@ -22,7 +22,7 @@ import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
-import de.florianmichael.betapackets.model.game.hud.chat.ChatVisibility;
+import de.florianmichael.betapackets.model.hud.chat.ChatVisibility;
 
 import java.util.Objects;
 

@@ -19,7 +19,7 @@ package de.florianmichael.betapackets.base.bytebuf;
 
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.game.item.ItemStackV1_3;
+import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 import de.florianmichael.betapackets.model.entity.metadata.MetadataTypes;
 import io.netty.buffer.ByteBuf;
@@ -82,7 +82,10 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     }
 
     public void writeCompoundTag(final CompoundTag tag) throws IOException {
-        if (tag == null) return;
+        if (tag == null) {
+            writeByte(0);
+            return;
+        }
 
         final DataOutputStream dataOutputStream = new DataOutputStream(new ByteBufOutputStream(getBuffer()));
         NbtIO.JAVA.write(dataOutputStream, "", tag, getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9));
@@ -105,8 +108,19 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
 
     public void writeMetadata(final List<Metadata> metadata) throws Exception {
         for (Metadata metadatum : metadata) {
-            this.writeByte((metadatum.metadataType.getId(getProtocolVersion()) << 5 | metadatum.index & 31));
-            metadatum.metadataType.getWriter().accept(this, metadatum.value);
+            if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+                this.writeByte(metadatum.index);
+                this.writeVarInt((metadatum.metadataType.getId(getProtocolVersion())));
+                metadatum.metadataType.getWriter().accept(this, metadatum.value);
+            } else {
+                this.writeByte((metadatum.metadataType.getId(getProtocolVersion()) << 5 | metadatum.index & 31) & 255);
+                metadatum.metadataType.getWriter().accept(this, metadatum.value);
+            }
+        }
+        if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            writeByte(255);
+        } else {
+            writeByte(127);
         }
     }
 

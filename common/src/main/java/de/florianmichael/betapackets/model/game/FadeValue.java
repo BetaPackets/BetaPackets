@@ -17,7 +17,6 @@
 
 package de.florianmichael.betapackets.model.game;
 
-import de.florianmichael.betapackets.model.DemoMode;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
 public enum FadeValue {

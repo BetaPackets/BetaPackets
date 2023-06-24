@@ -44,6 +44,7 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         final LoginSuccessS2CPacket loginSuccessS2CPacket = new LoginSuccessS2CPacket(data);
 
         userConnection.setState(NetworkState.PLAY);
+        userConnection.setPlayer(loginSuccessS2CPacket.uuid);
         BetaPackets.getAPI().getEventProvider().postInternal(new PlayerEarlyJoinListener.PlayerEarlyJoinEvent(
                 loginSuccessS2CPacket.uuid,
                 loginSuccessS2CPacket.username,
@@ -55,7 +56,7 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
 
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) {
-        final FunctionalByteBuf data = new FunctionalByteBuf(msg.copy(), userConnection);
+        final FunctionalByteBuf data = new FunctionalByteBuf(msg, userConnection);
         try {
             final int packetId = data.readVarInt();
 
@@ -74,6 +75,11 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
             if (event.isCancelled()) {
                 return;
             }
+
+            final FunctionalByteBuf output = new FunctionalByteBuf(ctx.alloc().buffer(), userConnection);
+            output.writeVarInt(packetId);
+            model.write(output);
+            out.add(output.getBuffer().retain());
             BetaPackets.getPlatform().getLogging().info("CLIENTBOUND -> " + userConnection.getState() + ": " + model);
         } catch (Exception e) {
             // In case reading failed
@@ -82,8 +88,6 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
             e.printStackTrace();
             return;
         }
-
-        out.add(ctx.alloc().buffer().writeBytes(msg).retain());
     }
 
     public UserConnection getUserConnection() {

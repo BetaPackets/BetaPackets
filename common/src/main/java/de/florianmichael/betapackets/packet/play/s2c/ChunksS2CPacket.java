@@ -17,13 +17,50 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.packet.NoopPacket;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.model.world.chunk.Chunk;
+import de.florianmichael.betapackets.model.world.chunk.ChunkData;
 
-public class ChunksS2CPacket extends NoopPacket {
+public class ChunksS2CPacket extends Packet {
 
-    public ChunksS2CPacket(FunctionalByteBuf buf) {
-        super(buf);
+    public int chunkX;
+    public int chunkZ;
+    public boolean fullChunk;
+    public ChunkData chunkData;
+
+    // Model data
+    public Chunk chunk;
+
+    public ChunksS2CPacket(final FunctionalByteBuf buf) {
+        this.chunkX = buf.readInt();
+        this.chunkZ = buf.readInt();
+        this.fullChunk = buf.readBoolean();
+        this.chunkData = new ChunkData(buf.readShort(), buf.readByteArray());
+
+        this.chunk = new Chunk(this.chunkX, this.chunkZ);
+        this.chunk.fillDepth(this.chunkData, buf.getUserConnection().trackingData.isInOverWorld, this.fullChunk);
+    }
+
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
+        buf.writeInt(this.chunkX);
+        buf.writeInt(this.chunkZ);
+        buf.writeBoolean(this.fullChunk);
+
+        final ChunkData writedData = this.chunk.writeToData();
+        buf.writeShort(writedData.dataSize & 65535);
+        buf.writeByteArray(writedData.data);
+    }
+
+    @Override
+    public String toString() {
+        return "ChunksS2CPacket{" +
+                "chunkX=" + chunkX +
+                ", chunkZ=" + chunkZ +
+                ", fullChunk=" + fullChunk +
+                ", chunkData=" + chunkData +
+                ", chunk=" + chunk +
+                '}';
     }
 }

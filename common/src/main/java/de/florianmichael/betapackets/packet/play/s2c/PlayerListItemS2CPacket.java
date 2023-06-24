@@ -22,8 +22,8 @@ import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.auth.GameProfile;
 import de.florianmichael.betapackets.model.auth.ProfileProperty;
-import de.florianmichael.betapackets.model.game.hud.tablist.AddPlayerData;
-import de.florianmichael.betapackets.model.game.hud.tablist.TabAction;
+import de.florianmichael.betapackets.model.hud.tablist.AddPlayerData;
+import de.florianmichael.betapackets.model.hud.tablist.TabAction;
 
 import java.util.ArrayList;
 import java.util.List;
