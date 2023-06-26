@@ -32,14 +32,25 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
 
+/**
+ * This decoder decodes all incoming packets and executes the BetaPacketsAPI in the process
+ */
 public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
 
+    /**
+     * The user connection of the player
+     */
     private final UserConnection userConnection;
 
     public BetaPacketsDecoder(UserConnection userConnection) {
         this.userConnection = userConnection;
     }
 
+    /**
+     * This method is called when the handshake packet is received and initializes the user connection
+     * @param data The data of the packet
+     * @return The packet model
+     */
     private HandshakeC2SPacket handleHandshake(final FunctionalByteBuf data) {
         final HandshakeC2SPacket handshakeC2SPacket = new HandshakeC2SPacket(data);
 

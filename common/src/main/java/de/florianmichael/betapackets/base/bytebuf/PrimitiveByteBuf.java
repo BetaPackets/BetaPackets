@@ -25,6 +25,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+/**
+ * This class is a wrapper for the ByteBuf class and provides methods for reading and writing primitive data types.
+ */
 public class PrimitiveByteBuf {
     public final static short DEFAULT_MAX_STRING_LENGTH = Short.MAX_VALUE;
 

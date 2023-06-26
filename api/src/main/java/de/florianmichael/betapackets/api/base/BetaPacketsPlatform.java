@@ -24,10 +24,13 @@ import java.util.logging.Logger;
 
 /**
  * This class represents a BetaPackets platform implementation
- * @param <T>
+ * @param <T> The player class of the platform
  */
 public interface BetaPacketsPlatform<T> {
 
+    /**
+     * Loads the platform into BetaPackets
+     */
     default void loadPlatform() {
         BetaPackets.init(this);
 
@@ -35,8 +38,19 @@ public interface BetaPacketsPlatform<T> {
         logger.info("Injecting BetaPackets platform into " + getPlatformName());
     }
 
+    /**
+     * @return The (logger) of the platform
+     */
     Logger getLogging();
+
+    /**
+     * @return The name of the platform
+     */
     String getPlatformName();
 
+    /**
+     * @param uuid The uuid of the player
+     * @return The player object
+     */
     T getPlayer(final UUID uuid);
 }

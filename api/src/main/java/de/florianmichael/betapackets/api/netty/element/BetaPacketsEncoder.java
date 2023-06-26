@@ -32,6 +32,9 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 
 import java.util.List;
 
+/**
+ * This encoder encodes all outgoing packets and executes the BetaPacketsAPI in the process
+ */
 public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
 
     private final UserConnection userConnection;
@@ -40,6 +43,11 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
+    /**
+     * This method is called when the login success packet is sent, and it updates the user connection and fires the PlayerEarlyJoinEvent
+     * @param data The data of the packet
+     * @return The packet model
+     */
     private LoginSuccessS2CPacket handleLoginSuccess(final FunctionalByteBuf data) {
         final LoginSuccessS2CPacket loginSuccessS2CPacket = new LoginSuccessS2CPacket(data);
 

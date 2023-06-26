@@ -18,7 +18,7 @@
 package de.florianmichael.betapackets.bungeecord;
 
 import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
-import de.florianmichael.betapackets.bungeecord.injection.ReflectionInject;
+import de.florianmichael.betapackets.bungeecord.util.TheUnsafeReflect;
 import de.florianmichael.betapackets.bungeecord.netty.BetaPacketsKickStringWriter;
 import de.florianmichael.betapackets.bungeecord.util.JLoggerToSLF4J;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -35,7 +35,7 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform<Prox
     @Override
     public void onLoad() {
         this.loadPlatform();
-        ReflectionInject.setKickStringWriter(new BetaPacketsKickStringWriter());
+        TheUnsafeReflect.setKickStringWriter(new BetaPacketsKickStringWriter());
     }
 
     @Override

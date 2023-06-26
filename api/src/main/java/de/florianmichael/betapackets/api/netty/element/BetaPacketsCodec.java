@@ -24,12 +24,19 @@ import io.netty.handler.codec.MessageToMessageCodec;
 
 import java.util.List;
 
+/**
+ * This codec is a merge of the {@link BetaPacketsDecoder} and {@link BetaPacketsEncoder} and it can be used in codec pipelines.
+ */
 public class BetaPacketsCodec extends MessageToMessageCodec<ByteBuf, ByteBuf> {
     private final BetaPacketsDecoder decoder;
     private final BetaPacketsEncoder encoder;
 
     private final UserConnection userConnection;
 
+    /**
+     * Creates a new codec for the given user connection
+     * @param userConnection The user connection
+     */
     public BetaPacketsCodec(UserConnection userConnection) {
         this.decoder = new BetaPacketsDecoder(userConnection);
         this.encoder = new BetaPacketsEncoder(userConnection);

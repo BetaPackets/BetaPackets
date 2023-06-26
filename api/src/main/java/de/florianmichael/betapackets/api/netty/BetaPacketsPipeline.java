@@ -24,18 +24,35 @@ import de.florianmichael.betapackets.api.netty.event.ReorderPipelineEvent;
 import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.*;
 
+/**
+ * This class bundles the whole Netty pipeline of BetaPackets into one HandlerAdapter
+ * <p>
+ * Intended implementation: This handler should always be the last one in the pipeline.
+ */
 public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
+
+    /**
+     * The name of the decoder and encoder handlers
+     */
     public final static String HANDLER_PACKET_DECODER_NAME = "betapackets-packet-decoder";
     public final static String HANDLER_PACKET_ENCODER_NAME = "betapackets-packet-encoder";
 
     private final UserConnection userConnection;
 
+    /**
+     * Creates a new BetaPacketsPipeline and tracks the connection
+     * @param userConnection The connection to track
+     */
     public BetaPacketsPipeline(final UserConnection userConnection) {
         this.userConnection = userConnection;
 
         BetaPackets.getConnectionMap().addConnection(userConnection.getChannel(), userConnection);
     }
 
+    /**
+     * Adds the BetaPacketsDecoder and BetaPacketsEncoder to the pipeline
+     * @param ctx The ChannelHandlerContext
+     */
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         final ChannelPipeline pipeline = ctx.channel().pipeline();
@@ -44,6 +61,10 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, createBetaPacketsEncoder(userConnection));
     }
 
+    /**
+     * Removes the {@link UserConnection} from the connection map when the channel is inactive
+     * @param ctx The ChannelHandlerContext
+     */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
@@ -51,6 +72,11 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         BetaPackets.getConnectionMap().removeConnection(ctx.channel());
     }
 
+    /**
+     * In case the implementation doesn't have an event when it reorders the compression, or you can't access it, you
+     * can use this method to add a dummy handler which will automatically reorder the pipeline when it has to
+     * @param channelPipeline The ChannelPipeline
+     */
     public void addAutomaticallyReorderElement(final ChannelPipeline channelPipeline) {
         channelPipeline.addLast(new ChannelOutboundHandlerAdapter() {
             @Override
@@ -63,6 +89,9 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         });
     }
 
+    /**
+     * Handles the {@link ReorderPipelineEvent} and reorders the pipeline
+     */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof ReorderPipelineEvent) {
@@ -81,6 +110,11 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         super.userEventTriggered(ctx, evt);
     }
 
+    /**
+     * Checks if the pipeline needs to be reordered
+     * @param pipeline The ChannelPipeline
+     * @return True if the pipeline needs to be reordered
+     */
     public boolean needsReorderPipeline(final ChannelPipeline pipeline) {
         final int decoderIndex = pipeline.names().indexOf(getPacketDecompressName());
         if (decoderIndex == -1) return false;
@@ -88,11 +122,19 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         return decoderIndex > pipeline.names().indexOf(HANDLER_PACKET_DECODER_NAME);
     }
 
+    /**
+     * These methods are used to get the names of the handlers which are used to reorder the pipeline
+     */
+
     public abstract String getPacketDecompressName();
     public abstract String getPacketCompressName();
 
     public abstract String getPacketDecoderName();
     public abstract String getPacketEncoderName();
+
+    /**
+     * These methods can be used in case the implementation want's to overwrite the original handlers
+     */
 
     public BetaPacketsDecoder createBetaPacketsDecoder(final UserConnection userConnection) {
         return new BetaPacketsDecoder(userConnection);
@@ -108,6 +150,6 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     @Override
     public boolean isSharable() {
-        return true;
+        return this.userConnection != null;
     }
 }

@@ -29,9 +29,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Manages all {@link PacketRegistry}s
+ */
 public class PacketRegistryManager {
+
+    /**
+     * A map of all {@link PacketRegistry}s
+     */
     private final Map<ProtocolCollection, List<PacketRegistry>> packetRegistries = new HashMap<>();
 
+    /**
+     * Creates a new {@link PacketRegistryManager} and registers all {@link PacketRegistry}s
+     */
     public PacketRegistryManager() {
         registerPacketRegistry(ProtocolCollection.R1_7_5, new BasePacketRegistry1_7.PacketRegistryHandshake1_7());
         registerPacketRegistry(ProtocolCollection.R1_7_5, new BasePacketRegistry1_7.PacketRegistryStatus1_7());
@@ -43,10 +53,19 @@ public class PacketRegistryManager {
         packetRegistries.forEach((protocolCollection, packetRegistry) -> packetRegistry.forEach(PacketRegistry::init));
     }
 
+    /**
+     * Registers a {@link PacketRegistry} for a specific version
+     * @param version The version
+     * @param packetRegistry The {@link PacketRegistry}
+     */
     public void registerPacketRegistry(final ProtocolCollection version, final PacketRegistry packetRegistry) {
         packetRegistries.computeIfAbsent(version, k -> new ArrayList<>()).add(packetRegistry);
     }
 
+    /**
+     * Returns all {@link PacketRegistry}s for a specific version
+     * @return The {@link PacketRegistry}s
+     */
     public Map<ProtocolCollection, List<PacketRegistry>> getPacketRegistries() {
         return packetRegistries;
     }

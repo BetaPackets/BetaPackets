@@ -15,37 +15,43 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.bungeecord.injection;
+package de.florianmichael.betapackets.bungeecord.util;
 
+import de.florianmichael.betapackets.api.BetaPackets;
+import sun.misc.Unsafe;
 import net.md_5.bungee.protocol.KickStringWriter;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
-public class ReflectionInject {
-
+public class TheUnsafeReflect {
+    private final static Unsafe jvmInternal = getTheUnsafe();
     private static Field pipelineUtilsKickStringWriter;
 
     static {
         try {
             final Class<?> pipelineUtils = Class.forName("net.md_5.bungee.netty.PipelineUtils");
+
             pipelineUtilsKickStringWriter = pipelineUtils.getDeclaredField("legacyKicker");
-            pipelineUtilsKickStringWriter.setAccessible(true);
         } catch (NoSuchFieldException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public static void setKickStringWriter(KickStringWriter writer) {
+    public static Unsafe getTheUnsafe() {
         try {
-            final Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(pipelineUtilsKickStringWriter, pipelineUtilsKickStringWriter.getModifiers() & ~Modifier.FINAL);
-
-            pipelineUtilsKickStringWriter.set(null, writer);
-            modifiersField.setAccessible(false);
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
+            for (Field field : Unsafe.class.getDeclaredFields()) {
+                if (field.getType() == Unsafe.class) {
+                    field.setAccessible(true);
+                    return (Unsafe) field.get(null);
+                }
+            }
+        } catch (IllegalAccessException ignored) {
+            BetaPackets.getPlatform().getLogging().severe("Could not get Unsafe instance!");
         }
+        return null;
+    }
+
+    public static void setKickStringWriter(KickStringWriter writer) {
+        jvmInternal.putObject(pipelineUtilsKickStringWriter.getDeclaringClass(), jvmInternal.staticFieldOffset(pipelineUtilsKickStringWriter), writer);
     }
 }

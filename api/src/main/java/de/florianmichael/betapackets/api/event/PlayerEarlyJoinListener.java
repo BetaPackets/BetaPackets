@@ -24,10 +24,20 @@ import de.florianmichael.dietrichevents.handle.Listener;
 
 import java.util.UUID;
 
+/**
+ * This event is fired when a player joins the server before the protocol version is known.
+ */
 public interface PlayerEarlyJoinListener extends Listener {
 
+    /**
+     * Called when a player joins the server before the protocol version is known.
+     * @param event The event.
+     */
     void onPlayerEarlyJoin(final PlayerEarlyJoinEvent event);
 
+    /**
+     * This class represents the event that is called when a player joins the server before the protocol version is known.
+     */
     class PlayerEarlyJoinEvent extends AbstractEvent<PlayerEarlyJoinListener> {
         private final EventExecutor<PlayerEarlyJoinListener> eventExecutor = listener -> listener.onPlayerEarlyJoin(this);
 

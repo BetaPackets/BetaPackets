@@ -19,7 +19,15 @@ package de.florianmichael.betapackets.base.packet;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
+/**
+ * This class is the base class for all packets.
+ */
 public abstract class Packet {
 
+    /**
+     * Writes the packet to the given {@link FunctionalByteBuf}.
+     * @param buf the {@link FunctionalByteBuf} to write to
+     * @throws Exception if an error occurs
+     */
     public abstract void write(final FunctionalByteBuf buf) throws Exception;
 }

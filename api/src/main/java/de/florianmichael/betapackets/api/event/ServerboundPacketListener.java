@@ -24,10 +24,20 @@ import de.florianmichael.dietrichevents.handle.EventExecutor;
 import de.florianmichael.dietrichevents.handle.Listener;
 import de.florianmichael.dietrichevents.types.CancellableEvent;
 
+/**
+ * This interface is used to listen to serverbound packets.
+ */
 public interface ServerboundPacketListener extends Listener {
 
+    /**
+     * This method is called when a serverbound packet is sent.
+     * @param event The event.
+     */
     void onClientBoundPacket(ServerboundPacketEvent<?> event);
 
+    /**
+     * This class represents the event that is called when a serverbound packet is sent.
+     */
     class ServerboundPacketEvent<T> extends CancellableEvent<ServerboundPacketListener> {
         private final EventExecutor<ServerboundPacketListener> eventExecutor = listener -> listener.onClientBoundPacket(this);
 

@@ -17,7 +17,6 @@
 
 package de.florianmichael.betapackets.api.base;
 
-import de.florianmichael.betapackets.api.BetaPackets;
 import de.florianmichael.betapackets.api.BetaPacketsAPI;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.packet.play.s2c.JoinGameS2CPacket;
@@ -32,8 +31,15 @@ import java.util.Map;
  */
 public class ConnectionMap {
 
+    /**
+     * Stores all UserConnection's
+     */
     public final Map<Channel, UserConnection> userConnectionMap = new HashMap<>();
 
+    /**
+     * Creates a new ConnectionMap and registers all needed listeners to update the {@link UserConnection.TrackingData} fields
+     * @param api The {@link BetaPacketsAPI} instance
+     */
     public ConnectionMap(final BetaPacketsAPI api) {
         api.registerOutgoingPacketListener(event -> {
             if (event.packet instanceof RespawnS2CPacket || event.packet instanceof JoinGameS2CPacket) {
@@ -53,14 +59,27 @@ public class ConnectionMap {
         });
     }
 
+    /**
+     * Adds a new UserConnection to the map
+     * @param channel The channel of the connection
+     * @param userConnection The UserConnection
+     */
     public void addConnection(final Channel channel, final UserConnection userConnection) {
         userConnectionMap.put(channel, userConnection);
     }
 
+    /**
+     * Removes a UserConnection from the map (e.g. if the client disconnects)
+     * @param channel The channel of the connection
+     */
     public void removeConnection(final Channel channel) {
         userConnectionMap.remove(channel);
     }
 
+    /**
+     * @param channel The channel of the connection
+     * @return if the channel has a tracking UserConnection
+     */
     public boolean hasConnection(final Channel channel) {
         return userConnectionMap.containsKey(channel);
     }

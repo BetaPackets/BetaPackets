@@ -21,13 +21,25 @@ import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
 import de.florianmichael.betapackets.PacketRegistryManager;
 import de.florianmichael.betapackets.api.base.ConnectionMap;
 
+/**
+ * The main class of BetaPackets, it has all instances in it.
+ */
 public class BetaPackets {
+
+    /**
+     * The platform instance
+     */
     private static BetaPacketsPlatform<?> platform;
 
     private static BetaPacketsAPI api;
     private static PacketRegistryManager packetRegistryManager;
     private static ConnectionMap connectionMap;
 
+
+    /**
+     * Called by {@link BetaPacketsPlatform#loadPlatform()} to initialize all instances and the platform
+     * @param platform The platform instance
+     */
     public static void init(final BetaPacketsPlatform<?> platform) {
         BetaPackets.platform = platform;
 

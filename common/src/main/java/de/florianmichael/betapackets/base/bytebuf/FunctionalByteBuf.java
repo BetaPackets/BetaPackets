@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class is an extension of the {@link PrimitiveByteBuf} which adds version dependent methods
+ */
 public class FunctionalByteBuf extends PrimitiveByteBuf {
 
     private final UserConnection userConnection;

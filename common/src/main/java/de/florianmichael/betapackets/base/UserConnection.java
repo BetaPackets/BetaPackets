@@ -27,7 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * This class reflects a connection of a client, in it all important data for the decoder/encoder as well as the packet models are stored.
+ */
 public class UserConnection {
+
     public final TrackingData trackingData = new TrackingData();
     private final Channel channel;
     private final PacketRegistryManager packetRegistryManager;
@@ -36,20 +40,41 @@ public class UserConnection {
     private ProtocolCollection protocolVersion;
     private PacketRegistry currentRegistry;
 
+    /**
+     * The UUID of the player
+     */
     private UUID player;
+
+    /**
+     * If the connection is fully loaded
+     */
     private boolean loaded;
 
+    /**
+     * Creates a new {@link UserConnection}
+     * @param channel The channel of the connection
+     * @param packetRegistryManager The {@link PacketRegistryManager} used to generate the {@link UserConnection#currentRegistry}
+     */
     public UserConnection(Channel channel, PacketRegistryManager packetRegistryManager) {
         this.channel = channel;
         this.packetRegistryManager = packetRegistryManager;
     }
 
+    /**
+     * Initializes the connection
+     * @param state The {@link NetworkState} of the connection
+     * @param protocolVersion The {@link ProtocolCollection} of the connection
+     */
     public void init(final NetworkState state, final ProtocolCollection protocolVersion) {
         this.protocolVersion = protocolVersion; // Version has to be valid for setState() detection
         this.setState(state);
         this.loaded = true;
     }
 
+    /**
+     * Set's the current {@link NetworkState} of the connection and reloads the {@link UserConnection#currentRegistry}
+     * @param state The {@link NetworkState} of the connection
+     */
     public void setState(NetworkState state) {
         this.state = state;
 
