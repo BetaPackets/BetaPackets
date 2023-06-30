@@ -1,38 +1,67 @@
-plugins {
-    id "java"
-}
+subprojects {
+    apply plugin: "java-library"
+    apply plugin: "maven-publish"
 
-configurations {
-    implementation.extendsFrom projectInclude
-    api.extendsFrom projectInclude
-}
+    archivesBaseName = "BetaPackets-" + project.maven_name
+    group = project.maven_group
+    version = project.maven_version
 
-allprojects {
     repositories {
         mavenCentral()
         maven {
             name = "Jitpack"
             url = "https://jitpack.io"
         }
-    }
-}
-
-dependencies {
-    // Base
-    projectInclude project(":common")
-    projectInclude project(":api")
-
-    // Platform implementations
-    projectInclude project(":bungeecord")
-}
-
-jar {
-    dependsOn configurations.projectInclude
-    from {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        configurations.projectInclude.collect {
-            zipTree(it)
+        maven {
+            name = "Lenni0451 Snapshots"
+            url = "https://maven.lenni0451.net/snapshots"
         }
     }
-    from("LICENSE") { rename { "${it}_${project.archivesBaseName}" } }
+
+    publishing {
+        repositories {
+            maven {
+                name = "reposilite"
+                def releasesUrl = "https://maven.lenni0451.net/releases"
+                def snapshotsUrl = "https://maven.lenni0451.net/snapshots"
+                url = project.version.endsWith("SNAPSHOT") ? snapshotsUrl : releasesUrl
+
+                credentials(PasswordCredentials)
+                authentication {
+                    basic(BasicAuthentication)
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                artifactId = project.archivesBaseName
+                groupId = project.group
+                version = project.version
+
+                from components.java
+
+                pom {
+                    name = artifactId
+                    description = "The ultimate standalone Minecraft protocol library for all platforms and all Minecraft versions"
+                    url = "https://github.com/FlorianMichael/BetaPackets"
+                    licenses {
+                        license {
+                            name = "Apache-2.0 license"
+                            url = "https://github.com/FlorianMichael/BetaPackets/blob/main/LICENSE"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "FlorianMichael"
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:git://github.com/FlorianMichael/BetaPackets.git"
+                        developerConnection = "scm:git:ssh://github.com/FlorianMichael/BetaPackets.git"
+                        url = "github.com/FlorianMichael/BetaPackets"
+                    }
+                }
+            }
+        }
+    }
 }

@@ -20,9 +20,8 @@ package de.florianmichael.betapackets.api.event;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.dietrichevents.handle.EventExecutor;
-import de.florianmichael.dietrichevents.handle.Listener;
-import de.florianmichael.dietrichevents.types.CancellableEvent;
+import de.florianmichael.dietrichevents2.core.Listener;
+import de.florianmichael.dietrichevents2.type.CancellableEvent;
 
 /**
  * This interface is used to listen to clientbound packets.
@@ -39,7 +38,7 @@ public interface ClientboundPacketListener extends Listener {
      * This class represents the event that is called when a clientbound packet is sent.
      */
     class ClientboundPacketEvent<T> extends CancellableEvent<ClientboundPacketListener> {
-        private final EventExecutor<ClientboundPacketListener> eventExecutor = listener -> listener.onClientBoundPacket(this);
+        public final static int ID = 0;
 
         public UserConnection userConnection;
         public NetworkState networkState;
@@ -53,14 +52,10 @@ public interface ClientboundPacketListener extends Listener {
             this.player = player;
         }
 
-        @Override
-        public EventExecutor<ClientboundPacketListener> getEventExecutor() {
-            return this.eventExecutor;
-        }
 
         @Override
-        public Class<ClientboundPacketListener> getListenerType() {
-            return ClientboundPacketListener.class;
+        public void call(ClientboundPacketListener listener) {
+            listener.onClientBoundPacket(this);
         }
     }
 }

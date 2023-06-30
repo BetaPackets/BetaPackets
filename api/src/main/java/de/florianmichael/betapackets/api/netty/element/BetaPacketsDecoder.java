@@ -77,12 +77,14 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
             } else {
                 model = userConnection.getCurrentRegistry().createModel(NetworkSide.SERVERBOUND, packetId, data);
             }
-            final ServerboundPacketListener.ServerboundPacketEvent<?> event = BetaPackets.getAPI().getEventProvider().postInternal(new ServerboundPacketListener.ServerboundPacketEvent<>(
+            final var event = new ServerboundPacketListener.ServerboundPacketEvent<>(
                     userConnection,
                     userConnection.getState(),
                     model,
                     BetaPackets.getPlatform().getPlayer(userConnection.getPlayer())
-            ));
+            );
+
+            BetaPackets.getAPI().getEventProvider().postInternal(ServerboundPacketListener.ServerboundPacketEvent.ID, event);
             if (event.isCancelled()) {
                 return;
             }

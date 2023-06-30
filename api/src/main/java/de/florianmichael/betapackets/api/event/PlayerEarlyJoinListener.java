@@ -18,9 +18,8 @@
 package de.florianmichael.betapackets.api.event;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.dietrichevents.AbstractEvent;
-import de.florianmichael.dietrichevents.handle.EventExecutor;
-import de.florianmichael.dietrichevents.handle.Listener;
+import de.florianmichael.dietrichevents2.core.AbstractEvent;
+import de.florianmichael.dietrichevents2.core.Listener;
 
 import java.util.UUID;
 
@@ -39,7 +38,7 @@ public interface PlayerEarlyJoinListener extends Listener {
      * This class represents the event that is called when a player joins the server before the protocol version is known.
      */
     class PlayerEarlyJoinEvent extends AbstractEvent<PlayerEarlyJoinListener> {
-        private final EventExecutor<PlayerEarlyJoinListener> eventExecutor = listener -> listener.onPlayerEarlyJoin(this);
+        public final static int ID = 2;
 
         public UUID uuid;
         public String username;
@@ -52,13 +51,8 @@ public interface PlayerEarlyJoinListener extends Listener {
         }
 
         @Override
-        public EventExecutor<PlayerEarlyJoinListener> getEventExecutor() {
-            return this.eventExecutor;
-        }
-
-        @Override
-        public Class<PlayerEarlyJoinListener> getListenerType() {
-            return PlayerEarlyJoinListener.class;
+        public void call(PlayerEarlyJoinListener listener) {
+            listener.onPlayerEarlyJoin(this);
         }
     }
 }

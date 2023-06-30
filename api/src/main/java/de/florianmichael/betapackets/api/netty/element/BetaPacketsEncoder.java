@@ -53,11 +53,13 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
 
         userConnection.setState(NetworkState.PLAY);
         userConnection.setPlayer(loginSuccessS2CPacket.uuid);
-        BetaPackets.getAPI().getEventProvider().postInternal(new PlayerEarlyJoinListener.PlayerEarlyJoinEvent(
+
+        final var event = new PlayerEarlyJoinListener.PlayerEarlyJoinEvent(
                 loginSuccessS2CPacket.uuid,
                 loginSuccessS2CPacket.username,
                 data.getProtocolVersion()
-        ));
+        );
+        BetaPackets.getAPI().getEventProvider().postInternal(PlayerEarlyJoinListener.PlayerEarlyJoinEvent.ID, event);
 
         return loginSuccessS2CPacket;
     }
@@ -74,12 +76,13 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
             } else {
                 model = userConnection.getCurrentRegistry().createModel(NetworkSide.CLIENTBOUND, packetId, data);
             }
-            final ClientboundPacketListener.ClientboundPacketEvent<?> event = BetaPackets.getAPI().getEventProvider().postInternal(new ClientboundPacketListener.ClientboundPacketEvent<>(
+            final var event = new ClientboundPacketListener.ClientboundPacketEvent<>(
                     userConnection,
                     userConnection.getState(),
                     model,
                     BetaPackets.getPlatform().getPlayer(userConnection.getPlayer())
-            ));
+            );
+            BetaPackets.getAPI().getEventProvider().postInternal(ClientboundPacketListener.ClientboundPacketEvent.ID, event);
             if (event.isCancelled()) {
                 return;
             }

@@ -13,6 +13,20 @@ Example:
 ![Design1](.github/images/design1.png)
 Where **Animation.java** is an enum with all possible animations of the respective version, and the **Short** is simply the raw type that is in the vanilla packet.
 
+## Contact
+If you encounter any issues, please report them on the
+[issue tracker](https://github.com/FlorianMichael/BetaPackets/issues).  
+If you just want to talk or need help with BetaPackets feel free to join my
+[Discord](https://discord.gg/BwWhCHUKDf).
+
+## How to add this to your project
+### Gradle/Maven
+To use BetaPackets with Gradle/Maven you can use this [Maven server](https://maven.lenni0451.net/#/releases/de/florianmichael) or [Jitpack](https://jitpack.io/#FlorianMichael/BetaPackets).  
+You can also find instructions how to implement it into your build script there.
+
+### Jar File
+If you just want the latest jar file you can download it from the GitHub [Actions](https://github.com/FlorianMichael/BetaPackets/actions).
+
 ## How to use?
 The BetaPacketsAPI has **3** listeners, **ClientboundPacketListener**, **ServerboundPacketListener** and **PlayerEarlyJoinPacketListener**.
 
@@ -115,19 +129,13 @@ ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent("target-decoder",
 - The implementation is not designed for codecs because most Minecraft pipelines don't use codecs, there is a **BetaPacketsCodec** but no pipeline class, that means you have to implement compression yourself. 
 
 ## Dependencies
-| Dependency     | Download                                         |
-|----------------|--------------------------------------------------|
-| MC-Structs     | https://github.com/Lenni0451/MCStructs           |
-| DietrichEvents | https://github.com/FlorianMichael/DietrichEvents |
+| Dependency      | Download                                          |
+|-----------------|---------------------------------------------------|
+| MC-Structs      | https://github.com/Lenni0451/MCStructs            |
+| BetaPackets | https://github.com/FlorianMichael/BetaPackets |
 
 ## TODO - LIST
 - [x] 1.8 packets and models
 - [ ] chunks and effect translations
 - [x] 1.9 packets and models
 - [ ] proper BungeeCord implementation and Spigot implementation
-
-## Contact
-If you encounter any issues, please report them on the
-[issue tracker](https://github.com/FlorianMichael/BetaPackets/issues).  
-If you just want to talk or need help with BetaPackets feel free to join my
-[Discord](https://discord.gg/BwWhCHUKDf).

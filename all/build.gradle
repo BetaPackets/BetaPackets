@@ -1,0 +1,10 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(":api")
+    api project(":common")
+
+    api project(":bungeecord")
+}
