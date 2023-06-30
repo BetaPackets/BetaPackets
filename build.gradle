@@ -18,6 +18,11 @@ subprojects {
         }
     }
 
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
     publishing {
         repositories {
             maven {

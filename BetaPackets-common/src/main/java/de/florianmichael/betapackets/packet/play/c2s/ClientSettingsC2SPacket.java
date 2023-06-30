@@ -35,7 +35,6 @@ public class ClientSettingsC2SPacket extends Packet {
 
     /**
      * You can use the SkinPartsFlagsConverter class to get these fields
-     * @see de.florianmichael.betapackets.api.converter.SkinPartsFlagsConverter
      */
     public int modelPartFlags;
     public ModelMapper<Integer, Hand1_9> hand1_9 = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, Hand1_9::getById);

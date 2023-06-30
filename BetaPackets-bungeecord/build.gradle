@@ -14,6 +14,6 @@ dependencies {
     compileOnly "org.slf4j:slf4j-api:2.0.7"
 
     implementation "de.florianmichael:DietrichEvents2:${project.dietrichevents2_version}"
-    implementation project(":common")
-    implementation project(":api")
+    implementation project(":BetaPackets-common")
+    implementation project(":BetaPackets-api")
 }

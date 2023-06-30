@@ -7,5 +7,5 @@ dependencies {
     compileOnly "com.google.code.gson:gson:${project.gson_version}"
 
     implementation "de.florianmichael:DietrichEvents2:${project.dietrichevents2_version}"
-    implementation project(":common")
+    implementation project(":BetaPackets-common")
 }
