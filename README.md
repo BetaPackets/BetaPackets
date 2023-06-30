@@ -132,7 +132,7 @@ ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent("target-decoder",
 | Dependency      | Download                                          |
 |-----------------|---------------------------------------------------|
 | MC-Structs      | https://github.com/Lenni0451/MCStructs            |
-| BetaPackets | https://github.com/FlorianMichael/BetaPackets |
+| DietrichEvents2 | https://github.com/FlorianMichael/DietrichEvents2 |
 
 ## TODO - LIST
 - [x] 1.8 packets and models
