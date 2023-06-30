@@ -32,7 +32,7 @@ public class HandshakeC2SPacket extends Packet {
     public HandshakeC2SPacket(final FunctionalByteBuf buf) {
         this(
                 buf.readVarInt(),
-                buf.readString(255),
+                buf.readString(Short.MAX_VALUE), // BungeeCord sends a large string here
                 buf.readShort(),
                 NetworkState.fromId(buf.readVarInt())
         );

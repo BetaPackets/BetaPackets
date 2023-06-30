@@ -48,6 +48,7 @@ public class PacketRegistryManager {
 
         registerPacketRegistry(ProtocolCollection.R1_8, new BasePacketRegistry1_8.PacketRegistryLogin1_8());
         registerPacketRegistry(ProtocolCollection.R1_8, new PacketRegistry1_8());
+
         registerPacketRegistry(ProtocolCollection.R1_9, new PacketRegistry1_9());
 
         packetRegistries.forEach((protocolCollection, packetRegistry) -> packetRegistry.forEach(PacketRegistry::init));
