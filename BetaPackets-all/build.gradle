@@ -1,3 +1,7 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
 repositories {
     mavenCentral()
 }
@@ -12,15 +16,21 @@ dependencies {
     projectInclude project(":BetaPackets-common")
 
     projectInclude project(":BetaPackets-bungeecord")
+    projectInclude project(":BetaPackets-spigot")
+
+    projectInclude "com.google.code.gson:gson:${project.gson_version}"
+}
+
+shadowJar {
+    archiveClassifier.set("shadow")
+    configurations {
+        projectInclude
+    }
+    relocate "com.google.gson", "de.florianmichael.betapackets.gson"
 }
 
 jar {
-    dependsOn configurations.projectInclude
-    from {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        configurations.projectInclude.collect {
-            zipTree(it)
-        }
-    }
     from("LICENSE") { rename { "${it}_${project.archivesBaseName}" } }
 }
+
+build.dependsOn shadowJar

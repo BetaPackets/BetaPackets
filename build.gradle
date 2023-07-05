@@ -2,7 +2,7 @@ subprojects {
     apply plugin: "java-library"
     apply plugin: "maven-publish"
 
-    archivesBaseName = "BetaPackets-" + project.maven_name
+    archivesBaseName = project.maven_name
     group = project.maven_group
     version = project.maven_version
 

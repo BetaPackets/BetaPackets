@@ -45,6 +45,7 @@ public class ClientSettingsC2SPacket extends Packet {
         this.chatVisibility.read(buf);
         this.enableColors = buf.readBoolean();
         this.modelPartFlags = buf.readUnsignedByte();
+        System.out.println(buf.getProtocolVersion());
         if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             this.hand1_9.read(buf);
         }

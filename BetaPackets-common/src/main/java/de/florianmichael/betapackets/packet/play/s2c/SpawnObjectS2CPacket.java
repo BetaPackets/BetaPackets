@@ -17,11 +17,9 @@
 
 package de.florianmichael.betapackets.packet.play.s2c;
 
-import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.entity.EntityTypes;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -30,7 +28,7 @@ public class SpawnObjectS2CPacket extends Packet {
 
     public int entityId;
     public UUID objectUUID_1_9;
-    public ModelMapper<Byte, EntityTypes> type = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, EntityTypes::getById);
+    public int type;
     public double x;
     public double y;
     public double z;
@@ -46,7 +44,7 @@ public class SpawnObjectS2CPacket extends Packet {
         if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             this.objectUUID_1_9 = buf.readUUID();
         }
-        this.type.read(buf);
+        this.type = buf.readByte();
         if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             this.x = buf.readDouble();
             this.y = buf.readDouble();
@@ -66,9 +64,9 @@ public class SpawnObjectS2CPacket extends Packet {
         }
     }
 
-    public SpawnObjectS2CPacket(int entityId, EntityTypes type, int x, int y, int z, int pitch, int yaw, int data, int speedX, int speedY, int speedZ) {
+    public SpawnObjectS2CPacket(int entityId, int type, int x, int y, int z, int pitch, int yaw, int data, int speedX, int speedY, int speedZ) {
         this.entityId = entityId;
-        this.type = new ModelMapper<>(FunctionalByteBuf::writeByte, type);
+        this.type = type;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -86,7 +84,7 @@ public class SpawnObjectS2CPacket extends Packet {
         if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             buf.writeUUID(objectUUID_1_9);
         }
-        this.type.write(buf);
+        buf.writeByte(type);
         if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             buf.writeDouble(x);
             buf.writeDouble(y);
@@ -151,7 +149,7 @@ public class SpawnObjectS2CPacket extends Packet {
         long temp;
         result = entityId;
         result = 31 * result + (objectUUID_1_9 != null ? objectUUID_1_9.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + type;
         temp = Double.doubleToLongBits(x);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(y);
