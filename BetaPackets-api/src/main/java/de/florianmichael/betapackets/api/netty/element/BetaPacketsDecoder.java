@@ -66,11 +66,6 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         try {
             final int packetId = data.readVarInt();
 
-            if (packetId == 0x17) {
-                out.add(ctx.alloc().buffer().writeBytes(msg).retain());
-                return;
-            }
-
             Packet model;
             if (!userConnection.hasLoaded() && packetId == 0x00 /* C -> S, HANDSHAKE, HANDSHAKE */) {
                 model = handleHandshake(data); // We need this to init the user connection and to track the next state

@@ -123,7 +123,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             writeByte(255);
         } else {
-            writeByte(127);
+            writeByte(Byte.MAX_VALUE);
         }
     }
 
