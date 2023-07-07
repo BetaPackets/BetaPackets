@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.entity.metadata;
+package de.florianmichael.betapackets.model.base;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.io.IOException;
 
-public interface IMetadataWriter {
-
-    Function<FunctionalByteBuf, Object> getReader() throws Exception;
-    BiConsumer<FunctionalByteBuf, Object> getWriter() throws Exception;
+public interface Writer<T> {
+    void write(FunctionalByteBuf buf, T object) throws IOException;
 }
+

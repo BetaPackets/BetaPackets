@@ -20,13 +20,16 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.potion.PotionEffectTypes;
 
 import java.util.Objects;
 
 public class EntityEffectS2CPacket extends Packet {
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
 
-    public int entityId;
+    }
+
+    /*public int entityId;
     public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
     public byte amplifier;
     public int duration;
@@ -90,5 +93,5 @@ public class EntityEffectS2CPacket extends Packet {
         result = 31 * result + duration;
         result = 31 * result + (int) hideParticles;
         return result;
-    }
+    }*/
 }

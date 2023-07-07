@@ -17,13 +17,15 @@
 
 package de.florianmichael.betapackets.model.position;
 
-public class Vec3 {
+import java.util.Objects;
 
-    public double x;
-    public double y;
-    public double z;
+public class Vec3f {
 
-    public Vec3(double x, double y, double z) {
+    public float x;
+    public float y;
+    public float z;
+
+    public Vec3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -42,24 +44,12 @@ public class Vec3 {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        Vec3 vec3 = (Vec3) o;
-
-        if (Double.compare(vec3.x, x) != 0) return false;
-        if (Double.compare(vec3.y, y) != 0) return false;
-        return Double.compare(vec3.z, z) == 0;
+        Vec3f vec3f = (Vec3f) o;
+        return Float.compare(vec3f.x, x) == 0 && Float.compare(vec3f.y, y) == 0 && Float.compare(vec3f.z, z) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(x);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(y);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(z);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+        return Objects.hash(x, y, z);
     }
 }

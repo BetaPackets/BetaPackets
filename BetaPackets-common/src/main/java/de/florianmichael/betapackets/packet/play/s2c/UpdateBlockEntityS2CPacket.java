@@ -20,7 +20,6 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.entity.metadata.MetadataAction;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
@@ -28,8 +27,12 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class UpdateBlockEntityS2CPacket extends Packet {
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
 
-    public BlockPos blockPos;
+    }
+
+    /*public BlockPos blockPos;
     public ModelMapper<Short, MetadataAction> metadata = new ModelMapper<>(FunctionalByteBuf::readUnsignedByte, FunctionalByteBuf::writeByte, MetadataAction::getById);
     public CompoundTag nbtData;
 
@@ -79,5 +82,5 @@ public class UpdateBlockEntityS2CPacket extends Packet {
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
         result = 31 * result + (nbtData != null ? nbtData.hashCode() : 0);
         return result;
-    }
+    }*/
 }

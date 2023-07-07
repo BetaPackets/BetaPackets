@@ -19,22 +19,22 @@ package de.florianmichael.betapackets.model.position;
 
 public class Rotations {
 
-    public float x;
-    public float y;
-    public float z;
+    public float pitch;
+    public float yaw;
+    public float roll;
 
-    public Rotations(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Rotations(float pitch, float yaw, float roll) {
+        this.pitch = pitch;
+        this.yaw = yaw;
+        this.roll = roll;
     }
 
     @Override
     public String toString() {
         return "Rotations{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
+                "pitch=" + pitch +
+                ", yaw=" + yaw +
+                ", roll=" + roll +
                 '}';
     }
 
@@ -45,16 +45,16 @@ public class Rotations {
 
         Rotations rotations = (Rotations) o;
 
-        if (Float.compare(rotations.x, x) != 0) return false;
-        if (Float.compare(rotations.y, y) != 0) return false;
-        return Float.compare(rotations.z, z) == 0;
+        if (Float.compare(rotations.pitch, pitch) != 0) return false;
+        if (Float.compare(rotations.yaw, yaw) != 0) return false;
+        return Float.compare(rotations.roll, roll) == 0;
     }
 
     @Override
     public int hashCode() {
-        int result = (x != +0.0f ? Float.floatToIntBits(x) : 0);
-        result = 31 * result + (y != +0.0f ? Float.floatToIntBits(y) : 0);
-        result = 31 * result + (z != +0.0f ? Float.floatToIntBits(z) : 0);
+        int result = (pitch != +0.0f ? Float.floatToIntBits(pitch) : 0);
+        result = 31 * result + (yaw != +0.0f ? Float.floatToIntBits(yaw) : 0);
+        result = 31 * result + (roll != +0.0f ? Float.floatToIntBits(roll) : 0);
         return result;
     }
 }

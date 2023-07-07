@@ -17,6 +17,13 @@
 
 package de.florianmichael.betapackets.model.base;
 
+import de.florianmichael.betapackets.model.block.BlockMapping;
+import de.florianmichael.betapackets.model.entity.EntityMapping;
+import de.florianmichael.betapackets.model.entity.metadata.MetadataCodecMapping;
+import de.florianmichael.betapackets.model.item.ItemMapping;
+import de.florianmichael.betapackets.model.particle.ParticleMapping;
+import de.florianmichael.betapackets.model.potioneffect.PotionEffectMapping;
+
 // Thanks to my 12-year-old self for this enum, I guess?
 public enum ProtocolCollection {
 
@@ -75,9 +82,40 @@ public enum ProtocolCollection {
     private final int protocolId;
     private final String protocolName;
 
+    private BlockMapping blockMapping;
+    private MetadataCodecMapping metadataCodecMapping;
+    private EntityMapping entityMapping;
+    private ItemMapping itemMapping;
+    private ParticleMapping particleMapping;
+    private PotionEffectMapping potionEffectMapping;
+
     ProtocolCollection(int protocolId, String protocolName) {
         this.protocolId = protocolId;
         this.protocolName = protocolName;
+    }
+
+    public BlockMapping getBlockMapping() {
+        return blockMapping;
+    }
+
+    public MetadataCodecMapping getMetadataCodecMapping() {
+        return metadataCodecMapping;
+    }
+
+    public EntityMapping getEntityMapping() {
+        return entityMapping;
+    }
+
+    public ItemMapping getItemMapping() {
+        return itemMapping;
+    }
+
+    public ParticleMapping getParticleMapping() {
+        return particleMapping;
+    }
+
+    public PotionEffectMapping getPotionEffectMapping() {
+        return potionEffectMapping;
     }
 
     public int getProtocolId() {

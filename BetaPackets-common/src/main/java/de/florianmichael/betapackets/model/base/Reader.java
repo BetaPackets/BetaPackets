@@ -15,27 +15,12 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.entity.metadata;
+package de.florianmichael.betapackets.model.base;
 
-import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 
-public enum MetadataAction {
+import java.io.IOException;
 
-    SET_SPAWN_POTENTIALS_OF_MOB_SPAWNER,
-    SET_COMMAND_BLOCK_TEXT_AND_LAST_EXECUTION_STATUS,
-    SET_LEVEL_AND_PRIMARY_AND_SECONDARY_POWERS_OF_BEACON,
-    SET_ROTATION_AND_SKIN_MOB_HEAD,
-    SET_TYPE_OF_FLOWER_FLOWER_POT,
-    SET_BASE_COLOR_AND_PATTERNS_BANNER;
-
-    public static MetadataAction getById(final ProtocolCollection version, final short id) {
-        for (MetadataAction value : values()) {
-            if (value.getId() == id) return value;
-        }
-        return null;
-    }
-
-    public int getId() {
-        return ordinal();
-    }
+public interface Reader<T> {
+    T read(FunctionalByteBuf buf) throws IOException;
 }

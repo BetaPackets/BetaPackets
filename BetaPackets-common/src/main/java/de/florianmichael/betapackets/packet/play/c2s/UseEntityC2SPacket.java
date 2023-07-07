@@ -22,7 +22,7 @@ import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
-import de.florianmichael.betapackets.model.position.Vec3;
+import de.florianmichael.betapackets.model.position.Vec3d;
 
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ public class UseEntityC2SPacket extends Packet {
 
     public int entityId;
     public ModelMapper<Integer, TAction> action = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, TAction::getById);
-    public Vec3 hitVec;
+    public Vec3d hitVec;
     public ModelMapper<Integer, Hand1_9> hand1_9 = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, Hand1_9::getById);
 
     public UseEntityC2SPacket(final FunctionalByteBuf buf) {
@@ -38,20 +38,20 @@ public class UseEntityC2SPacket extends Packet {
         this.action.read(buf);
 
         if (this.action.getValue() == TAction.INTERACT_AT) {
-            this.hitVec = new Vec3((double)buf.readFloat(), (double)buf.readFloat(), (double)buf.readFloat());
+            this.hitVec = new Vec3d((double)buf.readFloat(), (double)buf.readFloat(), (double)buf.readFloat());
         }
         if (this.action.getValue() == TAction.INTERACT || this.action.getValue() == TAction.INTERACT_AT) {
             this.hand1_9.read(buf);
         }
     }
 
-    public UseEntityC2SPacket(int entityId, TAction action, Vec3 hitVec) {
+    public UseEntityC2SPacket(int entityId, TAction action, Vec3d hitVec) {
         this.entityId = entityId;
         this.action = new ModelMapper<>(FunctionalByteBuf::writeVarInt, action);
         this.hitVec = hitVec;
     }
 
-    public UseEntityC2SPacket(int entityId, TAction action, Vec3 hitVec, Hand1_9 hand1_9) {
+    public UseEntityC2SPacket(int entityId, TAction action, Vec3d hitVec, Hand1_9 hand1_9) {
         this.entityId = entityId;
         this.action = new ModelMapper<>(FunctionalByteBuf::writeVarInt, action);
         this.hitVec = hitVec;

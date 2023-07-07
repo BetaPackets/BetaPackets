@@ -21,6 +21,11 @@ import de.florianmichael.betapackets.PacketRegistryManager;
 import de.florianmichael.betapackets.base.registry.PacketRegistry;
 import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.model.entity.EntityMapping;
+import de.florianmichael.betapackets.model.entity.metadata.MetadataCodecMapping;
+import de.florianmichael.betapackets.model.item.ItemMapping;
+import de.florianmichael.betapackets.model.particle.ParticleMapping;
+import de.florianmichael.betapackets.model.potioneffect.PotionEffectMapping;
 import io.netty.channel.Channel;
 
 import java.util.List;

@@ -42,6 +42,10 @@ public enum Facing {
         return HORIZONTALS[Math.abs(id % HORIZONTALS.length)];
     }
 
+    public static Facing getByName(String name) {
+        return valueOf(name.toUpperCase());
+    }
+
     public static Facing getById(final ProtocolCollection version, final byte id) {
         for (Facing facing : values()) {
             if (facing.ordinal() == id) return facing;

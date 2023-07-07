@@ -15,16 +15,23 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.entity.properties;
+package de.florianmichael.betapackets.model.entity;
 
-public enum Operation {
+public enum EntityPose {
+    STANDING,
+    FALL_FLYING,
+    SLEEPING,
+    SWIMMING,
+    SPIN_ATTACK,
+    CROUCHING,
+    LONG_JUMPING,
+    DYING,
+    CROAKING,
+    USING_TONGUE,
+    SITTING,
+    ROARING,
+    SNIFFING,
+    EMERGING,
+    DIGGING;
 
-    ADD_SUBTRACT_AMOUNT, ADD_SUBTRACT_AMOUNT_PERCENT_VALUE, MULTIPLY_BY_AMOUNT_PERCENT;
-
-    public static Operation getById(final int id) {
-        for (Operation value : values()) {
-            if (value.ordinal() == id) return value;
-        }
-        return null;
-    }
 }

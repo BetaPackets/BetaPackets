@@ -20,14 +20,14 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.model.potion.ParticleTypes;
+import de.florianmichael.betapackets.model.particle.Particle;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public class ParticleS2CPacket extends Packet {
 
-    public ModelMapper<Integer, ParticleTypes> particleType = new ModelMapper<>(FunctionalByteBuf::readInt, FunctionalByteBuf::writeInt, ParticleTypes::getById);
+    public ModelMapper<Integer, Particle> particleType = new ModelMapper<>(FunctionalByteBuf::readInt, FunctionalByteBuf::writeInt, (protocolCollection, integer) -> null);
     public boolean longDistance;
 
     public float x;
@@ -46,7 +46,7 @@ public class ParticleS2CPacket extends Packet {
     public ParticleS2CPacket(final FunctionalByteBuf buf) {
         this.particleType.read(buf);
         if (this.particleType.mappedValue == null) {
-            this.particleType.mappedValue = ParticleTypes.BARRIER;
+            //this.particleType.mappedValue = ParticleTypes.BARRIER;
         }
         this.longDistance = buf.readBoolean();
 
@@ -61,13 +61,13 @@ public class ParticleS2CPacket extends Packet {
         this.particleData = buf.readFloat();
         this.particleCount = buf.readInt();
 
-        this.data = new int[this.particleType.mappedValue.argumentCount];
+        //this.data = new int[this.particleType.mappedValue.argumentCount];
         for (int i = 0; i < this.data.length; i++) {
             this.data[i] = buf.readVarInt();
         }
     }
 
-    public ParticleS2CPacket(ParticleTypes particleType, boolean longDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int[] data) {
+    /*public ParticleS2CPacket(ParticleTypes particleType, boolean longDistance, float x, float y, float z, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount, int[] data) {
         this.particleType = new ModelMapper<>(FunctionalByteBuf::writeInt, particleType);
         this.longDistance = longDistance;
         this.x = x;
@@ -79,7 +79,7 @@ public class ParticleS2CPacket extends Packet {
         this.particleData = particleData;
         this.particleCount = particleCount;
         this.data = data;
-    }
+    }*/
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {

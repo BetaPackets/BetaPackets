@@ -1,0 +1,39 @@
+package de.florianmichael.betapackets.model.potioneffect;
+
+public enum PotionEffectType {
+
+    ABSORPTION,
+    BAD_OMEN,
+    BLINDNESS,
+    CONDUIT_POWER,
+    DARKNESS,
+    DOLPHINS_GRACE,
+    FIRE_RESISTANCE,
+    GLOWING,
+    DIG_SPEED,
+    HEALTH_BOOST,
+    HERO_OF_THE_VILLAGE,
+    HUNGER,
+    HARM,
+    HEAL,
+    INVISIBILITY,
+    JUMP,
+    LEVITATION,
+    LUCK,
+    DIG_SLOWDOWN,
+    CONFUSION,
+    NIGHT_VISION,
+    POISON,
+    REGENERATION,
+    DAMAGE_RESISTANCE,
+    SATURATION,
+    SLOW_FALLING,
+    MOVEMENT_SLOWDOWN,
+    MOVEMENT_SPEED,
+    DAMAGE_BOOST,
+    UNLUCK,
+    WATER_BREATHING,
+    WEAKNESS,
+    WITHER;
+
+}

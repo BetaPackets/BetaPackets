@@ -19,9 +19,6 @@ package de.florianmichael.betapackets.packet.play.s2c;
 
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.entity.properties.EntityProperty;
-import de.florianmichael.betapackets.model.entity.properties.EntityPropertyModifier;
-import de.florianmichael.betapackets.model.entity.properties.Operation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +26,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class EntityPropertiesS2CPacket extends Packet {
+    @Override
+    public void write(FunctionalByteBuf buf) throws Exception {
 
-    public int entityId;
+    }
+
+    /*public int entityId;
     public List<EntityProperty> entityProperties;
 
     public EntityPropertiesS2CPacket(FunctionalByteBuf buf) {
@@ -100,5 +101,5 @@ public class EntityPropertiesS2CPacket extends Packet {
     @Override
     public int hashCode() {
         return entityProperties != null ? entityProperties.hashCode() : 0;
-    }
+    }*/
 }

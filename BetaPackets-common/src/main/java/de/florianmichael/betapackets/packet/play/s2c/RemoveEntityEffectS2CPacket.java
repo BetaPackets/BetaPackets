@@ -20,29 +20,29 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.ModelMapper;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.model.potion.PotionEffectTypes;
+import de.florianmichael.betapackets.model.potioneffect.PotionEffectType;
 
 import java.util.Objects;
 
 public class RemoveEntityEffectS2CPacket extends Packet {
 
     public int entityId;
-    public ModelMapper<Byte, PotionEffectTypes> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, PotionEffectTypes::getById);
+    public ModelMapper<Byte, PotionEffectType> entityEffect = new ModelMapper<>(FunctionalByteBuf::readByte, FunctionalByteBuf::writeByte, (protocolCollection, aByte) -> null);
 
     public RemoveEntityEffectS2CPacket(final FunctionalByteBuf buf) {
         this.entityId = buf.readVarInt();
-        this.entityEffect.read(buf);
+        //this.entityEffect.read(buf);
     }
 
-    public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
+    /*public RemoveEntityEffectS2CPacket(int entityId, PotionEffectTypes entityEffect) {
         this.entityId = entityId;
         this.entityEffect = new ModelMapper<>(FunctionalByteBuf::writeByte, entityEffect);
-    }
+    }*/
 
     @Override
     public void write(FunctionalByteBuf buf) throws Exception {
         buf.writeVarInt(this.entityId);
-        this.entityEffect.write(buf);
+        //this.entityEffect.write(buf);
     }
 
     @Override

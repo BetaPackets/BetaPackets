@@ -15,29 +15,26 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.entity.properties;
+package de.florianmichael.betapackets.model.position;
 
-import java.util.Objects;
-import java.util.UUID;
+public class Vec3d {
 
-public class EntityPropertyModifier {
+    public double x;
+    public double y;
+    public double z;
 
-    public UUID uuid;
-    public double amount;
-    public Operation operation;
-
-    public EntityPropertyModifier(UUID uuid, double amount, Operation operation) {
-        this.uuid = uuid;
-        this.amount = amount;
-        this.operation = operation;
+    public Vec3d(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     @Override
     public String toString() {
-        return "EntityPropertyModifier{" +
-                "uuid=" + uuid +
-                ", amount=" + amount +
-                ", operation=" + operation +
+        return "Vec3{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
                 '}';
     }
 
@@ -46,21 +43,23 @@ public class EntityPropertyModifier {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityPropertyModifier that = (EntityPropertyModifier) o;
+        Vec3d vec3D = (Vec3d) o;
 
-        if (Double.compare(that.amount, amount) != 0) return false;
-        if (!Objects.equals(uuid, that.uuid)) return false;
-        return operation == that.operation;
+        if (Double.compare(vec3D.x, x) != 0) return false;
+        if (Double.compare(vec3D.y, y) != 0) return false;
+        return Double.compare(vec3D.z, z) == 0;
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = uuid != null ? uuid.hashCode() : 0;
-        temp = Double.doubleToLongBits(amount);
+        temp = Double.doubleToLongBits(x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (operation != null ? operation.hashCode() : 0);
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 }
