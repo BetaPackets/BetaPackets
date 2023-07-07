@@ -91,11 +91,18 @@ public enum ParticleType {
     SWEEP_ATTACK,
     TOTEM_OF_UNDYING,
     UNDERWATER,
+    DEPTHSUSPEND,
     VIBRATION,
     WARPED_SPORE,
     WAX_OFF,
     WAX_ON,
     WHITE_ASH,
-    WITCH;
+    WITCH,
+    FOOTSTEP,
+    BARRIER,
+    LIGHT,
+    ITEMCRACK,
+    BLOCKCRACK,
+    BLOCKDUST;
 
 }
