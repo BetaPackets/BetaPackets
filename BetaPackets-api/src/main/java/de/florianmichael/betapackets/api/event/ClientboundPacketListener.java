@@ -20,13 +20,12 @@ package de.florianmichael.betapackets.api.event;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.dietrichevents2.core.Listener;
-import de.florianmichael.dietrichevents2.type.CancellableEvent;
+import de.florianmichael.dietrichevents2.CancellableEvent;
 
 /**
  * This interface is used to listen to clientbound packets.
  */
-public interface ClientboundPacketListener extends Listener {
+public interface ClientboundPacketListener {
 
     /**
      * This method is called when a clientbound packet is sent.

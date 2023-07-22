@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.packet.play.s2c;
 import de.florianmichael.betapackets.base.packet.Packet;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.position.Vec4b;
+import de.florianmichael.betapackets.model.position.MapData;
 
 import java.util.Arrays;
 
@@ -29,7 +29,7 @@ public class MapS2CPacket extends Packet {
     public int mapId;
     public byte mapScale;
     public boolean trackingPosition_1_9;
-    public Vec4b[] visiblePlayers;
+    public MapData[] visiblePlayers;
     public int minX;
     public int minY;
     public int maxX;
@@ -42,11 +42,11 @@ public class MapS2CPacket extends Packet {
         if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
             this.trackingPosition_1_9 = buf.readBoolean();
         }
-        this.visiblePlayers = new Vec4b[buf.readVarInt()];
+        this.visiblePlayers = new MapData[buf.readVarInt()];
         for (int i = 0; i < this.visiblePlayers.length; i++) {
             final short indices = buf.readByte();
 
-            this.visiblePlayers[i] = new Vec4b((byte) (indices >> 4 & 15), buf.readByte(), buf.readByte(), (byte) (indices & 15));
+            this.visiblePlayers[i] = new MapData((byte) (indices >> 4 & 15), buf.readByte(), buf.readByte(), (byte) (indices & 15));
         }
         this.maxX = buf.readUnsignedByte();
         if (this.maxX > 0) {
@@ -57,7 +57,7 @@ public class MapS2CPacket extends Packet {
         }
     }
 
-    public MapS2CPacket(int mapId, byte mapScale, Vec4b[] visiblePlayers, int minX, int minY, int maxX, int maxY, byte[] mapData) {
+    public MapS2CPacket(int mapId, byte mapScale, MapData[] visiblePlayers, int minX, int minY, int maxX, int maxY, byte[] mapData) {
         this.mapId = mapId;
         this.mapScale = mapScale;
         this.visiblePlayers = visiblePlayers;
@@ -68,7 +68,7 @@ public class MapS2CPacket extends Packet {
         this.mapData = mapData;
     }
 
-    public MapS2CPacket(int mapId, byte mapScale, boolean trackingPosition, Vec4b[] visiblePlayers, int minX, int minY, int maxX, int maxY, byte[] mapData) {
+    public MapS2CPacket(int mapId, byte mapScale, boolean trackingPosition, MapData[] visiblePlayers, int minX, int minY, int maxX, int maxY, byte[] mapData) {
         this.mapId = mapId;
         this.mapScale = mapScale;
         this.trackingPosition_1_9 = trackingPosition;
@@ -88,7 +88,7 @@ public class MapS2CPacket extends Packet {
             buf.writeBoolean(this.trackingPosition_1_9);
         }
         buf.writeVarInt(this.visiblePlayers.length);
-        for (final Vec4b visiblePlayer : this.visiblePlayers) {
+        for (final MapData visiblePlayer : this.visiblePlayers) {
             buf.writeByte((visiblePlayer.x & 15) << 4 | visiblePlayer.z & 15);
             buf.writeByte(visiblePlayer.y);
             buf.writeByte(visiblePlayer.w); // direction
