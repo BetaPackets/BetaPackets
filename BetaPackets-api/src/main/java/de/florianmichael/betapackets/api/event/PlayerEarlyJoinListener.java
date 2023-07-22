@@ -18,15 +18,14 @@
 package de.florianmichael.betapackets.api.event;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.dietrichevents2.core.AbstractEvent;
-import de.florianmichael.dietrichevents2.core.Listener;
+import de.florianmichael.dietrichevents2.AbstractEvent;
 
 import java.util.UUID;
 
 /**
  * This event is fired when a player joins the server before the protocol version is known.
  */
-public interface PlayerEarlyJoinListener extends Listener {
+public interface PlayerEarlyJoinListener {
 
     /**
      * Called when a player joins the server before the protocol version is known.

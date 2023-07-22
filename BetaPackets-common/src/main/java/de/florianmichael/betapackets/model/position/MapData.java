@@ -19,14 +19,14 @@ package de.florianmichael.betapackets.model.position;
 
 import java.util.Objects;
 
-public class Vec4b {
+public class MapData {
 
     public byte x;
     public byte y;
     public byte z;
     public byte w;
 
-    public Vec4b(byte x, byte y, byte z, byte w) {
+    public MapData(byte x, byte y, byte z, byte w) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -47,7 +47,7 @@ public class Vec4b {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Vec4b vec4b = (Vec4b) o;
+        MapData vec4b = (MapData) o;
         return x == vec4b.x && y == vec4b.y && z == vec4b.z && w == vec4b.w;
     }
 
