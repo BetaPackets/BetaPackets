@@ -26,6 +26,7 @@ public enum MetadataCodecType {
         }
     }),
     LONG(FunctionalByteBuf::writeVarLong, FunctionalByteBuf::readVarLong),
+    SHORT(FunctionalByteBuf::writeShort, FunctionalByteBuf::readShort),
     FLOAT(FunctionalByteBuf::writeFloat, FunctionalByteBuf::readFloat),
     STRING(FunctionalByteBuf::writeString, FunctionalByteBuf::readString),
     COMPONENT(FunctionalByteBuf::writeComponent, FunctionalByteBuf::readComponent),

@@ -17,6 +17,7 @@ public enum EntityType {
     CAVE_SPIDER(EntityBase.LIVING),
     CHEST_BOAT(EntityBase.BASE),
     CHEST_MINECART(EntityBase.BASE),
+    MUSHROOM_COW(EntityBase.LIVING),
     CHICKEN(EntityBase.LIVING),
     COD(EntityBase.LIVING),
     COMMAND_BLOCK_MINECART(EntityBase.BASE),
