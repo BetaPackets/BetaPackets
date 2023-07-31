@@ -16,6 +16,9 @@ subprojects {
             name = "Lenni0451 Snapshots"
             url = "https://maven.lenni0451.net/snapshots"
         }
+        maven {
+            url = "https://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/"
+        }
     }
 
     java {

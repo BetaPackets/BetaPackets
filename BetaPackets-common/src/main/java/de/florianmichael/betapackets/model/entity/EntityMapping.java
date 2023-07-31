@@ -13,7 +13,7 @@ public class EntityMapping {
     public void createIDMap() {
         byId = new Entity[typeToEntity.size()];
         for (Entity entity : typeToEntity.values()) {
-            byId[entity.getId()] = entity;
+            byId[entity.getEntityId()] = entity;
         }
     }
 

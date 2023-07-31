@@ -10,4 +10,5 @@ dependencies {
     implementation "net.lenni0451.mcstructs:nbt:${project.mcstructs_nbt_version}"
     implementation "net.lenni0451.mcstructs:text:${project.mcstructs_text_version}"
     implementation 'org.joml:joml:1.10.5'
+    implementation 'gnu.trove:trove:3.0.3'
 }

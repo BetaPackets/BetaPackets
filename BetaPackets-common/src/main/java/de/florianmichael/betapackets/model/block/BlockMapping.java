@@ -63,20 +63,6 @@ public class BlockMapping {
                 data.writeByte(value.length);
                 data.write(value);
             }
-            List<AABB> collisionShape = state.getCollisionShape();
-            if (collisionShape == null || collisionShape.isEmpty())
-                data.writeByte(0);
-            else {
-                data.writeByte(collisionShape.size());
-                for (AABB aabb : collisionShape) {
-                    data.writeByte((int) (aabb.getMinX() * 32));
-                    data.writeByte((int) (aabb.getMinY() * 32));
-                    data.writeByte((int) (aabb.getMinZ() * 32));
-                    data.writeByte((int) (aabb.getMaxX() * 32));
-                    data.writeByte((int) (aabb.getMaxY() * 32));
-                    data.writeByte((int) (aabb.getMaxZ() * 32));
-                }
-            }
         }
     }
 

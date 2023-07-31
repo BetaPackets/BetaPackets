@@ -33,9 +33,6 @@ public class ItemMapping {
             mask |= value.getBlockType() == null ? 0x02 : 0;
             mask |= value.isEdible() ? 0x01 : 0;
             data.writeByte(mask);
-
-            if (value.getBlockType() != null)
-                data.writeShort(value.getBlockType().ordinal());
         }
     }
 
