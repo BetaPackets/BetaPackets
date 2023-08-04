@@ -17,17 +17,14 @@
 
 package de.florianmichael.betapackets.model.base;
 
-import de.florianmichael.betapackets.model.block.BlockMapping;
-import de.florianmichael.betapackets.model.entity.EntityMapping;
-import de.florianmichael.betapackets.model.entity.metadata.MetadataCodecMapping;
-import de.florianmichael.betapackets.model.item.ItemMapping;
-import de.florianmichael.betapackets.model.particle.ParticleMapping;
-import de.florianmichael.betapackets.model.potioneffect.PotionEffectMapping;
+import de.florianmichael.betapackets.mapping.*;
+import de.florianmichael.betapackets.packet.ids.PacketId1_20_1;
+import de.florianmichael.betapackets.packet.ids.PacketIdList;
 
 // Thanks to my 12-year-old self for this enum, I guess?
 public enum ProtocolCollection {
 
-    R1_20_1(763, "1.20/1.20.1"),
+    R1_20_1(763, "1.20/1.20.1", new PacketId1_20_1()),
 
     R1_19_4(762, "1.19.4"),
     R1_19_3(761, "1.19.3"),
@@ -82,16 +79,57 @@ public enum ProtocolCollection {
     private final int protocolId;
     private final String protocolName;
 
+    private PacketIdList packetIdList;
+
     private BlockMapping blockMapping;
+    private BlockStateMapping blockStateMapping;
     private MetadataCodecMapping metadataCodecMapping;
     private EntityMapping entityMapping;
     private ItemMapping itemMapping;
     private ParticleMapping particleMapping;
     private PotionEffectMapping potionEffectMapping;
 
+    ProtocolCollection(int protocolId, String protocolName, PacketIdList packetIdList) {
+        this.protocolId = protocolId;
+        this.protocolName = protocolName;
+        this.packetIdList = packetIdList;
+    }
+
     ProtocolCollection(int protocolId, String protocolName) {
         this.protocolId = protocolId;
         this.protocolName = protocolName;
+    }
+
+    public PacketIdList getPacketIdList() {
+        return packetIdList;
+    }
+
+    public void setBlockMapping(BlockMapping blockMapping) {
+        this.blockMapping = blockMapping;
+    }
+
+    public void setBlockStateMapping(BlockStateMapping blockStateMapping) {
+        this.blockStateMapping = blockStateMapping;
+    }
+
+    public void setMetadataCodecMapping(MetadataCodecMapping metadataCodecMapping) {
+        this.metadataCodecMapping = metadataCodecMapping;
+    }
+
+    public void setEntityMapping(EntityMapping entityMapping) {
+        this.entityMapping = entityMapping;
+    }
+
+    public void setItemMapping(ItemMapping itemMapping) {
+        this.itemMapping = itemMapping;
+    }
+
+    public void setParticleMapping(ParticleMapping particleMapping) {
+        this.particleMapping = particleMapping;
+    }
+
+    public void setPotionEffectMapping(PotionEffectMapping potionEffectMapping) {
+        this.potionEffectMapping = potionEffectMapping;
     }
 
     public BlockMapping getBlockMapping() {

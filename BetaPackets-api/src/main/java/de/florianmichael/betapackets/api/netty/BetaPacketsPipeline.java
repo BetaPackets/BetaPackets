@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.api.netty.element.BetaPacketsEncoder;
 import de.florianmichael.betapackets.api.netty.event.ReorderPipelineEvent;
 import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.*;
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * This class bundles the whole Netty pipeline of BetaPackets into one HandlerAdapter
@@ -36,6 +37,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      */
     public final static String HANDLER_PACKET_DECODER_NAME = "betapackets-packet-decoder";
     public final static String HANDLER_PACKET_ENCODER_NAME = "betapackets-packet-encoder";
+    public final static String HANDLER_AUTO_REORDER_NAME = "betapackets-auto-reorder";
 
     private final UserConnection userConnection;
 
@@ -78,7 +80,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      * @param channelPipeline The ChannelPipeline
      */
     public void addAutomaticallyReorderElement(final ChannelPipeline channelPipeline) {
-        channelPipeline.addLast(new ChannelOutboundHandlerAdapter() {
+        channelPipeline.addLast(HANDLER_AUTO_REORDER_NAME, new ChannelOutboundHandlerAdapter() {
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (needsReorderPipeline(ctx.pipeline())) {

@@ -19,6 +19,7 @@ package de.florianmichael.betapackets.api.base;
 
 import de.florianmichael.betapackets.api.BetaPackets;
 
+import java.io.InputStream;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -53,4 +54,8 @@ public interface BetaPacketsPlatform<T> {
      * @return The player object
      */
     T getPlayer(final UUID uuid);
+
+    InputStream getResource(String path);
+
+    Object getPlugin();
 }

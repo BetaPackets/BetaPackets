@@ -1,5 +1,7 @@
 package de.florianmichael.betapackets.model.entity.metadata;
 
+import java.util.Objects;
+
 public class Metadata {
 
     private int index;
@@ -22,5 +24,23 @@ public class Metadata {
 
     public MetadataCodecType getCodecType() {
         return codecType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Metadata metadata = (Metadata) o;
+        return index == metadata.index && Objects.equals(name, metadata.name) && codecType == metadata.codecType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(index, name, codecType);
+    }
+
+    @Override
+    public String toString() {
+        return index + ":" + name + ":" + codecType.name().toLowerCase();
     }
 }

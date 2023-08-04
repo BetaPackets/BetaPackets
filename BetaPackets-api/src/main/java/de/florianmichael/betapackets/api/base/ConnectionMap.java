@@ -19,8 +19,6 @@ package de.florianmichael.betapackets.api.base;
 
 import de.florianmichael.betapackets.api.BetaPacketsAPI;
 import de.florianmichael.betapackets.base.UserConnection;
-import de.florianmichael.betapackets.packet.play.s2c.JoinGameS2CPacket;
-import de.florianmichael.betapackets.packet.play.s2c.RespawnS2CPacket;
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
@@ -41,22 +39,6 @@ public class ConnectionMap {
      * @param api The {@link BetaPacketsAPI} instance
      */
     public ConnectionMap(final BetaPacketsAPI api) {
-        api.registerOutgoingPacketListener(event -> {
-            if (event.packet instanceof RespawnS2CPacket || event.packet instanceof JoinGameS2CPacket) {
-                userConnectionMap.forEach((channel, userConnection) -> {
-                    System.out.println(userConnection.getPlayer() + " " + event.userConnection.getPlayer());
-                    if (userConnection.getPlayer().equals(event.userConnection.getPlayer())) {
-                        final UserConnection.TrackingData data = userConnection.trackingData;
-
-                        if (event.packet instanceof RespawnS2CPacket) {
-                            data.isInOverWorld = ((RespawnS2CPacket) event.packet).dimension == 0;
-                        } else {
-                            data.isInOverWorld = ((JoinGameS2CPacket) event.packet).dimension == 0;
-                        }
-                    }
-                });
-            }
-        });
     }
 
     /**

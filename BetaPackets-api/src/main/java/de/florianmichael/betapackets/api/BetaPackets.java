@@ -18,8 +18,11 @@
 package de.florianmichael.betapackets.api;
 
 import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
-import de.florianmichael.betapackets.PacketRegistryManager;
 import de.florianmichael.betapackets.api.base.ConnectionMap;
+import de.florianmichael.betapackets.api.base.InternalHandshakeListener;
+import de.florianmichael.betapackets.mapping.MappingLoader;
+
+import java.io.IOException;
 
 /**
  * The main class of BetaPackets, it has all instances in it.
@@ -32,9 +35,7 @@ public class BetaPackets {
     private static BetaPacketsPlatform<?> platform;
 
     private static BetaPacketsAPI api;
-    private static PacketRegistryManager packetRegistryManager;
     private static ConnectionMap connectionMap;
-
 
     /**
      * Called by {@link BetaPacketsPlatform#loadPlatform()} to initialize all instances and the platform
@@ -44,8 +45,15 @@ public class BetaPackets {
         BetaPackets.platform = platform;
 
         BetaPackets.api = new BetaPacketsAPI();
-        BetaPackets.packetRegistryManager = new PacketRegistryManager();
         BetaPackets.connectionMap = new ConnectionMap(BetaPackets.api);
+
+        BetaPackets.api.registerListener(new InternalHandshakeListener(platform));
+
+        try {
+            MappingLoader.load(platform.getResource("mappings.bin"));
+        } catch (IOException e) {
+            throw new RuntimeException(e); // TODO Logger here
+        }
     }
 
     public static BetaPacketsPlatform<?> getPlatform() {
@@ -54,10 +62,6 @@ public class BetaPackets {
 
     public static BetaPacketsAPI getAPI() {
         return api;
-    }
-
-    public static PacketRegistryManager getPacketRegistryManager() {
-        return packetRegistryManager;
     }
 
     public static ConnectionMap getConnectionMap() {

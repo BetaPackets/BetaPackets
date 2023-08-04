@@ -52,4 +52,9 @@ public class SpigotPlugin extends JavaPlugin implements BetaPacketsPlatform<Play
     public Player getPlayer(UUID uuid) {
         return Bukkit.getPlayer(uuid);
     }
+
+    @Override
+    public Object getPlugin() {
+        return this;
+    }
 }

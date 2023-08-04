@@ -15,19 +15,31 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.bungeecord.netty;
+package de.florianmichael.betapackets.packet;
 
-import de.florianmichael.betapackets.api.BetaPackets;
-import de.florianmichael.betapackets.base.UserConnection;
-import io.netty.channel.ChannelHandlerContext;
-import net.md_5.bungee.protocol.KickStringWriter;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public class BetaPacketsKickStringWriter extends KickStringWriter {
+public enum NetworkState {
 
-    @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        ctx.pipeline().addFirst(new BungeeCordBetaPacketsPipeline(new UserConnection(
-                ctx.channel()
-        )));
+    HANDSHAKE, PLAY, STATUS, LOGIN;
+
+    public int getId() {
+        if (this == HANDSHAKE) throw new IllegalArgumentException("Cannot get id of Handshake");
+        return ordinal() - 1;
+    }
+
+    public static NetworkState fromId(ProtocolCollection version, int id) {
+        switch (id) {
+
+            case 0:
+                return PLAY;
+
+            case 1:
+                return STATUS;
+
+            case 2:
+                return LOGIN;
+        }
+        return null;
     }
 }

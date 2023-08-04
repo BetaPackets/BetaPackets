@@ -17,19 +17,15 @@
 
 package de.florianmichael.betapackets.base;
 
-import de.florianmichael.betapackets.PacketRegistryManager;
-import de.florianmichael.betapackets.base.registry.PacketRegistry;
-import de.florianmichael.betapackets.model.base.NetworkState;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.entity.EntityMapping;
-import de.florianmichael.betapackets.model.entity.metadata.MetadataCodecMapping;
-import de.florianmichael.betapackets.model.item.ItemMapping;
-import de.florianmichael.betapackets.model.particle.ParticleMapping;
-import de.florianmichael.betapackets.model.potioneffect.PotionEffectMapping;
+import de.florianmichael.betapackets.packet.NetworkSide;
+import de.florianmichael.betapackets.packet.NetworkState;
+import de.florianmichael.betapackets.packet.ids.PacketIdBase1_7;
+import de.florianmichael.betapackets.packet.ids.PacketIdList;
+import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.channel.Channel;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -37,13 +33,14 @@ import java.util.UUID;
  */
 public class UserConnection {
 
-    public final TrackingData trackingData = new TrackingData();
     private final Channel channel;
-    private final PacketRegistryManager packetRegistryManager;
 
     private NetworkState state;
+    private List<Packet> s2cPackets;
+    private List<Packet> c2sPackets;
     private ProtocolCollection protocolVersion;
-    private PacketRegistry currentRegistry;
+    private PacketIdList packetIdList;
+
 
     /**
      * The UUID of the player
@@ -57,48 +54,40 @@ public class UserConnection {
 
     /**
      * Creates a new {@link UserConnection}
+     *
      * @param channel The channel of the connection
-     * @param packetRegistryManager The {@link PacketRegistryManager} used to generate the {@link UserConnection#currentRegistry}
      */
-    public UserConnection(Channel channel, PacketRegistryManager packetRegistryManager) {
+    public UserConnection(Channel channel) {
         this.channel = channel;
-        this.packetRegistryManager = packetRegistryManager;
+        this.packetIdList = PacketIdBase1_7.INSTANCE;
+        setState(NetworkState.HANDSHAKE);
     }
 
     /**
      * Initializes the connection
-     * @param state The {@link NetworkState} of the connection
+     *
+     * @param state           The {@link NetworkState} of the connection
      * @param protocolVersion The {@link ProtocolCollection} of the connection
      */
     public void init(final NetworkState state, final ProtocolCollection protocolVersion) {
-        this.protocolVersion = protocolVersion; // Version has to be valid for setState() detection
+        this.protocolVersion = protocolVersion;
+        this.packetIdList = protocolVersion.getPacketIdList();
         this.setState(state);
         this.loaded = true;
     }
 
-    /**
-     * Set's the current {@link NetworkState} of the connection and reloads the {@link UserConnection#currentRegistry}
-     * @param state The {@link NetworkState} of the connection
-     */
     public void setState(NetworkState state) {
         this.state = state;
-
-        for (Map.Entry<ProtocolCollection, List<PacketRegistry>> listEntry : packetRegistryManager.getPacketRegistries().entrySet()) {
-            if (this.protocolVersion.isNewerThanOrEqualTo(listEntry.getKey())) {
-                for (PacketRegistry packetRegistry : listEntry.getValue()) {
-                    if (packetRegistry.getNetworkState() == this.state) {
-                        this.currentRegistry = packetRegistry;
-                    }
-                }
-            }
-        }
+        this.s2cPackets = this.packetIdList.getPacketIds(NetworkSide.S2C, state);
+        this.c2sPackets = this.packetIdList.getPacketIds(NetworkSide.C2S, state);
     }
 
-    /**
-     * Tracking data for the user connection, has to be updated by the implementation of the UserConnection
-     */
-    public static class TrackingData {
-        public boolean isInOverWorld = false;
+    public List<Packet> getC2SPackets() {
+        return c2sPackets;
+    }
+
+    public List<Packet> getS2CPackets() {
+        return s2cPackets;
     }
 
     public void setPlayer(UUID player) {
@@ -121,8 +110,8 @@ public class UserConnection {
         return protocolVersion;
     }
 
-    public PacketRegistry getCurrentRegistry() {
-        return currentRegistry;
+    public PacketIdList getPacketIdList() {
+        return packetIdList;
     }
 
     public UUID getPlayer() {

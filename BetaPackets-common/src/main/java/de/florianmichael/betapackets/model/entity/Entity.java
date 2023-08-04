@@ -3,6 +3,7 @@ package de.florianmichael.betapackets.model.entity;
 import de.florianmichael.betapackets.model.entity.metadata.DataTracker;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Entity {
 
@@ -44,5 +45,30 @@ public class Entity {
 
     public Map<EntityPose, EntityDimension> getPoseToDimension() {
         return poseToDimension;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity entity = (Entity) o;
+        return entityId == entity.entityId && globalId == entity.globalId && livingId == entity.livingId && type == entity.type && Objects.equals(dataTracker, entity.dataTracker) && Objects.equals(poseToDimension, entity.poseToDimension);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entityId, globalId, livingId, type, dataTracker, poseToDimension);
+    }
+
+    @Override
+    public String toString() {
+        return "Entity{" +
+                "entityId=" + entityId +
+                ", globalId=" + globalId +
+                ", livingId=" + livingId +
+                ", type=" + type +
+                ", dataTracker=" + dataTracker +
+                ", poseToDimension=" + poseToDimension +
+                '}';
     }
 }

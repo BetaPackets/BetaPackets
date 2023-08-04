@@ -17,57 +17,52 @@
 
 package de.florianmichael.betapackets.api;
 
-import de.florianmichael.betapackets.api.event.ClientboundPacketListener;
-import de.florianmichael.betapackets.api.event.PlayerEarlyJoinListener;
-import de.florianmichael.betapackets.api.event.ServerboundPacketListener;
-import de.florianmichael.dietrichevents2.DietrichEvents2;
+import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.type.Packet;
 
-/**
- * This class represents the user API for BetaPackets, it's using <a href="https://github.com/FlorianMichael/DietrichEvents">DietrichEvents</a> as event backend
- */
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class BetaPacketsAPI {
-    private final DietrichEvents2 eventProvider = new DietrichEvents2(Throwable::printStackTrace);
 
-    public ServerboundPacketListener registerIncomingPacketListener(final ServerboundPacketListener listener) {
-        return registerIncomingPacketListener(listener, 0);
+    private final Map<Packet, List<PacketListener>> listenerByType = new HashMap<>();
+    private final Map<Object, List<PacketListener>> listenerByPlugin = new HashMap<>();
+
+    public void registerListener(PacketListener listener) {
+        for (Packet packet : listener.getWhitelist()) {
+            listenerByType.computeIfAbsent(packet, k -> new ArrayList<>()).add(listener);
+        }
+        listenerByPlugin.computeIfAbsent(listener.getPlugin(), k -> new ArrayList<>()).add(listener);
     }
 
-    public ServerboundPacketListener registerIncomingPacketListener(final ServerboundPacketListener listener, final int priority) {
-        eventProvider.subscribe(ServerboundPacketListener.ServerboundPacketEvent.ID, listener, priority);
-        return listener;
+    public void fireReadEvent(PacketEvent event) {
+        List<PacketListener> packetListeners = listenerByType.get(event.getType());
+        if (packetListeners == null) return;
+
+        packetListeners.forEach(listener -> listener.onRead(event));
     }
 
-    public ClientboundPacketListener registerOutgoingPacketListener(final ClientboundPacketListener listener) {
-        return registerOutgoingPacketListener(listener, 0);
+    public void fireWriteEvent(PacketEvent event) {
+        List<PacketListener> packetListeners = listenerByType.get(event.getType());
+        if (packetListeners == null) return;
+
+        packetListeners.forEach(listener -> listener.onWrite(event));
     }
 
-    public ClientboundPacketListener registerOutgoingPacketListener(final ClientboundPacketListener listener, final int priority) {
-        eventProvider.subscribe(ClientboundPacketListener.ClientboundPacketEvent.ID, listener, priority);
-        return listener;
+    public void unregisterListener(PacketListener listener) {
+        for (Packet packet : listener.getWhitelist()) {
+            listenerByType.get(packet).remove(listener);
+        }
+        listenerByPlugin.get(listener.getPlugin()).remove(listener);
     }
 
-    public PlayerEarlyJoinListener registerPlayerEarlyJoinListener(final PlayerEarlyJoinListener listener) {
-        return registerPlayerEarlyJoinListener(listener, 0);
-    }
+    public void unloadPlugin(Object plugin) {
+        List<PacketListener> packetListeners = listenerByPlugin.get(plugin);
+        if (packetListeners == null) return;
 
-    public PlayerEarlyJoinListener registerPlayerEarlyJoinListener(final PlayerEarlyJoinListener listener, final int priority) {
-        eventProvider.subscribe(PlayerEarlyJoinListener.PlayerEarlyJoinEvent.ID, listener, priority);
-        return listener;
-    }
-
-    public void removeIncomingPacketListener(final ServerboundPacketListener listener) {
-        eventProvider.unsubscribe(ServerboundPacketListener.ServerboundPacketEvent.ID, listener);
-    }
-
-    public void removeOutgoingPacketListener(final ClientboundPacketListener listener) {
-        eventProvider.unsubscribe(ClientboundPacketListener.ClientboundPacketEvent.ID, listener);
-    }
-
-    public void removePlayerEarlyJoinListener(final PlayerEarlyJoinListener listener) {
-        eventProvider.unsubscribe(PlayerEarlyJoinListener.PlayerEarlyJoinEvent.ID, listener);
-    }
-
-    public DietrichEvents2 getEventProvider() {
-        return eventProvider;
+        packetListeners.forEach(this::unregisterListener);
+        listenerByPlugin.remove(plugin);
     }
 }

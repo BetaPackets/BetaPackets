@@ -112,8 +112,7 @@ public class BukkitInjector {
                     @Override
                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                         ctx.pipeline().addFirst(new SpigotBetaPacketsPipeline(new UserConnection(
-                                ctx.channel(),
-                                BetaPackets.getPacketRegistryManager()
+                                ctx.channel()
                         )));
                         ctx.pipeline().remove(this);
                         super.channelRead(ctx, msg);

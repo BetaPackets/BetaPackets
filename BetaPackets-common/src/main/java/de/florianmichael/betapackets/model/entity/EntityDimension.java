@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.model.entity;
 
+import java.util.Objects;
+
 public class EntityDimension {
 
     private float width;
@@ -45,5 +47,28 @@ public class EntityDimension {
 
     public boolean isFixed() {
         return fixed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityDimension that = (EntityDimension) o;
+        return Float.compare(that.width, width) == 0 && Float.compare(that.height, height) == 0 && Float.compare(that.eyeHeight, eyeHeight) == 0 && fixed == that.fixed;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(width, height, eyeHeight, fixed);
+    }
+
+    @Override
+    public String toString() {
+        return "EntityDimension{" +
+                "width=" + width +
+                ", height=" + height +
+                ", eyeHeight=" + eyeHeight +
+                ", fixed=" + fixed +
+                '}';
     }
 }

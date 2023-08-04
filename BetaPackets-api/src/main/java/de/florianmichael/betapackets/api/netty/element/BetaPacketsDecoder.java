@@ -20,14 +20,11 @@ package de.florianmichael.betapackets.api.netty.element;
 import de.florianmichael.betapackets.api.BetaPackets;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.api.event.ServerboundPacketListener;
-import de.florianmichael.betapackets.model.base.NetworkSide;
-import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.packet.handshake.HandshakeC2SPacket;
+import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
@@ -46,56 +43,28 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
-    /**
-     * This method is called when the handshake packet is received and initializes the user connection
-     * @param data The data of the packet
-     * @return The packet model
-     */
-    private HandshakeC2SPacket handleHandshake(final FunctionalByteBuf data) {
-        final HandshakeC2SPacket handshakeC2SPacket = new HandshakeC2SPacket(data);
-
-        userConnection.init(NetworkState.HANDSHAKE, ProtocolCollection.fromProtocolId(handshakeC2SPacket.getProtocolVersion()));
-        userConnection.setState(handshakeC2SPacket.getState());
-
-        return handshakeC2SPacket;
-    }
-
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final FunctionalByteBuf data = new FunctionalByteBuf(msg, userConnection);
-        try {
-            final int packetId = data.readVarInt();
+        FunctionalByteBuf readBuffer = new FunctionalByteBuf(msg, userConnection);
+        int packetId = readBuffer.readVarInt();
 
-            Packet model;
-            if (!userConnection.hasLoaded() && packetId == 0x00 /* C -> S, HANDSHAKE, HANDSHAKE */) {
-                model = handleHandshake(data); // We need this to init the user connection and to track the next state
-            } else {
-                model = userConnection.getCurrentRegistry().createModel(NetworkSide.SERVERBOUND, packetId, data);
-            }
-            final var event = new ServerboundPacketListener.ServerboundPacketEvent<>(
-                    userConnection,
-                    userConnection.getState(),
-                    model,
-                    BetaPackets.getPlatform().getPlayer(userConnection.getPlayer())
-            );
+        List<Packet> packets = userConnection.getC2SPackets();
+        if (packetId >= packets.size())
+            throw new DecoderException("Unknown packet-id " + packetId);
 
-            BetaPackets.getAPI().getEventProvider().postInternal(ServerboundPacketListener.ServerboundPacketEvent.ID, event);
-            if (event.isCancelled()) {
-                return;
-            }
-            BetaPackets.getPlatform().getLogging().info("SERVERBOUND -> " + userConnection.getState() + ": " + model);
+        PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
+        BetaPackets.getAPI().fireReadEvent(event);
 
-            final FunctionalByteBuf output = new FunctionalByteBuf(ctx.alloc().buffer(), userConnection);
-            output.writeVarInt(packetId);
-            model.write(output);
-            out.add(output.getBuffer().retain());
-        } catch (Exception e) {
-            // In case reading failed
-            ctx.fireExceptionCaught(e);
-            BetaPackets.getPlatform().getLogging().severe("Error while reading packet from " + userConnection.getPlayer() + " (SERVERBOUND)");
-            e.printStackTrace();
-            return;
+        ByteBuf outBuf = ctx.alloc().buffer();
+        FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
+        writeBuffer.writeVarInt(packetId);
+
+        if (event.getLastPacketWrapper() != null) { // packet was edited
+            event.getLastPacketWrapper().write(writeBuffer);
+        } else { // pass-through
+            writeBuffer.writeBytes(msg);
         }
+        out.add(outBuf);
     }
 
     public UserConnection getUserConnection() {

@@ -20,14 +20,13 @@ package de.florianmichael.betapackets.api.netty.element;
 import de.florianmichael.betapackets.api.BetaPackets;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.base.packet.Packet;
-import de.florianmichael.betapackets.api.event.ClientboundPacketListener;
-import de.florianmichael.betapackets.api.event.PlayerEarlyJoinListener;
-import de.florianmichael.betapackets.model.base.NetworkSide;
-import de.florianmichael.betapackets.model.base.NetworkState;
-import de.florianmichael.betapackets.packet.login.s2c.LoginSuccessS2CPacket;
+import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
 import java.util.List;
@@ -43,62 +42,29 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
         this.userConnection = userConnection;
     }
 
-    /**
-     * This method is called when the login success packet is sent, and it updates the user connection and fires the PlayerEarlyJoinEvent
-     * @param data The data of the packet
-     * @return The packet model
-     */
-    private LoginSuccessS2CPacket handleLoginSuccess(final FunctionalByteBuf data) {
-        final LoginSuccessS2CPacket loginSuccessS2CPacket = new LoginSuccessS2CPacket(data);
-
-        userConnection.setState(NetworkState.PLAY);
-        userConnection.setPlayer(loginSuccessS2CPacket.uuid);
-
-        final var event = new PlayerEarlyJoinListener.PlayerEarlyJoinEvent(
-                loginSuccessS2CPacket.uuid,
-                loginSuccessS2CPacket.username,
-                data.getProtocolVersion()
-        );
-        BetaPackets.getAPI().getEventProvider().postInternal(PlayerEarlyJoinListener.PlayerEarlyJoinEvent.ID, event);
-
-        return loginSuccessS2CPacket;
-    }
-
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) {
-        final FunctionalByteBuf data = new FunctionalByteBuf(msg, userConnection);
-        try {
-            final int packetId = data.readVarInt();
+        FunctionalByteBuf readBuffer = new FunctionalByteBuf(msg, userConnection);
+        int packetId = readBuffer.readVarInt();
 
-            final Packet model;
-            if (userConnection.getState() == NetworkState.LOGIN && packetId == 0x02 /* S -> C, LOGIN_SUCCESS, LOGIN */) {
-                model = handleLoginSuccess(data);
-            } else {
-                model = userConnection.getCurrentRegistry().createModel(NetworkSide.CLIENTBOUND, packetId, data);
-            }
-            final var event = new ClientboundPacketListener.ClientboundPacketEvent<>(
-                    userConnection,
-                    userConnection.getState(),
-                    model,
-                    BetaPackets.getPlatform().getPlayer(userConnection.getPlayer())
-            );
-            BetaPackets.getAPI().getEventProvider().postInternal(ClientboundPacketListener.ClientboundPacketEvent.ID, event);
-            if (event.isCancelled()) {
-                return;
-            }
 
-            final FunctionalByteBuf output = new FunctionalByteBuf(ctx.alloc().buffer(), userConnection);
-            output.writeVarInt(packetId);
-            model.write(output);
-            out.add(output.getBuffer().retain());
-            BetaPackets.getPlatform().getLogging().info("CLIENTBOUND -> " + userConnection.getState() + ": " + model);
-        } catch (Exception e) {
-            // In case reading failed
-            ctx.fireExceptionCaught(e);
-            BetaPackets.getPlatform().getLogging().severe("Error while reading packet from " + userConnection.getPlayer() + " (CLIENTBOUND)");
-            e.printStackTrace();
-            return;
+        List<Packet> packets = userConnection.getS2CPackets();
+        if (packetId >= packets.size())
+            throw new DecoderException("Unknown packet-id " + packetId);
+
+        PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
+        BetaPackets.getAPI().fireWriteEvent(event);
+
+        ByteBuf outBuf = ctx.alloc().buffer();
+        FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
+        writeBuffer.writeVarInt(packetId);
+
+        if (event.getLastPacketWrapper() != null) { // packet was edited
+            event.getLastPacketWrapper().write(writeBuffer);
+        } else { // pass-through
+            writeBuffer.writeBytes(msg);
         }
+        out.add(outBuf);
     }
 
     public UserConnection getUserConnection() {

@@ -238,6 +238,10 @@ public class PrimitiveByteBuf {
         buffer.readBytes(bytes);
     }
 
+    public void writeBytes(ByteBuf input) {
+        buffer.writeBytes(input);
+    }
+
     public void writeBytes(final byte[] input) {
         buffer.writeBytes(input);
     }

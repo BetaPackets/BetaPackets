@@ -44,10 +44,10 @@ public enum MetadataCodecType {
     OPTIONAL_UUID(FunctionalByteBuf::writeOptionalUUID, FunctionalByteBuf::readOptionalUUID),
     BLOCK_STATE((buf, object) -> {
         buf.writeVarInt(object.getId());
-    }, buf -> buf.getProtocolVersion().getBlockMapping().getStateById(buf.readVarInt())),
+    }, buf -> buf.getProtocolVersion().getBlockMapping().getById(buf.readVarInt())),
     OPTIONAL_BLOCK_STATE((buf, object) -> {
         buf.writeOptional(object, (buf1, val) -> buf1.writeVarInt(val.getId()));
-    }, buf -> buf.readOptional(buf1 -> buf1.getProtocolVersion().getBlockMapping().getStateById(buf1.readVarInt()))),
+    }, buf -> buf.readOptional(buf1 -> buf1.getProtocolVersion().getBlockMapping().getById(buf1.readVarInt()))),
     COMPOUND_TAG(FunctionalByteBuf::writeCompoundTag, FunctionalByteBuf::readCompoundTag),
     PARTICLE(null, null), /* MEGA TODO!!! SEHR WICHTIG DIE PARAMETER CODECS SCHREIBEN*/
     VILLAGER_DATA(null, null), /* MEGA TODO!!!2 VILLAGER TYPE UND PROFESSION MAPPEN*/

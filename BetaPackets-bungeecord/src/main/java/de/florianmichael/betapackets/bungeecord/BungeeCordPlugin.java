@@ -25,6 +25,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -46,6 +47,16 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform<Prox
     @Override
     public ProxiedPlayer getPlayer(UUID uuid) {
         return getProxy().getPlayer(uuid);
+    }
+
+    @Override
+    public InputStream getResource(String path) {
+        return getResourceAsStream(path);
+    }
+
+    @Override
+    public Object getPlugin() {
+        return this;
     }
 
     @Override
