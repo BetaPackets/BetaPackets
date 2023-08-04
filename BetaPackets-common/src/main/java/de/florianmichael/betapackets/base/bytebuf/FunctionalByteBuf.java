@@ -21,10 +21,10 @@ import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.base.Reader;
 import de.florianmichael.betapackets.model.base.Writer;
+import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 import de.florianmichael.betapackets.model.position.BlockPos;
 import de.florianmichael.betapackets.model.position.Vec3f;
 import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
-import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -36,8 +36,13 @@ import net.lenni0451.mcstructs.text.ATextComponent;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 import org.joml.Quaternionf;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * This class is an extension of the {@link PrimitiveByteBuf} which adds version dependent methods
@@ -144,21 +149,11 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     }
 
     public ATextComponent readComponent() {
-        final String text = readString(32767);
-        if (getProtocolVersion() == ProtocolCollection.R1_8) {
-            return TextComponentSerializer.V1_8.deserialize(text);
-        } else if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
-            return TextComponentSerializer.V1_9.deserialize(text);
-        }
-        return null;
+        return userConnection.getTextComponentSerializer().deserialize(readString());
     }
 
     public void writeComponent(final ATextComponent component) {
-        if (getProtocolVersion() == ProtocolCollection.R1_8) {
-            writeString(TextComponentSerializer.V1_8.serialize(component));
-        } else if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
-            writeString(TextComponentSerializer.V1_9.serialize(component));
-        }
+        writeString(userConnection.getTextComponentSerializer().serialize(component));
     }
 
     public Optional<BlockPos> readOptionalBlockPos() {
@@ -181,7 +176,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     }
 
     public <T extends Enum<T>> T readEnumConstant(Class<T> enumClass) {
-        return (T) ((Enum[])enumClass.getEnumConstants())[readVarInt()];
+        return (T) ((Enum[]) enumClass.getEnumConstants())[readVarInt()];
     }
 
     public void writeOptionalUUID(Optional<UUID> uuid) {

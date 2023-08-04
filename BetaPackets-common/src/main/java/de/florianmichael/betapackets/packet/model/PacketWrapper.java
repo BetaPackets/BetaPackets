@@ -25,19 +25,22 @@ public abstract class PacketWrapper<T extends PacketWrapper<T>> {
 
     public PacketWrapper(PacketEvent event) {
         if (event.getLastPacketWrapper() != null) {
-            if (event.getLastPacketWrapper().getClass() != getClass()) {
+            if (!getClass().isInstance(event.getLastPacketWrapper())) {
                 throw new CodecException("Duplicate implementation " + event.getLastPacketWrapper().getClass() + " " + getClass());
             }
-            copy((T) event.getLastPacketWrapper());
+            copyFrom((T) event.getLastPacketWrapper());
         } else {
             read(event.getByteBuf());
         }
         event.setLastPacketWrapper(this);
     }
 
+    public PacketWrapper() {
+    }
+
     public abstract void write(FunctionalByteBuf buf);
 
     public abstract void read(FunctionalByteBuf buf);
 
-    public abstract void copy(T base);
+    public abstract void copyFrom(T base);
 }

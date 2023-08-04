@@ -24,6 +24,7 @@ import de.florianmichael.betapackets.packet.ids.PacketIdBase1_7;
 import de.florianmichael.betapackets.packet.ids.PacketIdList;
 import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.channel.Channel;
+import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +41,7 @@ public class UserConnection {
     private List<Packet> c2sPackets;
     private ProtocolCollection protocolVersion;
     private PacketIdList packetIdList;
+    private TextComponentSerializer textComponentSerializer;
 
 
     /**
@@ -74,6 +76,29 @@ public class UserConnection {
         this.packetIdList = protocolVersion.getPacketIdList();
         this.setState(state);
         this.loaded = true;
+
+        if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_19_4)) {
+            textComponentSerializer = TextComponentSerializer.V1_19_4;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_18_1)) {
+            textComponentSerializer = TextComponentSerializer.V1_18;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_17)) {
+            textComponentSerializer = TextComponentSerializer.V1_17;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_16)) {
+            textComponentSerializer = TextComponentSerializer.V1_16;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_15)) {
+            textComponentSerializer = TextComponentSerializer.V1_15;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_14)) {
+            textComponentSerializer = TextComponentSerializer.V1_14;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_12)) {
+            textComponentSerializer = TextComponentSerializer.V1_12;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+            textComponentSerializer = TextComponentSerializer.V1_9;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_8)) {
+            textComponentSerializer = TextComponentSerializer.V1_8;
+        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_7_5)) {
+            textComponentSerializer = TextComponentSerializer.V1_7;
+        }
+        if (textComponentSerializer == null) throw new IllegalArgumentException("No text-serializer for " + protocolVersion);
     }
 
     public void setState(NetworkState state) {
@@ -116,5 +141,9 @@ public class UserConnection {
 
     public UUID getPlayer() {
         return player;
+    }
+
+    public TextComponentSerializer getTextComponentSerializer() {
+        return textComponentSerializer;
     }
 }

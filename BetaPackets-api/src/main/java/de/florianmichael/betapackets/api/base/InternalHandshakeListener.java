@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.api.base;
 import de.florianmichael.betapackets.api.PacketListener;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.NetworkState;
-import de.florianmichael.betapackets.packet.model.handshake.c2s.HandshakeC2SWrapper;
+import de.florianmichael.betapackets.packet.model.handshake.c2s.WrapperHandshakingClientHandshake;
 import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.DecoderException;
 
@@ -44,7 +44,7 @@ public class InternalHandshakeListener extends PacketListener {
     @Override
     public void onRead(PacketEvent event) {
         if (event.getType() == PacketType.Handshaking.Client.HANDSHAKE) {
-            HandshakeC2SWrapper handshake = new HandshakeC2SWrapper(event);
+            WrapperHandshakingClientHandshake handshake = new WrapperHandshakingClientHandshake(event);
             if (!event.getConnection().hasLoaded()) {
                 if (handshake.getVersion().getPacketIdList() == null) {
                     throw new DecoderException("Unimplemented version: " + handshake.getVersion().getProtocolName());

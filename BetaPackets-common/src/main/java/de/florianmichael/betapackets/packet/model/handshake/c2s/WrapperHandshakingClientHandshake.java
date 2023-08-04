@@ -24,15 +24,22 @@ import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import io.netty.handler.codec.DecoderException;
 
-public class HandshakeC2SWrapper extends PacketWrapper<HandshakeC2SWrapper> {
+public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHandshakingClientHandshake> {
 
     private ProtocolCollection version;
     private String hostName;
     private int port;
     private NetworkState intendedState;
 
-    public HandshakeC2SWrapper(PacketEvent event) {
+    public WrapperHandshakingClientHandshake(PacketEvent event) {
         super(event);
+    }
+
+    public WrapperHandshakingClientHandshake(ProtocolCollection version, String hostName, int port, NetworkState intendedState) {
+        this.version = version;
+        this.hostName = hostName;
+        this.port = port;
+        this.intendedState = intendedState;
     }
 
     @Override
@@ -58,7 +65,7 @@ public class HandshakeC2SWrapper extends PacketWrapper<HandshakeC2SWrapper> {
     }
 
     @Override
-    public void copy(HandshakeC2SWrapper base) {
+    public void copyFrom(WrapperHandshakingClientHandshake base) {
         version = base.version;
         hostName = base.hostName;
         port = base.port;
@@ -99,7 +106,7 @@ public class HandshakeC2SWrapper extends PacketWrapper<HandshakeC2SWrapper> {
 
     @Override
     public String toString() {
-        return "HandshakeC2SWrapper{" +
+        return "WrapperHandshakingClientHandshake{" +
                 "version=" + version +
                 ", hostName='" + hostName + '\'' +
                 ", port=" + port +
