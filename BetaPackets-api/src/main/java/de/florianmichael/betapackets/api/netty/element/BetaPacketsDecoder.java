@@ -21,9 +21,7 @@ import de.florianmichael.betapackets.api.BetaPackets;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
-import de.florianmichael.betapackets.packet.model.play.s2c.WrapperPlayServerJoinGame;
 import de.florianmichael.betapackets.packet.type.Packet;
-import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
@@ -57,12 +55,16 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
         PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
         BetaPackets.getAPI().fireReadEvent(event);
 
+        packetId = packets.indexOf(event.getType());
+        if (packetId == -1)
+            throw new DecoderException("Unregistered packet-type " + event.getType());
+
         ByteBuf outBuf = ctx.alloc().buffer();
         FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
         writeBuffer.writeVarInt(packetId);
 
         if (event.getLastPacketWrapper() != null) { // packet was edited
-            event.getLastPacketWrapper().write(writeBuffer);
+            event.getLastPacketWrapper().write(event.getType(), writeBuffer);
         } else { // pass-through
             writeBuffer.writeBytes(msg);
         }

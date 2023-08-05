@@ -22,6 +22,7 @@ import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.model.game.GameMode;
 import de.florianmichael.betapackets.model.position.GlobalPos;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
+import de.florianmichael.betapackets.packet.type.Packet;
 import net.lenni0451.mcstructs.core.Identifier;
 import net.lenni0451.mcstructs.nbt.INbtTag;
 import net.lenni0451.mcstructs.nbt.NbtType;
@@ -62,7 +63,7 @@ public class WrapperPlayServerJoinGame extends PacketWrapper<WrapperPlayServerJo
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) throws IOException {
+    public void write(Packet type, FunctionalByteBuf buf) throws IOException {
         buf.writeInt(entityId);
         buf.writeBoolean(hardcore);
         buf.writeByte(gameMode.getId());
@@ -86,7 +87,7 @@ public class WrapperPlayServerJoinGame extends PacketWrapper<WrapperPlayServerJo
     }
 
     @Override
-    public void read(FunctionalByteBuf buf) throws IOException {
+    public void read(Packet type, FunctionalByteBuf buf) throws IOException {
         entityId = buf.readInt();
         hardcore = buf.readBoolean();
         gameMode = GameMode.getById(buf.getProtocolVersion(), buf.readUnsignedByte());

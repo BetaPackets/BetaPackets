@@ -20,6 +20,7 @@ package de.florianmichael.betapackets.packet.model.status.c2s;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
+import de.florianmichael.betapackets.packet.type.Packet;
 
 import java.io.IOException;
 
@@ -36,12 +37,12 @@ public class WrapperStatusClientPingRequest extends PacketWrapper<WrapperStatusC
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
+    public void write(Packet type, FunctionalByteBuf buf) {
         buf.writeLong(time);
     }
 
     @Override
-    public void read(FunctionalByteBuf buf) {
+    public void read(Packet type, FunctionalByteBuf buf) {
         time = buf.readLong();
     }
 

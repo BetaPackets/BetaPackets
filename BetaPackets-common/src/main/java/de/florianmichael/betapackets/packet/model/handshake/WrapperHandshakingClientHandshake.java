@@ -22,6 +22,7 @@ import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
+import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.handler.codec.DecoderException;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
+    public void write(Packet type, FunctionalByteBuf buf) {
         buf.writeVarInt(version.getProtocolId());
         buf.writeString(hostName);
         buf.writeShort(port);
@@ -53,7 +54,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
     }
 
     @Override
-    public void read(FunctionalByteBuf buf) {
+    public void read(Packet type, FunctionalByteBuf buf) {
         int protocolId = buf.readVarInt();
         version = ProtocolCollection.fromProtocolId(protocolId);
         if (version == null) throw new DecoderException("Unknown protocol-id " + protocolId);

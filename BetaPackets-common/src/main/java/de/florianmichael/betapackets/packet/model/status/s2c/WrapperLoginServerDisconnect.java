@@ -20,6 +20,7 @@ package de.florianmichael.betapackets.packet.model.status.s2c;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
+import de.florianmichael.betapackets.packet.type.Packet;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.io.IOException;
@@ -33,12 +34,12 @@ public class WrapperLoginServerDisconnect extends PacketWrapper<WrapperLoginServ
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
+    public void write(Packet type, FunctionalByteBuf buf) {
         buf.writeComponent(reason);
     }
 
     @Override
-    public void read(FunctionalByteBuf buf) {
+    public void read(Packet type, FunctionalByteBuf buf) {
         reason = buf.readComponent();
     }
 

@@ -19,6 +19,8 @@ package de.florianmichael.betapackets.packet.model;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.CodecException;
 
 import java.io.IOException;
@@ -32,7 +34,7 @@ public abstract class PacketWrapper<T extends PacketWrapper<T>> {
             }
             copyFrom((T) event.getLastPacketWrapper());
         } else {
-            read(event.getByteBuf());
+            read(event.getType(), event.getByteBuf());
         }
         event.setLastPacketWrapper(this);
     }
@@ -40,9 +42,9 @@ public abstract class PacketWrapper<T extends PacketWrapper<T>> {
     public PacketWrapper() {
     }
 
-    public abstract void write(FunctionalByteBuf buf)throws IOException;
+    public abstract void write(Packet type, FunctionalByteBuf buf)throws IOException;
 
-    public abstract void read(FunctionalByteBuf buf)throws IOException;
+    public abstract void read(Packet type, FunctionalByteBuf buf)throws IOException;
 
     public abstract void copyFrom(T base);
 }

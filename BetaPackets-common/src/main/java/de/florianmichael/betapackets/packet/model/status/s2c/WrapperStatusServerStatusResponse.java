@@ -24,6 +24,7 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.model.auth.GameProfile;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
+import de.florianmichael.betapackets.packet.type.Packet;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class WrapperStatusServerStatusResponse extends PacketWrapper<WrapperStat
     }
 
     @Override
-    public void write(FunctionalByteBuf buf) {
+    public void write(Packet type, FunctionalByteBuf buf) {
         JsonObject object = new JsonObject();
 
         JsonObject versionObject = new JsonObject();
@@ -100,7 +101,7 @@ public class WrapperStatusServerStatusResponse extends PacketWrapper<WrapperStat
     }
 
     @Override
-    public void read(FunctionalByteBuf buf) {
+    public void read(Packet type, FunctionalByteBuf buf) {
         JsonObject object = GSON.fromJson(buf.readString(), JsonObject.class);
 
         JsonObject versionObject = object.getAsJsonObject("version");
