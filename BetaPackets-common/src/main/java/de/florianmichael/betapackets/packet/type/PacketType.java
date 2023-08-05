@@ -199,7 +199,7 @@ public class PacketType {
             PLUGIN_MESSAGE,
             EDIT_BOOK,
             QUERY_ENTITY_TAG,
-            INTERACT,
+            USE_ENTITY,
             JIGSAW_GENERATE,
             KEEP_ALIVE,
             LOCK_DIFFICULTY,

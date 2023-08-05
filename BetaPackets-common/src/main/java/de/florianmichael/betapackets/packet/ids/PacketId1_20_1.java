@@ -152,7 +152,7 @@ public class PacketId1_20_1 extends PacketIdBase1_7 {
         registerPlayPacket(PacketType.Play.Client.PLUGIN_MESSAGE);
         registerPlayPacket(PacketType.Play.Client.EDIT_BOOK);
         registerPlayPacket(PacketType.Play.Client.QUERY_ENTITY_TAG);
-        registerPlayPacket(PacketType.Play.Client.INTERACT);
+        registerPlayPacket(PacketType.Play.Client.USE_ENTITY);
         registerPlayPacket(PacketType.Play.Client.JIGSAW_GENERATE);
         registerPlayPacket(PacketType.Play.Client.KEEP_ALIVE);
         registerPlayPacket(PacketType.Play.Client.LOCK_DIFFICULTY);
