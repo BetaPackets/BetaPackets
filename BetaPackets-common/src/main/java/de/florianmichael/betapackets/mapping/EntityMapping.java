@@ -225,6 +225,10 @@ public class EntityMapping {
         byType.put(entity.getType(), entity);
     }
 
+    public Entity getByEntityId(int id) {
+        return byEntityId.get(id);
+    }
+
     public Entity getByType(EntityType type) {
         return byType.get(type);
     }
