@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.api.BetaPackets;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.model.play.s2c.WrapperPlayServerJoinGame;
 import de.florianmichael.betapackets.packet.type.Packet;
 import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.buffer.ByteBuf;
@@ -29,6 +30,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,7 +45,7 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
     }
 
     @Override
-    public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) {
+    public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws IOException {
         FunctionalByteBuf readBuffer = new FunctionalByteBuf(msg, userConnection);
         int packetId = readBuffer.readVarInt();
 
@@ -54,6 +56,14 @@ public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
 
         PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
         BetaPackets.getAPI().fireWriteEvent(event);
+
+        try {
+            if (event.getType() == PacketType.Play.Server.JOIN_GAME) {
+                WrapperPlayServerJoinGame joinGame = new WrapperPlayServerJoinGame(event);
+                System.out.println(joinGame);
+            }} catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ByteBuf outBuf = ctx.alloc().buffer();
         FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);

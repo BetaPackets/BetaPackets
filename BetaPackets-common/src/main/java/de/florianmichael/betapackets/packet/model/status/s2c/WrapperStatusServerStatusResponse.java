@@ -26,6 +26,7 @@ import de.florianmichael.betapackets.model.auth.GameProfile;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class WrapperStatusServerStatusResponse extends PacketWrapper<WrapperStat
     private Optional<Boolean> enforcesSecureChat;
     private Optional<Boolean> previewsChat;
 
-    public WrapperStatusServerStatusResponse(PacketEvent event) {
+    public WrapperStatusServerStatusResponse(PacketEvent event) throws IOException {
         super(event);
     }
 

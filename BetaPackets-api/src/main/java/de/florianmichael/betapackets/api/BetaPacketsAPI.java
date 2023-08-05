@@ -20,6 +20,7 @@ package de.florianmichael.betapackets.api;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.type.Packet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,18 +38,22 @@ public class BetaPacketsAPI {
         listenerByPlugin.computeIfAbsent(listener.getPlugin(), k -> new ArrayList<>()).add(listener);
     }
 
-    public void fireReadEvent(PacketEvent event) {
+    public void fireReadEvent(PacketEvent event) throws IOException {
         List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return;
 
-        packetListeners.forEach(listener -> listener.onRead(event));
+        for (PacketListener listener : packetListeners) {
+            listener.onRead(event);
+        }
     }
 
-    public void fireWriteEvent(PacketEvent event) {
+    public void fireWriteEvent(PacketEvent event) throws IOException{
         List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return;
 
-        packetListeners.forEach(listener -> listener.onWrite(event));
+        for (PacketListener listener : packetListeners) {
+            listener.onWrite(event);
+        }
     }
 
     public void unregisterListener(PacketListener listener) {

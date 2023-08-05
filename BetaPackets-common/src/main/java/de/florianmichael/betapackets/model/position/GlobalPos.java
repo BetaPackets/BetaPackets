@@ -15,41 +15,33 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.game;
+package de.florianmichael.betapackets.model.position;
 
-import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import net.lenni0451.mcstructs.core.Identifier;
 
-public enum GameMode {
+public class GlobalPos {
 
-    NOT_SET,
-    SURVIVAL,
-    CREATIVE,
-    ADVENTURE,
-    SPECTATOR;
+    private Identifier dimensionName;
+    private BlockPos pos;
 
-    private String name;
-
-    GameMode() {
-        this.name = name().toLowerCase();
-        if (this.name.equals("not_set")) {
-            this.name = "";
-        }
+    public GlobalPos(Identifier dimensionName, BlockPos pos) {
+        this.dimensionName = dimensionName;
+        this.pos = pos;
     }
 
-    public int getId() {
-        return ordinal() - 1;
+    public void setDimensionName(Identifier dimensionName) {
+        this.dimensionName = dimensionName;
     }
 
-    public static GameMode getById(final ProtocolCollection version, final short id) {
-        if (id < 0) return null;
-
-        for (GameMode value : values()) {
-            if (value.getId() == id) return value;
-        }
-        return null;
+    public void setPos(BlockPos pos) {
+        this.pos = pos;
     }
 
-    public String getName() {
-        return name;
+    public Identifier getDimensionName() {
+        return dimensionName;
+    }
+
+    public BlockPos getPos() {
+        return pos;
     }
 }

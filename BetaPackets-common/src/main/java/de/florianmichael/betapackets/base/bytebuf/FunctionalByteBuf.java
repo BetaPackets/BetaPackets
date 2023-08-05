@@ -23,11 +23,13 @@ import de.florianmichael.betapackets.model.base.Reader;
 import de.florianmichael.betapackets.model.base.Writer;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 import de.florianmichael.betapackets.model.position.BlockPos;
+import de.florianmichael.betapackets.model.position.GlobalPos;
 import de.florianmichael.betapackets.model.position.Vec3f;
 import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import net.lenni0451.mcstructs.core.Identifier;
 import net.lenni0451.mcstructs.nbt.INbtTag;
 import net.lenni0451.mcstructs.nbt.io.NbtIO;
 import net.lenni0451.mcstructs.nbt.io.NbtReadTracker;
@@ -56,6 +58,16 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         this.userConnection = userConnection;
     }
 
+    public void writeIdentifier(Identifier identifier) {
+        writeString(identifier.get());
+    }
+
+    public Identifier readIdentifier() {
+        String str = readString();
+        System.out.println("STR: " + str);
+        return Identifier.of(str);
+    }
+
     public ItemStackV1_3 readItemStack() throws IOException {
         int id = this.readShort();
 
@@ -80,11 +92,13 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     }
 
     public CompoundTag readCompoundTag() throws IOException {
+        int i = readerIndex();
         if (readableBytes() == 0 || readByte() == 0) {
             return null;
         }
+        readerIndex(i);
         final DataInputStream dataInputStream = new DataInputStream(new ByteBufInputStream(getBuffer()));
-        final INbtTag tag = NbtIO.JAVA.read(dataInputStream, getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9), NbtReadTracker.unlimited());
+        final INbtTag tag = NbtIO.JAVA.read(dataInputStream, false, NbtReadTracker.unlimited());
         if (tag instanceof CompoundTag) {
             return (CompoundTag) tag;
         }
@@ -98,7 +112,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         }
 
         final DataOutputStream dataOutputStream = new DataOutputStream(new ByteBufOutputStream(getBuffer()));
-        NbtIO.JAVA.write(dataOutputStream, "", tag, getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9));
+        NbtIO.JAVA.write(dataOutputStream, "", tag, false);
     }
 
     public List<Metadata> readMetadata() throws Exception {
@@ -245,5 +259,14 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
 
     public ProtocolCollection getProtocolVersion() {
         return userConnection.getProtocolVersion();
+    }
+
+    public GlobalPos readGlobalPos() {
+        return new GlobalPos(readIdentifier(), readBlockPos());
+    }
+
+    public void writeGlobalPos(GlobalPos globalPos) {
+        writeIdentifier(globalPos.getDimensionName());
+        writeBlockPos(globalPos.getPos());
     }
 }

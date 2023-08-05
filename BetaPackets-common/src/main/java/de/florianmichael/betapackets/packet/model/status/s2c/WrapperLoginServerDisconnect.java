@@ -22,11 +22,13 @@ import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
+import java.io.IOException;
+
 public class WrapperLoginServerDisconnect extends PacketWrapper<WrapperLoginServerDisconnect> {
 
     private ATextComponent reason;
 
-    public WrapperLoginServerDisconnect(PacketEvent event) {
+    public WrapperLoginServerDisconnect(PacketEvent event) throws IOException {
         super(event);
     }
 

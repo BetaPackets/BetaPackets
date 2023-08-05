@@ -21,11 +21,13 @@ import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 
+import java.io.IOException;
+
 public class WrapperStatusClientPingRequest extends PacketWrapper<WrapperStatusClientPingRequest> {
 
     private long time;
 
-    public WrapperStatusClientPingRequest(PacketEvent event) {
+    public WrapperStatusClientPingRequest(PacketEvent event) throws IOException {
         super(event);
     }
 

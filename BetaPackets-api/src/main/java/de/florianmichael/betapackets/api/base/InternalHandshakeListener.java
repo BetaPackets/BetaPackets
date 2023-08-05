@@ -24,6 +24,8 @@ import de.florianmichael.betapackets.packet.model.handshake.WrapperHandshakingCl
 import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.DecoderException;
 
+import java.io.IOException;
+
 public class InternalHandshakeListener extends PacketListener {
 
     public InternalHandshakeListener(BetaPacketsPlatform<?> platform) {
@@ -35,14 +37,14 @@ public class InternalHandshakeListener extends PacketListener {
     }
 
     @Override
-    public void onWrite(PacketEvent event) {
+    public void onWrite(PacketEvent event) throws IOException{
         if (event.getType() == PacketType.Login.Server.LOGIN_SUCCESS) {
             event.getConnection().setState(NetworkState.PLAY);
         }
     }
 
     @Override
-    public void onRead(PacketEvent event) {
+    public void onRead(PacketEvent event) throws IOException {
         if (event.getType() == PacketType.Handshaking.Client.HANDSHAKE) {
             WrapperHandshakingClientHandshake handshake = new WrapperHandshakingClientHandshake(event);
             if (!event.getConnection().hasLoaded()) {

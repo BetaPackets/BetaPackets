@@ -20,6 +20,7 @@ package de.florianmichael.betapackets.api;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.type.Packet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,11 +39,11 @@ public class PacketListener {
         whitelist.addAll(Arrays.asList(packets));
     }
 
-    public void onRead(PacketEvent event) {
+    public void onRead(PacketEvent event) throws IOException{
         throw new UnsupportedOperationException("onRead(event: PacketEvent) has to be implemented without super-call");
     }
 
-    public void onWrite(PacketEvent event) {
+    public void onWrite(PacketEvent event) throws IOException {
         throw new UnsupportedOperationException("onWrite(event: PacketEvent) has to be implemented without super-call");
     }
 

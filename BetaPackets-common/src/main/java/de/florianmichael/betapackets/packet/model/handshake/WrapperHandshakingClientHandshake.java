@@ -24,6 +24,8 @@ import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import io.netty.handler.codec.DecoderException;
 
+import java.io.IOException;
+
 public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHandshakingClientHandshake> {
 
     private ProtocolCollection version;
@@ -31,7 +33,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
     private int port;
     private NetworkState intendedState;
 
-    public WrapperHandshakingClientHandshake(PacketEvent event) {
+    public WrapperHandshakingClientHandshake(PacketEvent event) throws IOException {
         super(event);
     }
 
