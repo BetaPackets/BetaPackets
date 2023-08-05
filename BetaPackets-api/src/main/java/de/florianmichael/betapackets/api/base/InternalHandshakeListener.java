@@ -20,7 +20,7 @@ package de.florianmichael.betapackets.api.base;
 import de.florianmichael.betapackets.api.PacketListener;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.NetworkState;
-import de.florianmichael.betapackets.packet.model.handshake.c2s.WrapperHandshakingClientHandshake;
+import de.florianmichael.betapackets.packet.model.handshake.WrapperHandshakingClientHandshake;
 import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.DecoderException;
 

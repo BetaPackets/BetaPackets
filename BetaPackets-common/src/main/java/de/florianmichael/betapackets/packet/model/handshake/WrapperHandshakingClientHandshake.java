@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.model.handshake.c2s;
+package de.florianmichael.betapackets.packet.model.handshake;
 
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
