@@ -18,6 +18,7 @@
 package de.florianmichael.betapackets.spigot.netty;
 
 import de.florianmichael.betapackets.api.netty.BetaPacketsPipeline;
+import de.florianmichael.betapackets.api.netty.ViaVersionSupport;
 import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -51,11 +52,11 @@ public class SpigotBetaPacketsPipeline extends BetaPacketsPipeline {
 
     @Override
     public String getPacketDecoderName() {
-        return "decoder";
+        return ViaVersionSupport.getDecoderName("decoder");
     }
 
     @Override
     public String getPacketEncoderName() {
-        return "encoder";
+        return ViaVersionSupport.getEncoderName("encoder");
     }
 }

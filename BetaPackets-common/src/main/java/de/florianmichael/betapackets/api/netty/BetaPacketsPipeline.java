@@ -58,6 +58,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
         pipeline.addBefore(getPacketDecoderName(), HANDLER_PACKET_DECODER_NAME, createBetaPacketsDecoder(userConnection));
         pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, createBetaPacketsEncoder(userConnection));
+
     }
 
     /**
@@ -104,10 +105,10 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      * @return True if the pipeline needs to be reordered
      */
     public boolean needsReorderPipeline(final ChannelPipeline pipeline) {
-        final int decoderIndex = pipeline.names().indexOf(getPacketDecompressName());
-        if (decoderIndex == -1) return false;
+        final int decompressIndex = pipeline.names().indexOf(getPacketDecompressName());
+        if (decompressIndex == -1) return false;
 
-        return decoderIndex > pipeline.names().indexOf(HANDLER_PACKET_DECODER_NAME);
+        return decompressIndex + 1 != pipeline.names().indexOf(HANDLER_PACKET_DECODER_NAME);
     }
 
     /**

@@ -60,6 +60,11 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform<Prox
     }
 
     @Override
+    public boolean isPluginLoaded(String name) {
+        return getProxy().getPluginManager().getPlugin(name) != null;
+    }
+
+    @Override
     public Logger getLogging() {
         return logging;
     }

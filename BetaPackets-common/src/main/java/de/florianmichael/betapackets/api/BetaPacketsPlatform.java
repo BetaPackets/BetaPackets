@@ -58,4 +58,6 @@ public interface BetaPacketsPlatform<T> {
     InputStream getResource(String path);
 
     Object getPlugin();
+
+    boolean isPluginLoaded(String name);
 }

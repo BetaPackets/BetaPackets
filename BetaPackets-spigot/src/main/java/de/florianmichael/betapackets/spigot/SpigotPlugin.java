@@ -56,4 +56,9 @@ public class SpigotPlugin extends JavaPlugin implements BetaPacketsPlatform<Play
     public Object getPlugin() {
         return this;
     }
+
+    @Override
+    public boolean isPluginLoaded(String name) {
+        return getServer().getPluginManager().isPluginEnabled(name);
+    }
 }

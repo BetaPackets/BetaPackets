@@ -18,6 +18,7 @@
 package de.florianmichael.betapackets.bungeecord.netty;
 
 import de.florianmichael.betapackets.api.netty.BetaPacketsPipeline;
+import de.florianmichael.betapackets.api.netty.ViaVersionSupport;
 import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -46,11 +47,11 @@ public class BungeeCordBetaPacketsPipeline extends BetaPacketsPipeline {
 
     @Override
     public String getPacketDecoderName() {
-        return "packet-decoder";
+        return ViaVersionSupport.getDecoderName("packet-decoder");
     }
 
     @Override
     public String getPacketEncoderName() {
-        return "packet-encoder";
+        return ViaVersionSupport.getEncoderName("packet-encoder");
     }
 }
