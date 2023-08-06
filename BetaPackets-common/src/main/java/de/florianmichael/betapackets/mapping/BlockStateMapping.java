@@ -109,25 +109,29 @@ public class BlockStateMapping {
                     propertyDictionary.add(valueStr);
             }
             if (blockState.getCollisionShape() != null) {
-                if (blockState.getCollisionShape().getVoxelSet() instanceof BitVoxelSet bit) {
+                if (blockState.getCollisionShape().getVoxelSet() instanceof BitVoxelSet) {
+                    BitVoxelSet bit = (BitVoxelSet) blockState.getCollisionShape().getVoxelSet();
                     if (!bitVoxelSets.contains(bit))
                         bitVoxelSets.add(bit);
                 } else {
                     throw new IllegalArgumentException(blockState.getCollisionShape().getVoxelSet().getClass().getSimpleName());
                 }
-                if (blockState.getCollisionShape() instanceof ArrayVoxelShape arrayVoxelShape) {
+                if (blockState.getCollisionShape() instanceof ArrayVoxelShape) {
+                    ArrayVoxelShape arrayVoxelShape = (ArrayVoxelShape) blockState.getCollisionShape();
                     if (!arrayVoxelShapes.contains(arrayVoxelShape))
                         arrayVoxelShapes.add(arrayVoxelShape);
                 }
             }
             if (blockState.getOutlineShape() != null) {
-                if (blockState.getOutlineShape().getVoxelSet() instanceof BitVoxelSet bit) {
+                if (blockState.getOutlineShape().getVoxelSet() instanceof BitVoxelSet) {
+                    BitVoxelSet bit = (BitVoxelSet) blockState.getOutlineShape().getVoxelSet();
                     if (!bitVoxelSets.contains(bit))
                         bitVoxelSets.add(bit);
                 } else {
                     throw new IllegalArgumentException(blockState.getOutlineShape().getVoxelSet().getClass().getSimpleName());
                 }
-                if (blockState.getOutlineShape() instanceof ArrayVoxelShape arrayVoxelShape) {
+                if (blockState.getOutlineShape() instanceof ArrayVoxelShape) {
+                    ArrayVoxelShape arrayVoxelShape = (ArrayVoxelShape) blockState.getOutlineShape();
                     if (!arrayVoxelShapes.contains(arrayVoxelShape))
                         arrayVoxelShapes.add(arrayVoxelShape);
                 }
@@ -194,14 +198,14 @@ public class BlockStateMapping {
         } else {
             if (shape instanceof SimpleVoxelShape) {
                 out.writeByte(1);
-            } else if (shape instanceof ArrayVoxelShape arrayVoxelShape) {
+            } else if (shape instanceof ArrayVoxelShape) {
                 out.writeByte(2);
-                out.writeShort(arrayVoxelShapes.indexOf(arrayVoxelShape));
+                out.writeShort(arrayVoxelShapes.indexOf(shape));
             } else {
                 throw new IllegalArgumentException(shape.getClass().getSimpleName());
             }
-            if (shape.getVoxelSet() instanceof BitVoxelSet bit) {
-                out.writeShort(bitVoxelSets.indexOf(bit));
+            if (shape.getVoxelSet() instanceof BitVoxelSet) {
+                out.writeShort(bitVoxelSets.indexOf(shape.getVoxelSet()));
             } else {
                 throw new IllegalArgumentException(shape.getVoxelSet().getClass().getSimpleName());
             }

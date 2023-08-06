@@ -50,8 +50,10 @@ public class ArrayVoxelShape extends VoxelShape {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ArrayVoxelShape that)) return false;
-        return super.equals(o) && Arrays.equals(xPoints, that.xPoints) && Arrays.equals(yPoints, that.yPoints) && Arrays.equals(zPoints, that.zPoints);
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ArrayVoxelShape that = (ArrayVoxelShape) o;
+        return Arrays.equals(xPoints, that.xPoints) && Arrays.equals(yPoints, that.yPoints) && Arrays.equals(zPoints, that.zPoints);
     }
 
     @Override
