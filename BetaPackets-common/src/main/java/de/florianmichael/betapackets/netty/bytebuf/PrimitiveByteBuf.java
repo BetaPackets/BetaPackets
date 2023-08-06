@@ -275,4 +275,8 @@ public class PrimitiveByteBuf {
     public ByteBuf getBuffer() {
         return buffer;
     }
+
+    public void writeBytes(byte[] bytes, int start, int len) {
+        buffer.writeBytes(bytes, start, len);
+    }
 }

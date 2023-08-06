@@ -41,11 +41,6 @@ public class SpigotBetaPacketsPipeline extends BetaPacketsPipeline {
     }
 
     @Override
-    public String getPacketDecompressName() {
-        return "decompress";
-    }
-
-    @Override
     public String getPacketCompressName() {
         return "compress";
     }

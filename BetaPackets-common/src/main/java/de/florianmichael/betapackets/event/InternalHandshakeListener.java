@@ -39,13 +39,8 @@ public class InternalHandshakeListener extends PacketListener {
     @Override
     public void onWrite(PacketEvent event) throws IOException {
         if (event.getType() == PacketType.Login.Server.LOGIN_SUCCESS) {
-            /*try {
-                WrapperLoginServerLoginSuccess loginSuccess = new WrapperLoginServerLoginSuccess(event);
-                System.out.println(loginSuccess);
-                event.getConnection().setPlayer(loginSuccess.getProfile().uuid);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
+            WrapperLoginServerLoginSuccess loginSuccess = new WrapperLoginServerLoginSuccess(event);
+            event.getConnection().setPlayer(loginSuccess.getProfile().uuid);
             event.getConnection().setState(NetworkState.PLAY);
         }
     }

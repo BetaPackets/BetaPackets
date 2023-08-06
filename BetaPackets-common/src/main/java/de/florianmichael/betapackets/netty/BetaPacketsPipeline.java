@@ -53,11 +53,13 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         final ChannelPipeline pipeline = ctx.channel().pipeline();
-
-        pipeline.addBefore(getPacketDecoderName(), HANDLER_PACKET_DECODER_NAME, createBetaPacketsDecoder(userConnection));
-        pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, createBetaPacketsEncoder(userConnection));
-
+        addHandlers(pipeline, createBetaPacketsDecoder(userConnection), createBetaPacketsEncoder(userConnection));
         BetaPackets.getAPI().getConnections().addConnection(userConnection);
+    }
+
+    private void addHandlers(ChannelPipeline pipeline, ChannelHandler decoder, ChannelHandler encoder) {
+        pipeline.addBefore(getPacketDecoderName(), HANDLER_PACKET_DECODER_NAME, decoder);
+        pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, encoder);
     }
 
     @Override
@@ -76,6 +78,8 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (needsReorderPipeline(ctx.pipeline())) {
                     ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent());
+                    ctx.pipeline().write(msg);
+                    return;
                 }
                 super.write(ctx, msg, promise);
             }
@@ -88,7 +92,6 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof ReorderPipelineEvent) {
-            final ReorderPipelineEvent event = (ReorderPipelineEvent) evt;
             final ChannelPipeline pipeline = ctx.channel().pipeline();
 
             final ChannelHandler decoder = pipeline.get(HANDLER_PACKET_DECODER_NAME);
@@ -97,8 +100,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
             pipeline.remove(decoder);
             pipeline.remove(encoder);
 
-            pipeline.addAfter(getPacketDecompressName(), event.targetDecoder, decoder);
-            pipeline.addAfter(getPacketCompressName(), event.targetEncoder, encoder);
+            addHandlers(pipeline, decoder, encoder);
         }
         super.userEventTriggered(ctx, evt);
     }
@@ -109,18 +111,13 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      * @return True if the pipeline needs to be reordered
      */
     public boolean needsReorderPipeline(final ChannelPipeline pipeline) {
-        final int decompressIndex = pipeline.names().indexOf(getPacketDecompressName());
-        if (decompressIndex == -1) return false;
-
-        // betapackets has to be the first transformer after compression
-        return decompressIndex + 1 != pipeline.names().indexOf(HANDLER_PACKET_DECODER_NAME);
+        return pipeline.names().indexOf(getPacketEncoderName()) - 1 != pipeline.names().indexOf(HANDLER_PACKET_ENCODER_NAME);
     }
 
     /**
      * These methods are used to get the names of the handlers which are used to reorder the pipeline
      */
 
-    public abstract String getPacketDecompressName();
     public abstract String getPacketCompressName();
 
     public abstract String getPacketDecoderName();
@@ -135,7 +132,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     }
 
     public BetaPacketsEncoder createBetaPacketsEncoder(final UserConnection userConnection) {
-        return new BetaPacketsEncoder(userConnection);
+        return new BetaPacketsEncoder(getPacketCompressName(), userConnection);
     }
 
     public UserConnection getUserConnection() {

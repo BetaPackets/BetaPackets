@@ -37,9 +37,9 @@ public class BetaPacketsCodec extends MessageToMessageCodec<ByteBuf, ByteBuf> {
      * Creates a new codec for the given user connection
      * @param userConnection The user connection
      */
-    public BetaPacketsCodec(UserConnection userConnection) {
+    public BetaPacketsCodec(String compressHandler, UserConnection userConnection) {
         this.decoder = new BetaPacketsDecoder(userConnection);
-        this.encoder = new BetaPacketsEncoder(userConnection);
+        this.encoder = new BetaPacketsEncoder(compressHandler, userConnection);
 
         this.userConnection = userConnection;
     }
