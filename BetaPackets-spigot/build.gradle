@@ -12,8 +12,7 @@ repositories {
 dependencies {
     compileOnly "org.slf4j:slf4j-api:2.0.7"
     compileOnly 'org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT'
-    compileOnly "io.netty:netty-all:4.1.94.Final"
+    compileOnly "io.netty:netty-all:${project.netty_version}"
 
-    implementation "de.florianmichael:DietrichEvents2:${project.dietrichevents2_version}"
     implementation project(":BetaPackets-common")
 }
