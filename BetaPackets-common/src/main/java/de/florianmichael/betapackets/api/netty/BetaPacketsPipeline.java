@@ -108,6 +108,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         final int decompressIndex = pipeline.names().indexOf(getPacketDecompressName());
         if (decompressIndex == -1) return false;
 
+        // betapackets has to be the first transformer after compression
         return decompressIndex + 1 != pipeline.names().indexOf(HANDLER_PACKET_DECODER_NAME);
     }
 
