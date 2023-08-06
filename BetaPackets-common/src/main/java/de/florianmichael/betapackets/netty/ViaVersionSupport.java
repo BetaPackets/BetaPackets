@@ -15,13 +15,22 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.base;
+package de.florianmichael.betapackets.netty;
 
-import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.BetaPackets;
 
-import java.io.IOException;
+public class ViaVersionSupport {
 
-public interface Writer<T> {
-    void write(FunctionalByteBuf buf, T object) throws IOException;
+    public static boolean isViaVersionInstalled() {
+        return BetaPackets.getPlatform().isPluginLoaded("ViaVersion");
+    }
+
+    public static String getDecoderName(String platformName) {
+        return isViaVersionInstalled() ? "via-decoder" : platformName;
+    }
+
+    public static String getEncoderName(String platformName) {
+        return isViaVersionInstalled() ? "via-encoder" : platformName;
+    }
+
 }
-

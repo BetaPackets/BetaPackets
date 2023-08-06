@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.event;
 
-import de.florianmichael.betapackets.base.UserConnection;
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.connection.UserConnection;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
 

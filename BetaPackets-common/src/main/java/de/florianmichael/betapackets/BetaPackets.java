@@ -17,9 +17,7 @@
 
 package de.florianmichael.betapackets;
 
-import de.florianmichael.betapackets.api.BetaPacketsAPI;
-import de.florianmichael.betapackets.api.BetaPacketsPlatform;
-import de.florianmichael.betapackets.api.listener.InternalHandshakeListener;
+import de.florianmichael.betapackets.event.InternalHandshakeListener;
 import de.florianmichael.betapackets.mapping.MappingLoader;
 
 import java.io.IOException;

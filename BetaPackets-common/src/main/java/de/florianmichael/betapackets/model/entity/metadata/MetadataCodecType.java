@@ -1,6 +1,6 @@
 package de.florianmichael.betapackets.model.entity.metadata;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.base.Reader;
 import de.florianmichael.betapackets.model.base.Writer;

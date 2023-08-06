@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.model.base;
 
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 
 import java.io.IOException;
 

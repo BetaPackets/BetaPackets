@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.bungeecord.netty;
 
-import de.florianmichael.betapackets.base.UserConnection;
+import de.florianmichael.betapackets.connection.UserConnection;
 import io.netty.channel.ChannelHandlerContext;
 import net.md_5.bungee.protocol.KickStringWriter;
 

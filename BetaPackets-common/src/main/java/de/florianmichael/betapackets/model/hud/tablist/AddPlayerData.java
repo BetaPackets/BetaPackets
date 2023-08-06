@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.model.hud.tablist;
 
-import de.florianmichael.betapackets.base.ModelMapper;
-import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.packet.ModelMapper;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.auth.GameProfile;
 import de.florianmichael.betapackets.model.game.GameMode;
 import net.lenni0451.mcstructs.text.ATextComponent;

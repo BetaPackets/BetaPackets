@@ -15,35 +15,48 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.model;
+package de.florianmichael.betapackets.packet.model.c2s.play;
 
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
-import io.netty.handler.codec.CodecException;
 
 import java.io.IOException;
 
-public abstract class PacketWrapper<T extends PacketWrapper<T>> {
+public class WrapperPlayClientKeepAlive extends PacketWrapper<WrapperPlayClientKeepAlive> {
 
-    public PacketWrapper(PacketEvent event) throws IOException {
-        if (event.getLastPacketWrapper() != null) {
-            if (!getClass().isInstance(event.getLastPacketWrapper())) {
-                throw new CodecException("Duplicate implementation " + event.getLastPacketWrapper().getClass() + " " + getClass());
-            }
-            copyFrom((T) event.getLastPacketWrapper());
-        } else {
-            read(event.getType(), event.getByteBuf());
-        }
-        event.setLastPacketWrapper(this);
+    private long id;
+
+    public WrapperPlayClientKeepAlive(PacketEvent event) throws IOException {
+        super(event);
     }
 
-    public PacketWrapper() {
+    public WrapperPlayClientKeepAlive(long id) {
+        this.id = id;
     }
 
-    public abstract void write(Packet type, FunctionalByteBuf buf)throws IOException;
+    @Override
+    public void write(Packet type, FunctionalByteBuf buf) throws IOException {
+        buf.writeLong(id);
+    }
 
-    public abstract void read(Packet type, FunctionalByteBuf buf)throws IOException;
+    @Override
+    public void read(Packet type, FunctionalByteBuf buf) throws IOException {
+        id = buf.readLong();
+    }
 
-    public abstract void copyFrom(T base);
+    @Override
+    public void copyFrom(WrapperPlayClientKeepAlive base) {
+        id = base.id;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
 }

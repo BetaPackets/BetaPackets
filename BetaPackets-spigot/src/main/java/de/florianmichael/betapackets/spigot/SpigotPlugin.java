@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.spigot;
 
-import de.florianmichael.betapackets.api.BetaPacketsPlatform;
+import de.florianmichael.betapackets.BetaPacketsPlatform;
 import de.florianmichael.betapackets.spigot.netty.BukkitInjector;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

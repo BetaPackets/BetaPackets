@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.spigot.netty;
 
-import de.florianmichael.betapackets.base.UserConnection;
+import de.florianmichael.betapackets.connection.UserConnection;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
