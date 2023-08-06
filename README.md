@@ -6,13 +6,6 @@ The ultimate standalone Minecraft protocol library for all platforms and all Min
 ## Why another protocol library?
 The idea of BetaPackets is to develop a protocol library that is not based on any platform, the BetaPackets core is based only on Netty and can be implemented on anything, this ensures that this protocol library works on any server software with the same API.
 
-## Design ideology
-BetaPackets reads all packets and writes them exactly as they were read, which means that BetaPackets does not intercept invalid packets itself, but simply passes them on in the pipeline. BetaPackets tries to map everything possible into Java models, and gives the user the raw but also the model data.
-
-Example:
-![Design1](.github/images/design1.png)
-Where **Animation.java** is an enum with all possible animations of the respective version, and the **Short** is simply the raw type that is in the vanilla packet.
-
 ## Contact
 If you encounter any issues, please report them on the
 [issue tracker](https://github.com/FlorianMichael/BetaPackets/issues).  
@@ -132,10 +125,3 @@ ctx.pipeline().fireUserEventTriggered(new ReorderPipelineEvent("target-decoder",
 | Dependency      | Download                                          |
 |-----------------|---------------------------------------------------|
 | MC-Structs      | https://github.com/Lenni0451/MCStructs            |
-| DietrichEvents2 | https://github.com/FlorianMichael/DietrichEvents2 |
-
-## TODO - LIST
-- [x] 1.8 packets and models
-- [ ] chunks and effect translations
-- [x] 1.9 packets and models
-- [ ] proper BungeeCord implementation and Spigot implementation
