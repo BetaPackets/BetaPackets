@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.bungeecord;
 
-import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
+import de.florianmichael.betapackets.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.bungeecord.util.TheUnsafeReflect;
 import de.florianmichael.betapackets.bungeecord.netty.BetaPacketsKickStringWriter;
 import de.florianmichael.betapackets.bungeecord.util.JLoggerToSLF4J;

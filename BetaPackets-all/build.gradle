@@ -12,9 +12,7 @@ configurations {
 }
 
 dependencies {
-    projectInclude project(":BetaPackets-api")
     projectInclude project(":BetaPackets-common")
-
     projectInclude project(":BetaPackets-bungeecord")
     projectInclude project(":BetaPackets-spigot")
 

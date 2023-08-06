@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.api.base;
+package de.florianmichael.betapackets.api.listener;
 
-import de.florianmichael.betapackets.api.PacketListener;
+import de.florianmichael.betapackets.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.handshake.WrapperHandshakingClientHandshake;
@@ -37,7 +37,7 @@ public class InternalHandshakeListener extends PacketListener {
     }
 
     @Override
-    public void onWrite(PacketEvent event) throws IOException{
+    public void onWrite(PacketEvent event) throws IOException {
         if (event.getType() == PacketType.Login.Server.LOGIN_SUCCESS) {
             event.getConnection().setState(NetworkState.PLAY);
         }

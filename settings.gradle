@@ -1,6 +1,5 @@
+include "BetaPackets-all"
 include "BetaPackets-common"
 include "BetaPackets-bungeecord"
-include "BetaPackets-api"
-include "BetaPackets-all"
 include "BetaPackets-spigot"
 

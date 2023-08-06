@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.api;
+package de.florianmichael.betapackets.api.listener;
 
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.type.Packet;

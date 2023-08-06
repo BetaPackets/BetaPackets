@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.bungeecord.util;
 
-import de.florianmichael.betapackets.api.BetaPackets;
+import de.florianmichael.betapackets.BetaPackets;
 import sun.misc.Unsafe;
 import net.md_5.bungee.protocol.KickStringWriter;
 

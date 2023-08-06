@@ -17,13 +17,12 @@
 
 package de.florianmichael.betapackets.api.netty;
 
-import de.florianmichael.betapackets.api.BetaPackets;
+import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.api.netty.element.BetaPacketsDecoder;
 import de.florianmichael.betapackets.api.netty.element.BetaPacketsEncoder;
 import de.florianmichael.betapackets.api.netty.event.ReorderPipelineEvent;
 import de.florianmichael.betapackets.base.UserConnection;
 import io.netty.channel.*;
-import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * This class bundles the whole Netty pipeline of BetaPackets into one HandlerAdapter
@@ -42,13 +41,11 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     private final UserConnection userConnection;
 
     /**
-     * Creates a new BetaPacketsPipeline and tracks the connection
-     * @param userConnection The connection to track
+     * Creates a new BetaPacketsPipeline
+     * @param userConnection The connection
      */
     public BetaPacketsPipeline(final UserConnection userConnection) {
         this.userConnection = userConnection;
-
-        BetaPackets.getConnectionMap().addConnection(userConnection.getChannel(), userConnection);
     }
 
     /**
@@ -61,17 +58,6 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
         pipeline.addBefore(getPacketDecoderName(), HANDLER_PACKET_DECODER_NAME, createBetaPacketsDecoder(userConnection));
         pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, createBetaPacketsEncoder(userConnection));
-    }
-
-    /**
-     * Removes the {@link UserConnection} from the connection map when the channel is inactive
-     * @param ctx The ChannelHandlerContext
-     */
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
-
-        BetaPackets.getConnectionMap().removeConnection(ctx.channel());
     }
 
     /**

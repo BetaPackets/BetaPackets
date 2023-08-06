@@ -17,7 +17,7 @@
 
 package de.florianmichael.betapackets.api.netty.element;
 
-import de.florianmichael.betapackets.api.BetaPackets;
+import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.base.UserConnection;
 import de.florianmichael.betapackets.base.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;

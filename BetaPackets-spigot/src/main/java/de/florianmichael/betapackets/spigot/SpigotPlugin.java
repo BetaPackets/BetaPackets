@@ -17,14 +17,13 @@
 
 package de.florianmichael.betapackets.spigot;
 
-import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
+import de.florianmichael.betapackets.api.BetaPacketsPlatform;
 import de.florianmichael.betapackets.spigot.netty.BukkitInjector;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.UUID;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class SpigotPlugin extends JavaPlugin implements BetaPacketsPlatform<Player> {

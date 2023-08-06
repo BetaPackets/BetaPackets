@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.api;
+package de.florianmichael.betapackets;
 
-import de.florianmichael.betapackets.api.base.BetaPacketsPlatform;
-import de.florianmichael.betapackets.api.base.ConnectionMap;
-import de.florianmichael.betapackets.api.base.InternalHandshakeListener;
+import de.florianmichael.betapackets.api.BetaPacketsAPI;
+import de.florianmichael.betapackets.api.BetaPacketsPlatform;
+import de.florianmichael.betapackets.api.listener.InternalHandshakeListener;
 import de.florianmichael.betapackets.mapping.MappingLoader;
 
 import java.io.IOException;
@@ -35,7 +35,6 @@ public class BetaPackets {
     private static BetaPacketsPlatform<?> platform;
 
     private static BetaPacketsAPI api;
-    private static ConnectionMap connectionMap;
 
     /**
      * Called by {@link BetaPacketsPlatform#loadPlatform()} to initialize all instances and the platform
@@ -45,7 +44,6 @@ public class BetaPackets {
         BetaPackets.platform = platform;
 
         BetaPackets.api = new BetaPacketsAPI();
-        BetaPackets.connectionMap = new ConnectionMap(BetaPackets.api);
 
         BetaPackets.api.registerListener(new InternalHandshakeListener(platform));
 
@@ -62,9 +60,5 @@ public class BetaPackets {
 
     public static BetaPacketsAPI getAPI() {
         return api;
-    }
-
-    public static ConnectionMap getConnectionMap() {
-        return connectionMap;
     }
 }

@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.api;
 
+import de.florianmichael.betapackets.api.listener.PacketListener;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.type.Packet;
 

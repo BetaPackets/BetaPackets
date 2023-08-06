@@ -16,5 +16,4 @@ dependencies {
 
     implementation "de.florianmichael:DietrichEvents2:${project.dietrichevents2_version}"
     implementation project(":BetaPackets-common")
-    implementation project(":BetaPackets-api")
 }

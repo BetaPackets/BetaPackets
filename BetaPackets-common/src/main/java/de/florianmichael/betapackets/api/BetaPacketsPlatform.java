@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.api.base;
+package de.florianmichael.betapackets.api;
 
-import de.florianmichael.betapackets.api.BetaPackets;
+import de.florianmichael.betapackets.BetaPackets;
 
 import java.io.InputStream;
 import java.util.UUID;
