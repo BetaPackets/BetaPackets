@@ -45,7 +45,6 @@ public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        System.out.println("PIPELINE: " + ctx.pipeline().names());
         FunctionalByteBuf readBuffer = new FunctionalByteBuf(msg, userConnection);
         int packetId = readBuffer.readVarInt();
 
