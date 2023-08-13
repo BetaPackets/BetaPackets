@@ -19,16 +19,18 @@ package de.florianmichael.betapackets.connection;
 
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.netty.BetaPacketsPipeline;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.netty.legacybundle.LegacyBundle;
 import de.florianmichael.betapackets.packet.NetworkSide;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.ids.PacketIdBase1_7;
 import de.florianmichael.betapackets.packet.ids.PacketIdList;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
+import de.florianmichael.betapackets.packet.model.s2c.play.WrapperPlayServerBundleDelimiter;
 import de.florianmichael.betapackets.packet.type.Packet;
 import de.florianmichael.betapackets.packet.type.ServerPacket;
 import io.netty.channel.Channel;
-import io.netty.channel.epoll.EpollSocketChannel;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 
 import java.io.IOException;
@@ -41,6 +43,7 @@ import java.util.UUID;
 public class UserConnection {
 
     private final Channel channel;
+    private BetaPacketsPipeline pipeline;
 
     private NetworkState state;
     private List<Packet> s2cPackets;
@@ -49,6 +52,7 @@ public class UserConnection {
     private PacketIdList packetIdList;
     private TextComponentSerializer textComponentSerializer;
 
+    private int compressionThreshold;
 
     /**
      * The UUID of the player
@@ -70,6 +74,10 @@ public class UserConnection {
         this.channel = channel;
         this.packetIdList = PacketIdBase1_7.INSTANCE;
         setState(NetworkState.HANDSHAKE);
+    }
+
+    public void setPipeline(BetaPacketsPipeline pipeline) {
+        this.pipeline = pipeline;
     }
 
     /**
@@ -151,31 +159,67 @@ public class UserConnection {
         return uuid;
     }
 
-    public void write(PacketWrapper<?> wrapper, boolean flush) {
+    public void write(List<PacketWrapper<?>> wrapper) {
+        if (wrapper.isEmpty()) {
+            return;
+        }
+
+        if (wrapper.size() == 1) {
+            write(wrapper.get(0));
+            return;
+        }
+
+        if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_19_4)) {
+            write(WrapperPlayServerBundleDelimiter.INSTANCE);
+            wrapper.forEach(this::write);
+            write(WrapperPlayServerBundleDelimiter.INSTANCE);
+        } else if (pipeline.isLegacyBundleSupported()) {
+            FunctionalByteBuf[] packets = new FunctionalByteBuf[wrapper.size()];
+            for (int i = 0; i < wrapper.size(); i++) {
+                packets[i] = getPacket(wrapper.get(i));
+            }
+            channel.writeAndFlush(new LegacyBundle(packets));
+        } else {
+            wrapper.forEach(this::write);
+        }
+    }
+
+    public FunctionalByteBuf getPacket(PacketWrapper<?> wrapper) {
         Packet type = wrapper.getType();
         int id;
         if (!(type instanceof ServerPacket) || (id = s2cPackets.indexOf(type)) == -1) {
             throw new IllegalArgumentException("Unknown server-packet " + type);
         }
-
         try {
             FunctionalByteBuf byteBuf = new FunctionalByteBuf(channel.alloc().buffer(), this);
             byteBuf.writeVarInt(id);
             wrapper.write(type, byteBuf);
-            if (flush) {
-                channel.writeAndFlush(byteBuf);
-            } else {
-                channel.write(byteBuf);
-            }
+            return byteBuf;
         } catch (IOException e) {
             throw new IllegalArgumentException("Cannot construct packet " + type, e);
         }
+    }
+
+    public void write(PacketWrapper<?> wrapper) {
+        channel.writeAndFlush(getPacket(wrapper));
     }
 
     public Object getPlayer() {
         if (player == null)
             player = BetaPackets.getPlatform().getPlayer(uuid);
         return player;
+    }
+
+    public int getCompressionThreshold() {
+        return compressionThreshold;
+    }
+
+    public void setCompressionThreshold(int compressionThreshold) {
+        this.compressionThreshold = compressionThreshold;
+    }
+
+    public BetaPacketsPipeline getPipeline() {
+        return pipeline;
     }
 
     public TextComponentSerializer getTextComponentSerializer() {

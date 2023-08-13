@@ -41,6 +41,11 @@ public class BungeeCordBetaPacketsPipeline extends BetaPacketsPipeline {
     }
 
     @Override
+    public String getFrameEncoderName() {
+        return "frame-prepender";
+    }
+
+    @Override
     public String getPacketDecoderName() {
         return ViaVersionSupport.getDecoderName("packet-decoder");
     }

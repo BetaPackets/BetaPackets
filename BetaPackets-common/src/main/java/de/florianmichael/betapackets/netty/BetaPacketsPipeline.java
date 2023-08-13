@@ -19,6 +19,7 @@ package de.florianmichael.betapackets.netty;
 
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.connection.UserConnection;
+import de.florianmichael.betapackets.netty.legacybundle.BetaPacketsLegacyBundleEncoder;
 import io.netty.channel.*;
 
 /**
@@ -34,9 +35,12 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     public final static String HANDLER_INTERCEPTOR_CLIENT_NAME = "betapackets-interceptor-client";
     public final static String HANDLER_INTERCEPTOR_SERVER_NAME = "betapackets-interceptor-server";
     public final static String HANDLER_ENCODER = "betapackets-encoder";
+    public final static String HANDLER_LEGACY_BUNDLER = "betapackets-legacy-bundler";
     public final static String HANDLER_AUTO_REORDER_NAME = "betapackets-auto-reorder";
 
     private final UserConnection userConnection;
+
+    private boolean legacyBundleSupported;
 
     /**
      * Creates a new BetaPacketsPipeline
@@ -44,6 +48,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      */
     public BetaPacketsPipeline(final UserConnection userConnection) {
         this.userConnection = userConnection;
+        userConnection.setPipeline(this);
     }
 
     /**
@@ -55,6 +60,17 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         final ChannelPipeline pipeline = ctx.channel().pipeline();
         addHandlers(pipeline, createBetaPacketsInterceptorClient(userConnection), createBetaPacketsInterceptorServer(userConnection), createBetaPacketsEncoder());
         BetaPackets.getAPI().getConnections().addConnection(userConnection);
+    }
+
+    public void addLegacyBundlerSupport() {
+        if (userConnection.getChannel().pipeline().get(HANDLER_LEGACY_BUNDLER) == null) {
+            userConnection.getChannel().pipeline().addBefore(getFrameEncoderName(), HANDLER_LEGACY_BUNDLER, createLegacyBundleEncoder(userConnection));
+            legacyBundleSupported = true;
+        }
+    }
+
+    public boolean isLegacyBundleSupported() {
+        return legacyBundleSupported;
     }
 
     private void addHandlers(ChannelPipeline pipeline, ChannelHandler interceptorClient, ChannelHandler interceptorServer, ChannelHandler encoder) {
@@ -123,7 +139,10 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     public abstract String getPacketCompressName();
 
+    public abstract String getFrameEncoderName();
+
     public abstract String getPacketDecoderName();
+
     public abstract String getPacketEncoderName();
 
     /**
@@ -136,6 +155,10 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     public BetaPacketsInterceptorServer createBetaPacketsInterceptorServer(final UserConnection userConnection) {
         return new BetaPacketsInterceptorServer(getPacketCompressName(), userConnection);
+    }
+
+    public BetaPacketsLegacyBundleEncoder createLegacyBundleEncoder(final UserConnection userConnection) {
+        return new BetaPacketsLegacyBundleEncoder(userConnection);
     }
 
     public BetaPacketsEncoder createBetaPacketsEncoder() {

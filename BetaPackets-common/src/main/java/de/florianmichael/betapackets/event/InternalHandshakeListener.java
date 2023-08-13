@@ -18,9 +18,11 @@
 package de.florianmichael.betapackets.event;
 
 import de.florianmichael.betapackets.BetaPacketsPlatform;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.c2s.handshake.WrapperHandshakingClientHandshake;
 import de.florianmichael.betapackets.packet.model.s2c.login.WrapperLoginServerLoginSuccess;
+import de.florianmichael.betapackets.packet.model.s2c.login.WrapperLoginServerSetCompression;
 import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.DecoderException;
 
@@ -32,7 +34,8 @@ public class InternalHandshakeListener extends PacketListener {
         super(platform.getPlugin(),
                 PacketType.Handshaking.Client.HANDSHAKE,
                 PacketType.Handshaking.Client.LEGACY_STATUS,
-                PacketType.Login.Server.LOGIN_SUCCESS
+                PacketType.Login.Server.LOGIN_SUCCESS,
+                PacketType.Play.Server.JOIN_GAME
         );
     }
 
@@ -42,6 +45,13 @@ public class InternalHandshakeListener extends PacketListener {
             WrapperLoginServerLoginSuccess loginSuccess = new WrapperLoginServerLoginSuccess(event);
             event.getConnection().setUuid(loginSuccess.getProfile().uuid);
             event.getConnection().setState(NetworkState.PLAY);
+        } else if (event.getType() == PacketType.Login.Server.SET_COMPRESSION) {
+            WrapperLoginServerSetCompression setCompression = new WrapperLoginServerSetCompression(event);
+            event.getConnection().setCompressionThreshold(setCompression.getThreshold());
+        } else if (event.getType() == PacketType.Play.Server.JOIN_GAME) {
+            if (event.getConnection().getProtocolVersion().isOlderThan(ProtocolCollection.R1_19_4)) {
+                event.getConnection().getPipeline().addLegacyBundlerSupport();
+            }
         }
     }
 

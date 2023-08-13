@@ -46,6 +46,11 @@ public class SpigotBetaPacketsPipeline extends BetaPacketsPipeline {
     }
 
     @Override
+    public String getFrameEncoderName() {
+        return "prepender";
+    }
+
+    @Override
     public String getPacketDecoderName() {
         return ViaVersionSupport.getDecoderName("decoder");
     }
