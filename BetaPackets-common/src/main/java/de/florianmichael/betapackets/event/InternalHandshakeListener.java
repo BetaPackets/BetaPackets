@@ -21,8 +21,12 @@ import de.florianmichael.betapackets.BetaPacketsPlatform;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.c2s.handshake.WrapperHandshakingClientHandshake;
+import de.florianmichael.betapackets.packet.model.c2s.play.WrapperPlayClientKeepAlive;
+import de.florianmichael.betapackets.packet.model.c2s.play.WrapperPlayClientPong;
 import de.florianmichael.betapackets.packet.model.s2c.login.WrapperLoginServerLoginSuccess;
 import de.florianmichael.betapackets.packet.model.s2c.login.WrapperLoginServerSetCompression;
+import de.florianmichael.betapackets.packet.model.s2c.play.WrapperPlayServerKeepAlive;
+import de.florianmichael.betapackets.packet.model.s2c.play.WrapperPlayServerPing;
 import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.DecoderException;
 
@@ -35,12 +39,16 @@ public class InternalHandshakeListener extends PacketListener {
                 PacketType.Handshaking.Client.HANDSHAKE,
                 PacketType.Handshaking.Client.LEGACY_STATUS,
                 PacketType.Login.Server.LOGIN_SUCCESS,
-                PacketType.Play.Server.JOIN_GAME
+                PacketType.Play.Server.JOIN_GAME,
+                PacketType.Play.Client.PONG,
+                PacketType.Play.Client.KEEP_ALIVE,
+                PacketType.Play.Server.PING,
+                PacketType.Play.Server.KEEP_ALIVE
         );
     }
 
     @Override
-    public void onWrite(PacketEvent event) throws IOException {
+    public void onWrite(PacketSendEvent event) throws IOException {
         if (event.getType() == PacketType.Login.Server.LOGIN_SUCCESS) {
             WrapperLoginServerLoginSuccess loginSuccess = new WrapperLoginServerLoginSuccess(event);
             event.getConnection().setUuid(loginSuccess.getProfile().uuid);
@@ -52,6 +60,10 @@ public class InternalHandshakeListener extends PacketListener {
             if (event.getConnection().getProtocolVersion().isOlderThan(ProtocolCollection.R1_19_4)) {
                 event.getConnection().getPipeline().addLegacyBundlerSupport();
             }
+        } else if (event.getType() == PacketType.Play.Server.KEEP_ALIVE) {
+            event.getConnection().getAcknowledgements().onKeepAliveSent(new WrapperPlayServerKeepAlive(event));
+        } else if (event.getType() == PacketType.Play.Server.PING) {
+            event.getConnection().getAcknowledgements().onPingSent(new WrapperPlayServerPing(event));
         }
     }
 
@@ -67,6 +79,10 @@ public class InternalHandshakeListener extends PacketListener {
             } else {
                 throw new DecoderException("Cannot handshake twice");
             }
+        } else if (event.getType() == PacketType.Play.Client.KEEP_ALIVE) {
+            event.getConnection().getAcknowledgements().onKeepAliveReceive(new WrapperPlayClientKeepAlive(event));
+        } else if (event.getType() == PacketType.Play.Client.PONG) {
+            event.getConnection().getAcknowledgements().onPongReceive(new WrapperPlayClientPong(event));
         }
     }
 }

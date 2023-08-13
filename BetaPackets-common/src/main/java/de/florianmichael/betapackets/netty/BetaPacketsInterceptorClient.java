@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.connection.UserConnection;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.packet.CancelPacketException;
 import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -56,6 +57,10 @@ public class BetaPacketsInterceptorClient extends MessageToMessageDecoder<ByteBu
 
         PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
         BetaPackets.getAPI().fireReadEvent(event);
+        if (event.isCancelled()) {
+            msg.clear();
+            throw CancelPacketException.INSTANCE;
+        }
 
         packetId = packets.indexOf(event.getType());
         if (packetId == -1)

@@ -30,8 +30,18 @@ public class PacketEvent {
     private UserConnection connection;
     private Object player;
 
+    private boolean cancelled;
+
     public FunctionalByteBuf getByteBuf() {
         return byteBuf;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
     }
 
     public PacketEvent(Packet type, FunctionalByteBuf byteBuf, UserConnection connection) {

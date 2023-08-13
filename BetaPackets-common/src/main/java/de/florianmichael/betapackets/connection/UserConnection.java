@@ -18,6 +18,7 @@
 package de.florianmichael.betapackets.connection;
 
 import de.florianmichael.betapackets.BetaPackets;
+import de.florianmichael.betapackets.connection.ack.Acknowledgements;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.netty.BetaPacketsPipeline;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
@@ -45,12 +46,15 @@ public class UserConnection {
     private final Channel channel;
     private BetaPacketsPipeline pipeline;
 
+    private final Acknowledgements acknowledgements = new Acknowledgements();
+
     private NetworkState state;
     private List<Packet> s2cPackets;
     private List<Packet> c2sPackets;
     private ProtocolCollection protocolVersion;
     private PacketIdList packetIdList;
     private TextComponentSerializer textComponentSerializer;
+
 
     private int compressionThreshold;
 
@@ -220,6 +224,10 @@ public class UserConnection {
 
     public BetaPacketsPipeline getPipeline() {
         return pipeline;
+    }
+
+    public Acknowledgements getAcknowledgements() {
+        return acknowledgements;
     }
 
     public TextComponentSerializer getTextComponentSerializer() {

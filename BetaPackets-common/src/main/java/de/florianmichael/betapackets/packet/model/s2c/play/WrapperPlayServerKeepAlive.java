@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.model.s2c.play;
 
-import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
 import de.florianmichael.betapackets.packet.type.PacketType;
@@ -45,12 +45,12 @@ public class WrapperPlayServerKeepAlive extends PacketWrapper<WrapperPlayServerK
 
     @Override
     public void read(Packet type, FunctionalByteBuf buf) throws IOException {
-id = buf.readLong();
+        id = buf.readLong();
     }
 
     @Override
     public void copyFrom(WrapperPlayServerKeepAlive base) {
-id = base.id;
+        id = base.id;
     }
 
     public long getId() {

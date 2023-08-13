@@ -20,7 +20,12 @@ package de.florianmichael.betapackets.netty;
 import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.connection.UserConnection;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.event.PacketSendEvent;
+import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
+import de.florianmichael.betapackets.netty.legacybundle.LegacyBundle;
+import de.florianmichael.betapackets.packet.CancelPacketException;
+import de.florianmichael.betapackets.packet.model.s2c.play.WrapperPlayServerBundleDelimiter;
 import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -56,6 +61,17 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
     }
 
     @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        Throwable lastCause = cause;
+        while (lastCause != null) {
+            if (lastCause instanceof CancelPacketException)
+                return;
+            lastCause = lastCause.getCause();
+        }
+        super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         boolean couldBeCompressed = isCompressed(ctx.pipeline());
         boolean compressed = false;
@@ -84,8 +100,50 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
         if (packetId >= packets.size())
             throw new EncoderException("Unknown packet-id " + packetId);
 
-        PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
+        PacketSendEvent event = new PacketSendEvent(packets.get(packetId), readBuffer, userConnection);
         BetaPackets.getAPI().fireWriteEvent(event);
+        if (event.isCancelled()) {
+            msg.clear();
+            throw CancelPacketException.INSTANCE;
+        }
+
+        if (event.getBundle().size() > 1) {
+            FunctionalByteBuf[] bundle = new FunctionalByteBuf[event.getBundle().size()];
+            for (int i = 0; i < event.getBundle().size(); i++) {
+                PacketEvent packetEvent = event.getBundle().get(i);
+                ByteBuf outBuf = ctx.alloc().buffer();
+
+                packetId = packets.indexOf(packetEvent.getType());
+                if (packetId == -1)
+                    throw new EncoderException("Unregistered packet-type " + packetEvent.getType());
+
+                FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
+                writeBuffer.writeVarInt(packetId);
+                if (packetEvent == event && packetEvent.getLastPacketWrapper() == null) {
+                    writeBuffer.writeBytes(messageToRead);
+                } else if (packetEvent.getLastPacketWrapper() != null) {
+                    packetEvent.getLastPacketWrapper().write(packetEvent.getType(), writeBuffer);
+                } else {
+                    throw new IllegalArgumentException("Cannot add PacketEvent without wrapper");
+                }
+                bundle[i] = writeBuffer;
+            }
+            if (userConnection.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_19_4)) {
+                ctx.writeAndFlush(userConnection.getPacket(WrapperPlayServerBundleDelimiter.INSTANCE));
+                for (FunctionalByteBuf byteBuf : bundle) {
+                    ctx.writeAndFlush(byteBuf);
+                }
+                ctx.writeAndFlush(userConnection.getPacket(WrapperPlayServerBundleDelimiter.INSTANCE));
+            } else if (userConnection.getPipeline().isLegacyBundleSupported()) {
+                ctx.writeAndFlush(new LegacyBundle(bundle));
+            } else {
+                for (FunctionalByteBuf buf : bundle) {
+                    ctx.writeAndFlush(buf);
+                }
+            }
+            msg.clear();
+            throw CancelPacketException.INSTANCE;
+        }
 
         packetId = packets.indexOf(event.getType());
         if (packetId == -1)

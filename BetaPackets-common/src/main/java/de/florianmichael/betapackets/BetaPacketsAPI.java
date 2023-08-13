@@ -20,6 +20,7 @@ package de.florianmichael.betapackets;
 import de.florianmichael.betapackets.connection.ConnectionList;
 import de.florianmichael.betapackets.event.PacketListener;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.event.PacketSendEvent;
 import de.florianmichael.betapackets.packet.type.Packet;
 
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class BetaPacketsAPI {
         }
     }
 
-    public void fireWriteEvent(PacketEvent event) throws IOException{
+    public void fireWriteEvent(PacketSendEvent event) throws IOException{
         List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return;
 

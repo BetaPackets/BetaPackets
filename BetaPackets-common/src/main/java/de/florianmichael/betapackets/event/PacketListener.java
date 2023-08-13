@@ -43,7 +43,7 @@ public class PacketListener {
         throw new UnsupportedOperationException("onRead(event: PacketEvent) has to be implemented without super-call");
     }
 
-    public void onWrite(PacketEvent event) throws IOException {
+    public void onWrite(PacketSendEvent event) throws IOException {
         throw new UnsupportedOperationException("onWrite(event: PacketEvent) has to be implemented without super-call");
     }
 
