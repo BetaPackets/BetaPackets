@@ -31,9 +31,18 @@ public class PacketEvent {
     private Object player;
 
     private boolean cancelled;
+    private boolean abort;
 
     public FunctionalByteBuf getByteBuf() {
         return byteBuf;
+    }
+
+    public void setAbort(boolean abort) {
+        this.abort = abort;
+    }
+
+    public boolean isAbort() {
+        return abort;
     }
 
     public void setCancelled(boolean cancelled) {

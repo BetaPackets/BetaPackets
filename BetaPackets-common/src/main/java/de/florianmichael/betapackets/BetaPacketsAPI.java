@@ -18,8 +18,8 @@
 package de.florianmichael.betapackets;
 
 import de.florianmichael.betapackets.connection.ConnectionList;
-import de.florianmichael.betapackets.event.PacketListener;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.event.PacketListener;
 import de.florianmichael.betapackets.event.PacketSendEvent;
 import de.florianmichael.betapackets.packet.type.Packet;
 
@@ -49,15 +49,17 @@ public class BetaPacketsAPI {
 
         for (PacketListener listener : packetListeners) {
             listener.onRead(event);
+            if (event.isAbort()) return;
         }
     }
 
-    public void fireWriteEvent(PacketSendEvent event) throws IOException{
+    public void fireWriteEvent(PacketSendEvent event) throws IOException {
         List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return;
 
         for (PacketListener listener : packetListeners) {
             listener.onWrite(event);
+            if (event.isAbort()) return;
         }
     }
 

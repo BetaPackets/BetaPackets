@@ -60,20 +60,24 @@ public class Acknowledgements {
             ack.onSend();
     }
 
-    public void onPongReceive(WrapperPlayClientPong pong) {
+    public boolean onPongReceive(WrapperPlayClientPong pong) {
         reservedTransactionIds.remove(pong.getId());
         AckWithID ack = transactionById.remove(pong.getId());
         if (ack != null) {
             ack.onReceive();
+            return true;
         }
+        return false;
     }
 
-    public void onKeepAliveReceive(WrapperPlayClientKeepAlive keepAlive) {
+    public boolean onKeepAliveReceive(WrapperPlayClientKeepAlive keepAlive) {
         reservedKeepAliveIds.remove(keepAlive.getId());
         AckWithID ack = keepAliveById.remove(keepAlive.getId());
         if (ack != null) {
             ack.onReceive();
+            return true;
         }
+        return false;
     }
 
     public PacketWrapper<?> createKeepAlive(Consumer<Ack> callback) {

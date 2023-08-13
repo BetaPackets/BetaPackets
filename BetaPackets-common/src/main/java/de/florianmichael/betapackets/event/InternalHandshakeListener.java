@@ -80,9 +80,15 @@ public class InternalHandshakeListener extends PacketListener {
                 throw new DecoderException("Cannot handshake twice");
             }
         } else if (event.getType() == PacketType.Play.Client.KEEP_ALIVE) {
-            event.getConnection().getAcknowledgements().onKeepAliveReceive(new WrapperPlayClientKeepAlive(event));
+            if (event.getConnection().getAcknowledgements().onKeepAliveReceive(new WrapperPlayClientKeepAlive(event))) {
+                event.setCancelled(true);
+                event.setAbort(true);
+            }
         } else if (event.getType() == PacketType.Play.Client.PONG) {
-            event.getConnection().getAcknowledgements().onPongReceive(new WrapperPlayClientPong(event));
+            if (event.getConnection().getAcknowledgements().onPongReceive(new WrapperPlayClientPong(event))) {
+                event.setCancelled(true);
+                event.setAbort(true);
+            }
         }
     }
 }

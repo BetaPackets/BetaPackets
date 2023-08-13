@@ -17,6 +17,6 @@
 
 package de.florianmichael.betapackets.packet;
 
-public class CancelPacketException extends Exception {
+public class CancelPacketException extends RuntimeException {
     public static CancelPacketException INSTANCE = new CancelPacketException();
 }
