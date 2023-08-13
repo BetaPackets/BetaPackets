@@ -17,15 +17,21 @@
 
 package de.florianmichael.betapackets.connection;
 
+import de.florianmichael.betapackets.BetaPackets;
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.NetworkSide;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.ids.PacketIdBase1_7;
 import de.florianmichael.betapackets.packet.ids.PacketIdList;
+import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.ServerPacket;
 import io.netty.channel.Channel;
+import io.netty.channel.epoll.EpollSocketChannel;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +53,8 @@ public class UserConnection {
     /**
      * The UUID of the player
      */
-    private UUID player;
+    private UUID uuid;
+    private Object player;
 
     /**
      * If the connection is fully loaded
@@ -98,7 +105,8 @@ public class UserConnection {
         } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_7_5)) {
             textComponentSerializer = TextComponentSerializer.V1_7;
         }
-        if (textComponentSerializer == null) throw new IllegalArgumentException("No text-serializer for " + protocolVersion);
+        if (textComponentSerializer == null)
+            throw new IllegalArgumentException("No text-serializer for " + protocolVersion);
     }
 
     public void setState(NetworkState state) {
@@ -115,8 +123,8 @@ public class UserConnection {
         return s2cPackets;
     }
 
-    public void setPlayer(UUID player) {
-        this.player = player;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public boolean hasLoaded() {
@@ -139,7 +147,34 @@ public class UserConnection {
         return packetIdList;
     }
 
-    public UUID getPlayer() {
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void write(PacketWrapper<?> wrapper, boolean flush) {
+        Packet type = wrapper.getType();
+        int id;
+        if (!(type instanceof ServerPacket) || (id = s2cPackets.indexOf(type)) == -1) {
+            throw new IllegalArgumentException("Unknown server-packet " + type);
+        }
+
+        try {
+            FunctionalByteBuf byteBuf = new FunctionalByteBuf(channel.alloc().buffer(), this);
+            byteBuf.writeVarInt(id);
+            wrapper.write(type, byteBuf);
+            if (flush) {
+                channel.writeAndFlush(byteBuf);
+            } else {
+                channel.write(byteBuf);
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Cannot construct packet " + type, e);
+        }
+    }
+
+    public Object getPlayer() {
+        if (player == null)
+            player = BetaPackets.getPlatform().getPlayer(uuid);
         return player;
     }
 

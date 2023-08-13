@@ -17,118 +17,24 @@
 
 package de.florianmichael.betapackets.netty;
 
-import de.florianmichael.betapackets.BetaPackets;
-import de.florianmichael.betapackets.connection.UserConnection;
-import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
-import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.DecoderException;
-import io.netty.handler.codec.EncoderException;
-import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.MessageToByteEncoder;
 
-import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+@ChannelHandler.Sharable
+public class BetaPacketsEncoder extends MessageToByteEncoder<FunctionalByteBuf> {
 
-/**
- * This encoder encodes all outgoing packets and executes the BetaPacketsAPI in the process
- */
-public class BetaPacketsEncoder extends MessageToMessageEncoder<ByteBuf> {
+    private String compressHandler;
 
-    private final UserConnection userConnection;
-    private final String compress;
-    private final byte[] deflateBuffer = new byte[8192];
-    private final Inflater inflater = new Inflater();
-    private final Deflater deflater = new Deflater();
-
-    public BetaPacketsEncoder(String compress, UserConnection userConnection) {
-        this.userConnection = userConnection;
-        this.compress = compress;
-    }
-
-    private boolean isCompressed(ChannelPipeline pipeline) {
-        return pipeline.names().indexOf(compress) > pipeline.names().indexOf(BetaPacketsPipeline.HANDLER_PACKET_ENCODER_NAME);
+    public BetaPacketsEncoder(String compressHandler) {
+        this.compressHandler = compressHandler;
     }
 
     @Override
-    public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        boolean couldBeCompressed = isCompressed(ctx.pipeline());
-        boolean compressed = false;
-
-        ByteBuf messageToRead = msg;
-        if (couldBeCompressed) {
-            FunctionalByteBuf buf = new FunctionalByteBuf(messageToRead, userConnection);
-            int uncompressedSize = buf.readVarInt();
-            if (uncompressedSize == 0) {
-            } else {
-                byte[] bytes = new byte[messageToRead.readableBytes()];
-                messageToRead.readBytes(bytes);
-                inflater.setInput(bytes);
-                byte[] uncompressed = new byte[uncompressedSize];
-                inflater.inflate(uncompressed);
-                messageToRead = Unpooled.wrappedBuffer(uncompressed);
-                inflater.reset();
-                compressed = true;
-            }
-        }
-
-        FunctionalByteBuf readBuffer = new FunctionalByteBuf(messageToRead, userConnection);
-        int packetId = readBuffer.readVarInt();
-
-        List<Packet> packets = userConnection.getS2CPackets();
-        if (packetId >= packets.size())
-            throw new EncoderException("Unknown packet-id " + packetId);
-
-        PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
-        BetaPackets.getAPI().fireWriteEvent(event);
-
-        packetId = packets.indexOf(event.getType());
-        if (packetId == -1)
-            throw new EncoderException("Unregistered packet-type " + event.getType());
-
-        ByteBuf outBuf = ctx.alloc().buffer();
-        FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
-        writeBuffer.writeVarInt(packetId);
-
-        if (event.getLastPacketWrapper() != null) { // packet was edited
-            event.getLastPacketWrapper().write(event.getType(), writeBuffer);
-        } else { // pass-through
-            writeBuffer.writeBytes(messageToRead);
-        }
-
-        if (couldBeCompressed) {
-            FunctionalByteBuf buf = new FunctionalByteBuf(Unpooled.buffer(), userConnection);
-            if (compressed) {
-                buf.writeVarInt(outBuf.readableBytes());
-                byte[] bytes = new byte[outBuf.readableBytes()];
-                outBuf.readBytes(bytes);
-                deflater.setInput(bytes);
-                deflater.finish();
-                while (!deflater.finished()) {
-                    int index = deflater.deflate(deflateBuffer);
-                    buf.writeBytes(deflateBuffer, 0, index);
-                }
-                deflater.reset();
-            } else {
-                buf.writeVarInt(0);
-                buf.writeBytes(outBuf);
-            }
-            out.add(buf.getBuffer());
-        } else {
-            out.add(outBuf);
-        }
-    }
-
-    public UserConnection getUserConnection() {
-        return userConnection;
-    }
-
-    @Override
-    public boolean isSharable() {
-        return this.userConnection != null;
+    protected void encode(ChannelHandlerContext ctx, FunctionalByteBuf msg, ByteBuf out) throws Exception {
+        out.writeBytes(msg.getBuffer());
+        // TODO compression handling here
     }
 }

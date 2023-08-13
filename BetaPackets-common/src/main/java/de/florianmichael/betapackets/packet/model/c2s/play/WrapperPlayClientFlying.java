@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.model.c2s.play;
 
-import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
 import de.florianmichael.betapackets.packet.type.PacketType;
@@ -39,6 +39,8 @@ public class WrapperPlayClientFlying extends PacketWrapper<WrapperPlayClientFlyi
     }
 
     public WrapperPlayClientFlying(double x, double y, double z, float yaw, float pitch, boolean onGround, boolean positionUpdate, boolean lookUpdate) {
+        super(positionUpdate && lookUpdate ? PacketType.Play.Client.POSITION_LOOK : positionUpdate
+                ? PacketType.Play.Client.POSITION : lookUpdate ? PacketType.Play.Client.LOOK : PacketType.Play.Client.FLYING);
         this.x = x;
         this.y = y;
         this.z = z;

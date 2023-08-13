@@ -25,6 +25,7 @@ import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.model.auth.GameProfile;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.io.IOException;
@@ -55,6 +56,7 @@ public class WrapperStatusServerStatusResponse extends PacketWrapper<WrapperStat
     }
 
     public WrapperStatusServerStatusResponse(String versionName, int versionId, int maxPlayers, int onlinePlayers, List<GameProfile> players, ATextComponent description, Optional<String> favicon, Optional<Boolean> enforcesSecureChat, Optional<Boolean> previewsChat) {
+        super(PacketType.Status.Server.STATUS_RESPONSE);
         this.versionName = versionName;
         this.versionId = versionId;
         this.maxPlayers = maxPlayers;

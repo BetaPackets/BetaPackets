@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.auth.ProfileProperty;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class WrapperLoginServerLoginSuccess extends PacketWrapper<WrapperLoginSe
     }
 
     public WrapperLoginServerLoginSuccess(GameProfile profile) {
+        super(PacketType.Login.Server.LOGIN_SUCCESS);
         this.profile = profile;
     }
 

@@ -15,53 +15,56 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.packet.model.s2c.status;
+package de.florianmichael.betapackets.packet.model.c2s.play;
 
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
 import de.florianmichael.betapackets.packet.type.PacketType;
-import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.io.IOException;
 
-public class WrapperLoginServerDisconnect extends PacketWrapper<WrapperLoginServerDisconnect> {
+public class WrapperPlayClientConfirmTeleport extends PacketWrapper<WrapperPlayClientConfirmTeleport> {
 
-    private ATextComponent reason;
+    private int id;
 
-    public WrapperLoginServerDisconnect(PacketEvent event) throws IOException {
+    public WrapperPlayClientConfirmTeleport(PacketEvent event) throws IOException {
         super(event);
     }
 
-    @Override
-    public void write(Packet type, FunctionalByteBuf buf) {
-        buf.writeComponent(reason);
+    public WrapperPlayClientConfirmTeleport(int id) {
+        super(PacketType.Play.Client.CONFIRM_TELEPORT);
+        this.id = id;
     }
 
     @Override
-    public void read(Packet type, FunctionalByteBuf buf) {
-        reason = buf.readComponent();
+    public void write(Packet type, FunctionalByteBuf buf) throws IOException {
+        buf.writeVarInt(id);
     }
 
     @Override
-    public void copyFrom(WrapperLoginServerDisconnect base) {
-        reason = base.reason;
+    public void read(Packet type, FunctionalByteBuf buf) throws IOException {
+        id = buf.readVarInt();
     }
 
-    public WrapperLoginServerDisconnect(ATextComponent reason) {
-        super(PacketType.Play.Server.DISCONNECT);
-        this.reason = reason;
+    @Override
+    public void copyFrom(WrapperPlayClientConfirmTeleport base) {
+        id = base.id;
     }
 
-    public ATextComponent getReason() {
-        return reason;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
     public String toString() {
-        return "WrapperLoginServerDisconnect{" +
-                "reason=" + reason +
+        return "WrapperPlayClientTeleportConfirm{" +
+                "id=" + id +
                 '}';
     }
 }

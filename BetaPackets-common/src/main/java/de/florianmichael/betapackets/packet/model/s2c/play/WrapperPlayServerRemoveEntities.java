@@ -21,20 +21,22 @@ import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 import gnu.trove.list.TIntList;
 import gnu.trove.list.array.TIntArrayList;
 
 import java.io.IOException;
 
-public class WrapperPlayServerDestroyEntities extends PacketWrapper<WrapperPlayServerDestroyEntities> {
+public class WrapperPlayServerRemoveEntities extends PacketWrapper<WrapperPlayServerRemoveEntities> {
 
     private TIntList entityIds;
 
-    public WrapperPlayServerDestroyEntities(PacketEvent event) throws IOException {
+    public WrapperPlayServerRemoveEntities(PacketEvent event) throws IOException {
         super(event);
     }
 
-    public WrapperPlayServerDestroyEntities(TIntList entityIds) {
+    public WrapperPlayServerRemoveEntities(TIntList entityIds) {
+        super(PacketType.Play.Server.REMOVE_ENTITIES);
         this.entityIds = entityIds;
     }
 
@@ -54,7 +56,7 @@ public class WrapperPlayServerDestroyEntities extends PacketWrapper<WrapperPlayS
     }
 
     @Override
-    public void copyFrom(WrapperPlayServerDestroyEntities base) {
+    public void copyFrom(WrapperPlayServerRemoveEntities base) {
         entityIds = base.entityIds;
     }
 

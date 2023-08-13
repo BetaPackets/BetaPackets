@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 
 import java.io.IOException;
 
@@ -41,6 +42,7 @@ public class WrapperPlayClientUseEntity extends PacketWrapper<WrapperPlayClientU
     }
 
     public WrapperPlayClientUseEntity(int entityId, Action action, float hitVecX, float hitVecY, float hitVecZ, Hand1_9 hand, boolean sneaking) {
+        super(PacketType.Play.Client.USE_ENTITY);
         this.entityId = entityId;
         this.action = action;
         this.hitVecX = hitVecX;

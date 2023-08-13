@@ -28,6 +28,7 @@ public class PacketEvent {
     private FunctionalByteBuf byteBuf;
     private PacketWrapper<?> lastPacketWrapper;
     private UserConnection connection;
+    private Object player;
 
     public FunctionalByteBuf getByteBuf() {
         return byteBuf;
@@ -37,6 +38,7 @@ public class PacketEvent {
         this.type = type;
         this.byteBuf = byteBuf;
         this.connection = connection;
+        this.player = connection.getPlayer();
     }
 
     public UserConnection getConnection() {
@@ -49,6 +51,10 @@ public class PacketEvent {
 
     public Packet getType() {
         return type;
+    }
+
+    public Object getPlayer() {
+        return player;
     }
 
     public void setLastPacketWrapper(PacketWrapper<?> lastPacketWrapper) {

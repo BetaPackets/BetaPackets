@@ -17,52 +17,69 @@
 
 package de.florianmichael.betapackets.packet.model.c2s.play;
 
-import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.model.entity.v1_9.Hand1_9;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 
 import java.io.IOException;
 
-public class WrapperPlayClientTeleportConfirm extends PacketWrapper<WrapperPlayClientTeleportConfirm> {
+public class WrapperPlayClientUseItem extends PacketWrapper<WrapperPlayClientUseItem> {
 
-    private int id;
+    private Hand1_9 hand;
+    private int sequence;
 
-    public WrapperPlayClientTeleportConfirm(PacketEvent event) throws IOException {
+    public WrapperPlayClientUseItem(PacketEvent event) throws IOException {
         super(event);
     }
 
-    public WrapperPlayClientTeleportConfirm(int id) {
-        this.id = id;
+    public WrapperPlayClientUseItem(Hand1_9 hand, int sequence) {
+        super(PacketType.Play.Client.USE_ITEM);
+        this.hand = hand;
+        this.sequence = sequence;
     }
 
     @Override
     public void write(Packet type, FunctionalByteBuf buf) throws IOException {
-        buf.writeVarInt(id);
+        buf.writeEnumConstant(hand);
+        buf.writeVarInt(sequence);
     }
 
     @Override
     public void read(Packet type, FunctionalByteBuf buf) throws IOException {
-        id = buf.readVarInt();
+        hand = buf.readEnumConstant(Hand1_9.class);
+        sequence = buf.readVarInt();
     }
 
     @Override
-    public void copyFrom(WrapperPlayClientTeleportConfirm base) {
-        id = base.id;
+    public void copyFrom(WrapperPlayClientUseItem base) {
+        hand = base.hand;
+        sequence = base.sequence;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Hand1_9 getHand() {
+        return hand;
     }
 
-    public int getId() {
-        return id;
+    public void setHand(Hand1_9 hand) {
+        this.hand = hand;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
     }
 
     @Override
     public String toString() {
-        return "WrapperPlayClientTeleportConfirm{" +
-                "id=" + id +
+        return "WrapperPlayClientUseItem{" +
+                "hand=" + hand +
+                ", sequence=" + sequence +
                 '}';
     }
 }

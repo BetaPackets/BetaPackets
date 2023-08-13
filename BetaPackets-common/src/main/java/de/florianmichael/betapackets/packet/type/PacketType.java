@@ -179,7 +179,7 @@ public class PacketType {
             FEATURE_FLAGS,
             ENTITY_EFFECT,
             UPDATE_RECIPES,
-            UPDATE_TAGS
+            UPDATE_ENTITY, UPDATE_TAGS
         }
 
         public enum Client implements ClientPacket {

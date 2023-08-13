@@ -17,6 +17,8 @@
 
 package de.florianmichael.betapackets.connection;
 
+import de.florianmichael.betapackets.model.game.PlayerDiggingStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,9 +35,17 @@ public class ConnectionList {
         connections.remove(connection);
     }
 
+    public UserConnection getConnectionByPlayer(Object player) {
+        for (UserConnection connection : connections) {
+            if (connection.getPlayer() == player)
+                return connection;
+        }
+        return null;
+    }
+
     public UserConnection getConnectionByUUID(UUID uuid) {
         for (UserConnection connection : connections) {
-            if (connection.getPlayer() != null && connection.getPlayer().equals(uuid))
+            if (connection.getUuid() != null && connection.getUuid().equals(uuid))
                 return connection;
         }
         return null;

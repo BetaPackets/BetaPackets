@@ -17,6 +17,7 @@
 
 package de.florianmichael.betapackets.packet.model.s2c.play;
 
+import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
@@ -30,6 +31,10 @@ public class WrapperPlayServerSpawnPlayer extends PacketWrapper<WrapperPlayServe
     private UUID uuid;
     private double x, y, z;
     private float yaw, pitch;
+
+    public WrapperPlayServerSpawnPlayer(PacketEvent event) throws IOException {
+        super(event);
+    }
 
     @Override
     public void write(Packet type, FunctionalByteBuf buf) throws IOException {

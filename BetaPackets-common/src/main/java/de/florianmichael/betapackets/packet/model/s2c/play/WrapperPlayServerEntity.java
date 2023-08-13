@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.model.s2c.play;
 
-import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
 import de.florianmichael.betapackets.packet.type.PacketType;
@@ -56,6 +56,9 @@ public class WrapperPlayServerEntity extends PacketWrapper<WrapperPlayServerEnti
     }
 
     public WrapperPlayServerEntity(int entityId, double deltaX, double deltaY, double deltaZ, float yaw, float pitch, boolean onGround, boolean positionUpdate, boolean lookUpdate) {
+        super(positionUpdate && lookUpdate ? PacketType.Play.Server.UPDATE_ENTITY_POSITION_AND_ROTATION : positionUpdate
+                ? PacketType.Play.Server.UPDATE_ENTITY_POSITION : lookUpdate ? PacketType.Play.Server.UPDATE_ENTITY_ROTATION
+                : PacketType.Play.Server.UPDATE_ENTITY);
         this.entityId = entityId;
         this.deltaX = deltaX;
         this.deltaY = deltaY;
@@ -123,6 +126,13 @@ public class WrapperPlayServerEntity extends PacketWrapper<WrapperPlayServerEnti
         onGround = base.onGround;
         positionUpdate = base.positionUpdate;
         lookUpdate = base.lookUpdate;
+    }
+
+    public static boolean isEntityPacket(Packet type) {
+        return type == PacketType.Play.Server.UPDATE_ENTITY
+                || type == PacketType.Play.Server.UPDATE_ENTITY_ROTATION
+                || type == PacketType.Play.Server.UPDATE_ENTITY_POSITION
+                || type == PacketType.Play.Server.UPDATE_ENTITY_POSITION_AND_ROTATION;
     }
 
     public int getEntityId() {

@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.base.ProtocolCollection;
 import de.florianmichael.betapackets.packet.NetworkState;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.DecoderException;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
     }
 
     public WrapperHandshakingClientHandshake(ProtocolCollection version, String hostName, int port, NetworkState intendedState) {
+        super(PacketType.Handshaking.Client.HANDSHAKE);
         this.version = version;
         this.hostName = hostName;
         this.port = port;

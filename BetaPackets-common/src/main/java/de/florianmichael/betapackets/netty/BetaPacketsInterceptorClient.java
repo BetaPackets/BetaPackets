@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -32,14 +33,15 @@ import java.util.List;
 /**
  * This decoder decodes all incoming packets and executes the BetaPacketsAPI in the process
  */
-public class BetaPacketsDecoder extends MessageToMessageDecoder<ByteBuf> {
+@ChannelHandler.Sharable
+public class BetaPacketsInterceptorClient extends MessageToMessageDecoder<ByteBuf> {
 
     /**
      * The user connection of the player
      */
     private final UserConnection userConnection;
 
-    public BetaPacketsDecoder(UserConnection userConnection) {
+    public BetaPacketsInterceptorClient(UserConnection userConnection) {
         this.userConnection = userConnection;
     }
 

@@ -22,6 +22,7 @@ import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.model.entity.Entity;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 import io.netty.handler.codec.EncoderException;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class WrapperPlayServerSpawnEntity extends PacketWrapper<WrapperPlayServe
     }
 
     public WrapperPlayServerSpawnEntity(int entityId, UUID uuid, Entity entity, double x, double y, double z, double velocityX, double velocityY, double velocityZ, float yaw, float pitch, float headYaw, int data) {
+        super(PacketType.Play.Server.SPAWN_ENTITY);
         this.entityId = entityId;
         this.uuid = uuid;
         this.entity = entity;

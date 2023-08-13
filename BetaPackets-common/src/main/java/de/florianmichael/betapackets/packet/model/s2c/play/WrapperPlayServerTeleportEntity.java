@@ -21,21 +21,23 @@ import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 
 import java.io.IOException;
 
-public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlayServerEntityTeleport> {
+public class WrapperPlayServerTeleportEntity extends PacketWrapper<WrapperPlayServerTeleportEntity> {
 
     private int entityId;
     private double x, y, z;
     private float yaw, pitch;
     private boolean onGround;
 
-    public WrapperPlayServerEntityTeleport(PacketEvent event) throws IOException {
+    public WrapperPlayServerTeleportEntity(PacketEvent event) throws IOException {
         super(event);
     }
 
-    public WrapperPlayServerEntityTeleport(int entityId, double x, double y, double z, float yaw, float pitch) {
+    public WrapperPlayServerTeleportEntity(int entityId, double x, double y, double z, float yaw, float pitch) {
+        super(PacketType.Play.Server.TELEPORT_ENTITY);
         this.entityId = entityId;
         this.x = x;
         this.y = y;
@@ -67,7 +69,7 @@ public class WrapperPlayServerEntityTeleport extends PacketWrapper<WrapperPlaySe
     }
 
     @Override
-    public void copyFrom(WrapperPlayServerEntityTeleport base) {
+    public void copyFrom(WrapperPlayServerTeleportEntity base) {
         x = base.x;
         y = base.y;
         z = base.z;

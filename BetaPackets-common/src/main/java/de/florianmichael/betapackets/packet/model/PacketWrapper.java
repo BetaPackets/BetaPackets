@@ -17,8 +17,8 @@
 
 package de.florianmichael.betapackets.packet.model;
 
-import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.packet.type.Packet;
 import io.netty.handler.codec.CodecException;
 
@@ -26,7 +26,10 @@ import java.io.IOException;
 
 public abstract class PacketWrapper<T extends PacketWrapper<T>> {
 
+    private Packet type;
+
     public PacketWrapper(PacketEvent event) throws IOException {
+        type = event.getType();
         if (event.getLastPacketWrapper() != null) {
             if (!getClass().isInstance(event.getLastPacketWrapper())) {
                 throw new CodecException("Duplicate implementation " + event.getLastPacketWrapper().getClass() + " " + getClass());
@@ -38,7 +41,8 @@ public abstract class PacketWrapper<T extends PacketWrapper<T>> {
         event.setLastPacketWrapper(this);
     }
 
-    public PacketWrapper() {
+    public PacketWrapper(Packet type) {
+        this.type = type;
     }
 
     public abstract void write(Packet type, FunctionalByteBuf buf)throws IOException;
@@ -46,4 +50,8 @@ public abstract class PacketWrapper<T extends PacketWrapper<T>> {
     public abstract void read(Packet type, FunctionalByteBuf buf)throws IOException;
 
     public abstract void copyFrom(T base);
+
+    public Packet getType() {
+        return type;
+    }
 }

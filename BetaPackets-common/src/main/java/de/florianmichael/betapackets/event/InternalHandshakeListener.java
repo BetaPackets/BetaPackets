@@ -40,7 +40,7 @@ public class InternalHandshakeListener extends PacketListener {
     public void onWrite(PacketEvent event) throws IOException {
         if (event.getType() == PacketType.Login.Server.LOGIN_SUCCESS) {
             WrapperLoginServerLoginSuccess loginSuccess = new WrapperLoginServerLoginSuccess(event);
-            event.getConnection().setPlayer(loginSuccess.getProfile().uuid);
+            event.getConnection().setUuid(loginSuccess.getProfile().uuid);
             event.getConnection().setState(NetworkState.PLAY);
         }
     }

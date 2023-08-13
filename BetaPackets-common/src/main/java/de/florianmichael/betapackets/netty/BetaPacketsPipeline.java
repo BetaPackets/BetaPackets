@@ -18,7 +18,6 @@
 package de.florianmichael.betapackets.netty;
 
 import de.florianmichael.betapackets.BetaPackets;
-import de.florianmichael.betapackets.BetaPacketsAPI;
 import de.florianmichael.betapackets.connection.UserConnection;
 import io.netty.channel.*;
 
@@ -32,8 +31,9 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     /**
      * The name of the decoder and encoder handlers
      */
-    public final static String HANDLER_PACKET_DECODER_NAME = "betapackets-packet-decoder";
-    public final static String HANDLER_PACKET_ENCODER_NAME = "betapackets-packet-encoder";
+    public final static String HANDLER_INTERCEPTOR_CLIENT_NAME = "betapackets-interceptor-client";
+    public final static String HANDLER_INTERCEPTOR_SERVER_NAME = "betapackets-interceptor-server";
+    public final static String HANDLER_ENCODER = "betapackets-encoder";
     public final static String HANDLER_AUTO_REORDER_NAME = "betapackets-auto-reorder";
 
     private final UserConnection userConnection;
@@ -53,13 +53,14 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         final ChannelPipeline pipeline = ctx.channel().pipeline();
-        addHandlers(pipeline, createBetaPacketsDecoder(userConnection), createBetaPacketsEncoder(userConnection));
+        addHandlers(pipeline, createBetaPacketsInterceptorClient(userConnection), createBetaPacketsInterceptorServer(userConnection), createBetaPacketsEncoder());
         BetaPackets.getAPI().getConnections().addConnection(userConnection);
     }
 
-    private void addHandlers(ChannelPipeline pipeline, ChannelHandler decoder, ChannelHandler encoder) {
-        pipeline.addBefore(getPacketDecoderName(), HANDLER_PACKET_DECODER_NAME, decoder);
-        pipeline.addBefore(getPacketEncoderName(), HANDLER_PACKET_ENCODER_NAME, encoder);
+    private void addHandlers(ChannelPipeline pipeline, ChannelHandler interceptorClient, ChannelHandler interceptorServer, ChannelHandler encoder) {
+        pipeline.addBefore(getPacketDecoderName(), HANDLER_INTERCEPTOR_CLIENT_NAME, interceptorClient);
+        pipeline.addBefore(getPacketEncoderName(), HANDLER_INTERCEPTOR_SERVER_NAME, interceptorServer);
+        pipeline.addBefore(HANDLER_INTERCEPTOR_SERVER_NAME, HANDLER_ENCODER, encoder);
     }
 
     @Override
@@ -94,13 +95,15 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         if (evt instanceof ReorderPipelineEvent) {
             final ChannelPipeline pipeline = ctx.channel().pipeline();
 
-            final ChannelHandler decoder = pipeline.get(HANDLER_PACKET_DECODER_NAME);
-            final ChannelHandler encoder = pipeline.get(HANDLER_PACKET_ENCODER_NAME);
+            final ChannelHandler interceptorClient = pipeline.get(HANDLER_INTERCEPTOR_CLIENT_NAME);
+            final ChannelHandler interceptorServer = pipeline.get(HANDLER_INTERCEPTOR_SERVER_NAME);
+            final ChannelHandler encoder = pipeline.get(HANDLER_ENCODER);
 
-            pipeline.remove(decoder);
+            pipeline.remove(interceptorClient);
+            pipeline.remove(interceptorServer);
             pipeline.remove(encoder);
 
-            addHandlers(pipeline, decoder, encoder);
+            addHandlers(pipeline, interceptorClient, interceptorServer, encoder);
         }
         super.userEventTriggered(ctx, evt);
     }
@@ -111,7 +114,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      * @return True if the pipeline needs to be reordered
      */
     public boolean needsReorderPipeline(final ChannelPipeline pipeline) {
-        return pipeline.names().indexOf(getPacketEncoderName()) - 1 != pipeline.names().indexOf(HANDLER_PACKET_ENCODER_NAME);
+        return pipeline.names().indexOf(getPacketEncoderName()) - 1 != pipeline.names().indexOf(HANDLER_INTERCEPTOR_SERVER_NAME);
     }
 
     /**
@@ -127,12 +130,16 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      * These methods can be used in case the implementation want's to overwrite the original handlers
      */
 
-    public BetaPacketsDecoder createBetaPacketsDecoder(final UserConnection userConnection) {
-        return new BetaPacketsDecoder(userConnection);
+    public BetaPacketsInterceptorClient createBetaPacketsInterceptorClient(final UserConnection userConnection) {
+        return new BetaPacketsInterceptorClient(userConnection);
     }
 
-    public BetaPacketsEncoder createBetaPacketsEncoder(final UserConnection userConnection) {
-        return new BetaPacketsEncoder(getPacketCompressName(), userConnection);
+    public BetaPacketsInterceptorServer createBetaPacketsInterceptorServer(final UserConnection userConnection) {
+        return new BetaPacketsInterceptorServer(getPacketCompressName(), userConnection);
+    }
+
+    public BetaPacketsEncoder createBetaPacketsEncoder() {
+        return new BetaPacketsEncoder(getPacketCompressName());
     }
 
     public UserConnection getUserConnection() {

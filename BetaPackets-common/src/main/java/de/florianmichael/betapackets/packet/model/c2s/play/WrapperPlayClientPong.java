@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
+import de.florianmichael.betapackets.packet.type.PacketType;
 
 import java.io.IOException;
 
@@ -33,6 +34,7 @@ public class WrapperPlayClientPong extends PacketWrapper<WrapperPlayClientPong> 
     }
 
     public WrapperPlayClientPong(int id) {
+        super(PacketType.Play.Client.PONG);
         this.id = id;
     }
 
