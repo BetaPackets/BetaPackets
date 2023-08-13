@@ -21,6 +21,7 @@ import de.florianmichael.betapackets.BetaPacketsPlatform;
 import de.florianmichael.betapackets.bungeecord.util.TheUnsafeReflect;
 import de.florianmichael.betapackets.bungeecord.netty.BetaPacketsKickStringWriter;
 import de.florianmichael.betapackets.bungeecord.util.JLoggerToSLF4J;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,11 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform<Prox
     public void onLoad() {
         this.loadPlatform();
         TheUnsafeReflect.setKickStringWriter(new BetaPacketsKickStringWriter());
+    }
+
+    @Override
+    public void onDisable() {
+        this.unloadPlatform();
     }
 
     @Override
@@ -62,6 +68,13 @@ public class BungeeCordPlugin extends Plugin implements BetaPacketsPlatform<Prox
     @Override
     public boolean isPluginLoaded(String name) {
         return getProxy().getPluginManager().getPlugin(name) != null;
+    }
+
+    @Override
+    public void kickAll(String message) {
+        for (ProxiedPlayer player : getProxy().getPlayers()) {
+            player.disconnect(new TextComponent(message));
+        }
     }
 
     @Override

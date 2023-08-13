@@ -38,6 +38,11 @@ public class SpigotPlugin extends JavaPlugin implements BetaPacketsPlatform<Play
     }
 
     @Override
+    public void onDisable() {
+        this.unloadPlatform();
+    }
+
+    @Override
     public Logger getLogging() {
         return logging;
     }
@@ -60,5 +65,12 @@ public class SpigotPlugin extends JavaPlugin implements BetaPacketsPlatform<Play
     @Override
     public boolean isPluginLoaded(String name) {
         return getServer().getPluginManager().isPluginEnabled(name);
+    }
+
+    @Override
+    public void kickAll(String message) {
+        for (Player onlinePlayer : getServer().getOnlinePlayers()) {
+            onlinePlayer.kickPlayer(message);
+        }
     }
 }

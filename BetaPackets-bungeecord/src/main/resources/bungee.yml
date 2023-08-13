@@ -2,3 +2,5 @@ name: BetaPackets
 version: '${version}'
 main: de.florianmichael.betapackets.bungeecord.BungeeCordPlugin
 author: Florian Michael
+softDepends:
+  - 'ViaVersion'

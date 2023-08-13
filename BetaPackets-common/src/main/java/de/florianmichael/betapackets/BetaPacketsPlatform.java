@@ -18,6 +18,7 @@
 package de.florianmichael.betapackets;
 
 import de.florianmichael.betapackets.BetaPackets;
+import net.lenni0451.mcstructs.core.TextFormatting;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -37,6 +38,12 @@ public interface BetaPacketsPlatform<T> {
 
         final Logger logger = getLogging();
         logger.info("Injecting BetaPackets platform into " + getPlatformName());
+
+        kickAll(TextFormatting.GREEN.toLegacy() + "Reload complete, please rejoin");
+    }
+
+    default void unloadPlatform() {
+        kickAll(TextFormatting.GREEN.toLegacy() + "Reload complete, please rejoin");
     }
 
     /**
@@ -60,4 +67,6 @@ public interface BetaPacketsPlatform<T> {
     Object getPlugin();
 
     boolean isPluginLoaded(String name);
+
+    void kickAll(String message);
 }
