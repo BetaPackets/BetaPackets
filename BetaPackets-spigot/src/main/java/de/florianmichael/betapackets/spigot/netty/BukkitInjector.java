@@ -18,10 +18,7 @@
 package de.florianmichael.betapackets.spigot.netty;
 
 import de.florianmichael.betapackets.connection.UserConnection;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.DefaultChannelPromise;
+import io.netty.channel.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
@@ -102,7 +99,10 @@ public class BukkitInjector {
     }
 
     public static void inject() {
-        ((DefaultChannelPromise) channelFutures.get(0)).channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
+        ChannelPipeline pipeline = ((DefaultChannelPromise) channelFutures.get(0)).channel().pipeline();
+        if (pipeline.names().contains("betapackets-bukkitinjector"))
+            pipeline.remove("betapackets-bukkitinjector");
+        pipeline.addFirst("betapackets-bukkitinjector", new ChannelInboundHandlerAdapter() {
 
             @Override
             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
