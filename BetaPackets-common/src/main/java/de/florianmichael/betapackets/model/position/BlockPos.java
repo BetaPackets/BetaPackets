@@ -19,11 +19,6 @@ package de.florianmichael.betapackets.model.position;
 
 public class BlockPos extends Vec3i {
 
-    private final static int NUM_X_BITS = 26 /* 1 + MathHelper.calculateLogBaseTwo(MathHelper.roundUpToPowerOfTwo(30000000)) */;
-    private final static int NUM_Z_BITS = NUM_X_BITS;
-    private final static int NUM_Y_BITS = 64 - NUM_X_BITS - NUM_Z_BITS;
-    private final static int X_SHIFT = NUM_Z_BITS + NUM_Y_BITS;
-
     public BlockPos(int x, int y, int z) {
         super(x, y, z);
     }
