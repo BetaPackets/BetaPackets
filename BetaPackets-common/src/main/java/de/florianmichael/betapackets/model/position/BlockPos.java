@@ -28,22 +28,6 @@ public class BlockPos extends Vec3i {
         super(x, y, z);
     }
 
-    public static BlockPos fromLong(long serialized) {
-        final int x = (int)(serialized << 64 - X_SHIFT - NUM_X_BITS >> 64 - NUM_X_BITS);
-        final int y = (int)(serialized << 64 - NUM_Z_BITS - NUM_Y_BITS >> 64 - NUM_Y_BITS);
-        final int z = (int)(serialized << 64 - NUM_Z_BITS >> 64 - NUM_Z_BITS);
-
-        return new BlockPos(x, y, z);
-    }
-
-    private final static long X_MASK = (1L << NUM_X_BITS) - 1L;
-    private final static long Y_MASK = (1L << NUM_Y_BITS) - 1L;
-    private final static long Z_MASK = (1L << NUM_Z_BITS) - 1L;
-
-    public long toLong() {
-        return ((long)this.x & X_MASK) << X_SHIFT | ((long)this.y & Y_MASK) << NUM_Z_BITS | ((long) this.z & Z_MASK);
-    }
-
     @Override
     public String toString() {
         return "BlockPos{" +

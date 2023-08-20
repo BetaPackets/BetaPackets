@@ -43,6 +43,11 @@ public class ChunkSection1_20_1 implements ChunkSection {
         return version.getBlockStateMapping().getById(blockStateContainer.get(x, y, z));
     }
 
+    @Override
+    public void setBlockState(int x, int y, int z, BlockState state) {
+        blockStateContainer.set(x, y, z, state.getId());
+    }
+
     public PalettedContainer getBlockStateContainer() {
         return blockStateContainer;
     }

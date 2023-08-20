@@ -38,6 +38,16 @@ public class PalettedContainer {
         }
     }
 
+    public void set(int x, int y, int z, int registryId) {
+        int storageId = palette.getStorageId(registryId);
+        if (storageId == -1) {
+            // resize
+        }
+        if (storage != null) {
+            storage.set(y << 8 | z << 4 | x, storageId);
+        }
+    }
+
     public int get(int x, int y, int z) {
         if (storage != null) {
             int id = this.storage.get(y << 8 | z << 4 | x);

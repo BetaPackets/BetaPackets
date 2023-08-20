@@ -23,4 +23,6 @@ public interface ChunkSection {
 
     BlockState getBlockState(int x, int y, int z);
 
+    void setBlockState(int x, int y, int z, BlockState state);
+
 }

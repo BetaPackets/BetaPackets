@@ -257,12 +257,37 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         this.writeFloat(quaternionf.w);
     }
 
+    // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/util/Vector3i.java#L63
     public BlockPos readBlockPos() {
-        return BlockPos.fromLong(readLong());
+        long value = readLong();
+        int x = (int) (value >> 38);
+        int y;
+        int z;
+        if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_14)) {
+            y = (int) (value << 52 >> 52);
+            z = (int) (value << 26 >> 38);
+        } else {
+            y = (int) ((value >> 26) & 0xFFF);
+            z = (int) (value << 38 >> 38);
+        }
+        return new BlockPos(x, y, z);
     }
 
+    // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/util/Vector3i.java#L63
     public void writeBlockPos(BlockPos pos) {
-        writeLong(pos.toLong());
+        long value;
+        if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_17)) {
+            long x = pos.x & 0x3FFFFFF;
+            long y = pos.y & 0xFFF;
+            long z = pos.z & 0x3FFFFFF;
+
+            value = x << 38 | z << 12 | y;
+        } else if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_14)) {
+            value = ((long) (pos.x & 0x3FFFFFF) << 38) | ((long) (pos.z & 0x3FFFFFF) << 12) | (pos.y & 0xFFF);
+        } else {
+            value = ((long) (pos.x & 0x3FFFFFF) << 38) | ((long) (pos.y & 0xFFF) << 26) | (pos.z & 0x3FFFFFF);
+        }
+        writeLong(value);
     }
 
     public UserConnection getUserConnection() {
