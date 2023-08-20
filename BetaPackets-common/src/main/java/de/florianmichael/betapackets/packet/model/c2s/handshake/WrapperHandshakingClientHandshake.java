@@ -66,7 +66,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
 
         int stateId = buf.readVarInt();
         intendedState = NetworkState.fromId(version, stateId);
-        if (intendedState == null) throw new DecoderException("Unknown state-id " + stateId + " in " + version.getProtocolName());
+        if (intendedState != NetworkState.STATUS && intendedState != NetworkState.LOGIN) throw new DecoderException("Unknown state-id " + stateId + " in " + version.getProtocolName());
     }
 
     @Override

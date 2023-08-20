@@ -15,12 +15,19 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world.chunk;
+package de.florianmichael.betapackets.model.world.chunk.v1_20_1;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+import de.florianmichael.betapackets.model.world.chunk.PacketChunk;
 
-public interface ChunkSection {
+public class PacketChunk1_20_1 extends PacketChunk {
 
-    BlockState getBlockState(int x, int y, int z);
+    private byte[] data;
 
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
 }

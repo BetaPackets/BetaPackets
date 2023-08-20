@@ -18,13 +18,15 @@
 package de.florianmichael.betapackets.model.base;
 
 import de.florianmichael.betapackets.mapping.*;
+import de.florianmichael.betapackets.model.world.chunk.ChunkFormat;
+import de.florianmichael.betapackets.model.world.chunk.v1_20_1.ChunkFormat1_20_1;
 import de.florianmichael.betapackets.packet.ids.PacketId1_20_1;
 import de.florianmichael.betapackets.packet.ids.PacketIdList;
 
 // Thanks to my 12-year-old self for this enum, I guess?
 public enum ProtocolCollection {
 
-    R1_20_1(763, "1.20/1.20.1", new PacketId1_20_1()),
+    R1_20_1(763, "1.20/1.20.1", ChunkFormat1_20_1.INSTANCE, new PacketId1_20_1()),
 
     R1_19_4(762, "1.19.4"),
     R1_19_3(761, "1.19.3"),
@@ -81,6 +83,8 @@ public enum ProtocolCollection {
 
     private PacketIdList packetIdList;
 
+    private ChunkFormat chunkFormat;
+
     private BlockMapping blockMapping;
     private BlockStateMapping blockStateMapping;
     private MetadataCodecMapping metadataCodecMapping;
@@ -89,9 +93,10 @@ public enum ProtocolCollection {
     private ParticleMapping particleMapping;
     private PotionEffectMapping potionEffectMapping;
 
-    ProtocolCollection(int protocolId, String protocolName, PacketIdList packetIdList) {
+    ProtocolCollection(int protocolId, String protocolName, ChunkFormat chunkFormat, PacketIdList packetIdList) {
         this.protocolId = protocolId;
         this.protocolName = protocolName;
+        this.chunkFormat = chunkFormat;
         this.packetIdList = packetIdList;
     }
 
@@ -106,6 +111,10 @@ public enum ProtocolCollection {
 
     public void setBlockMapping(BlockMapping blockMapping) {
         this.blockMapping = blockMapping;
+    }
+
+    public BlockStateMapping getBlockStateMapping() {
+        return blockStateMapping;
     }
 
     public void setBlockStateMapping(BlockStateMapping blockStateMapping) {

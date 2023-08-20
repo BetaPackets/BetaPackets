@@ -15,12 +15,21 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world.chunk;
+package de.florianmichael.betapackets.model.world.chunk.palette;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+public class PassThroughPalette implements Palette {
+    @Override
+    public int getSize() {
+        return 0;
+    }
 
-public interface ChunkSection {
+    @Override
+    public int getStorageId(int registryId) {
+        return registryId;
+    }
 
-    BlockState getBlockState(int x, int y, int z);
-
+    @Override
+    public int getRegistryId(int storageId) {
+        return storageId;
+    }
 }

@@ -15,12 +15,32 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world.chunk;
+package de.florianmichael.betapackets.model.world.chunk.palette;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 
-public interface ChunkSection {
+public class SingularPalette implements Palette {
 
-    BlockState getBlockState(int x, int y, int z);
+    private int id;
 
+    public SingularPalette(FunctionalByteBuf buf) {
+        id = buf.readVarInt();
+    }
+
+    @Override
+    public int getSize() {
+        return 1;
+    }
+
+    @Override
+    public int getStorageId(int registryId) {
+        if (registryId == id) return 0;
+        else return -1;
+    }
+
+    @Override
+    public int getRegistryId(int storageId) {
+        if (storageId == 0) return id;
+        else return 0;
+    }
 }

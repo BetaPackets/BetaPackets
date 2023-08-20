@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world.chunk;
+package de.florianmichael.betapackets.model.world.chunk.palette;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+public interface Palette {
 
-public interface ChunkSection {
+    int getSize();
 
-    BlockState getBlockState(int x, int y, int z);
+    int getStorageId(int registryId);
 
+    int getRegistryId(int storageId);
 }

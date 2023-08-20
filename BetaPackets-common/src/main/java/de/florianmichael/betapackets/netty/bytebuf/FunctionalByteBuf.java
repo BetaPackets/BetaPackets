@@ -40,10 +40,7 @@ import org.joml.Quaternionf;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This class is an extension of the {@link PrimitiveByteBuf} which adds version dependent methods
@@ -88,6 +85,22 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
             this.writeShort(stack.damage);
             this.writeCompoundTag(stack.tag);
         }
+    }
+
+    public void writeBitSet(BitSet bitSet) {
+        long[] words = bitSet.toLongArray();
+        writeVarInt(words.length);
+        for (long word : words) {
+            writeLong(word);
+        }
+    }
+
+    public BitSet readBitSet() {
+        long[] words = new long[readVarInt()];
+        for (int i = 0; i < words.length; i++) {
+            words[i] = readLong();
+        }
+        return BitSet.valueOf(words);
     }
 
     public CompoundTag readCompoundTag() throws IOException {

@@ -17,10 +17,14 @@
 
 package de.florianmichael.betapackets.model.world.chunk;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 
-public interface ChunkSection {
+import java.io.IOException;
 
-    BlockState getBlockState(int x, int y, int z);
+public interface ChunkFormat {
+
+    void write(PacketChunk chunk, FunctionalByteBuf buf) throws IOException;
+
+    PacketChunk read(FunctionalByteBuf buf) throws IOException;
 
 }

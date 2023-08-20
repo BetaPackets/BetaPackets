@@ -15,12 +15,18 @@
  * limitations under the License.
  */
 
-package de.florianmichael.betapackets.model.world.chunk;
+package de.florianmichael.betapackets.model.world.chunk.storage;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+public interface Storage {
 
-public interface ChunkSection {
+    long[] getData();
 
-    BlockState getBlockState(int x, int y, int z);
+    int getBitsPerEntry();
+
+    int getSize();
+
+    int get(int index);
+
+    void set(int index, int value);
 
 }

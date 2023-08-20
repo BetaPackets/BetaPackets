@@ -17,10 +17,35 @@
 
 package de.florianmichael.betapackets.model.world.chunk;
 
-import de.florianmichael.betapackets.model.block.BlockState;
+import net.lenni0451.mcstructs.nbt.tags.CompoundTag;
 
-public interface ChunkSection {
+public class PacketBlockEntity {
 
-    BlockState getBlockState(int x, int y, int z);
+        private byte packedXZ;
+        private short y;
+        private int type;
+        private CompoundTag data;
 
-}
+        public PacketBlockEntity(byte packedXZ, short y, int type, CompoundTag data) {
+            this.packedXZ = packedXZ;
+            this.y = y;
+            this.type = type;
+            this.data = data;
+        }
+
+        public byte getPackedXZ() {
+            return packedXZ;
+        }
+
+        public short getY() {
+            return y;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public CompoundTag getData() {
+            return data;
+        }
+    }
