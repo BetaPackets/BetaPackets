@@ -25,13 +25,16 @@ public class ArrayPalette implements Palette {
     private int maxId;
     private int newSize;
 
-    public ArrayPalette(FunctionalByteBuf buf, int bits) {
+    public ArrayPalette(int bits) {
         maxId = 1 << bits;
         ids = new int[maxId];
+    }
+
+    public ArrayPalette(FunctionalByteBuf buf, int bits) {
+        this(bits);
         newSize = buf.readVarInt();
         for (int i = 0; i < newSize; i++)
             ids[i] = buf.readVarInt();
-
     }
 
     @Override

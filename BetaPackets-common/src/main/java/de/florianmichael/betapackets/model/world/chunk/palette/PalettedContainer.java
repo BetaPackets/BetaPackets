@@ -24,9 +24,11 @@ import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 public class PalettedContainer {
 
     private Palette palette;
+    private PaletteProvider provider;
     private Storage storage;
 
     public void read(FunctionalByteBuf buf, PaletteProvider paletteProvider) {
+        provider = paletteProvider;
         int bits = buf.readByte();
         palette = paletteProvider.readPalette(buf, bits);
         int storageLength = buf.readVarInt();
@@ -38,10 +40,34 @@ public class PalettedContainer {
         }
     }
 
+    // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/protocol/world/chunk/palette/DataPalette.java#L152
+    private int sanitizeBitsPerEntry(int bitsPerEntry) {
+        if (bitsPerEntry <= provider.getMaxBits()) {
+            return Math.max(provider.getMinBits(), bitsPerEntry);
+        } else {
+            return 14;
+        }
+    }
+
+    // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/protocol/world/chunk/palette/DataPalette.java#L160
     public void set(int x, int y, int z, int registryId) {
         int storageId = palette.getStorageId(registryId);
         if (storageId == -1) {
-            // resize
+            Palette oldPalette = this.palette;
+            Storage oldData = this.storage;
+
+            int bitsPerEntry = sanitizeBitsPerEntry(oldPalette instanceof SingularPalette ? 1 : oldData.getBitsPerEntry() + 1);
+            this.palette = provider.createPalette(bitsPerEntry);
+            this.storage = new BitStorage(bitsPerEntry, provider.getStorage(), null);
+
+            if (oldPalette instanceof SingularPalette) {
+                this.palette.getStorageId(oldPalette.getRegistryId(0));
+            } else {
+                for (int i = 0; i < provider.getStorage(); i++) {
+                    this.storage.set(i, this.palette.getStorageId(oldPalette.getRegistryId(oldData.get(i))));
+                }
+            }
+            storageId = palette.getStorageId(registryId);
         }
         if (storage != null) {
             storage.set(y << 8 | z << 4 | x, storageId);

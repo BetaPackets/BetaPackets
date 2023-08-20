@@ -23,6 +23,7 @@ import de.florianmichael.betapackets.model.base.Reader;
 import de.florianmichael.betapackets.model.base.Writer;
 import de.florianmichael.betapackets.model.entity.metadata.Metadata;
 import de.florianmichael.betapackets.model.position.BlockPos;
+import de.florianmichael.betapackets.model.position.ChunkSectionPos;
 import de.florianmichael.betapackets.model.position.GlobalPos;
 import de.florianmichael.betapackets.model.position.Vec3f;
 import de.florianmichael.betapackets.model.world.item.ItemStackV1_3;
@@ -255,6 +256,23 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         this.writeFloat(quaternionf.y);
         this.writeFloat(quaternionf.z);
         this.writeFloat(quaternionf.w);
+    }
+
+    public void writeChunkSectionPos(ChunkSectionPos pos) {
+        long value = 0L;
+        value |= ((long) pos.x & 0x3FFFFFL) << 42;
+        value |= ((long) pos.y & 0xFFFFFL) << 0;
+        value |= ((long) pos.z & 0x3FFFFFL) << 20;
+        writeLong(value);
+    }
+
+    public ChunkSectionPos readChunkSectionPos() {
+        long value = readLong();
+        return new ChunkSectionPos(
+                (int) (value << 0 >> 42),
+                (int) (value << 44 >> 44),
+                (int) (value << 22 >> 42)
+        );
     }
 
     // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/util/Vector3i.java#L63

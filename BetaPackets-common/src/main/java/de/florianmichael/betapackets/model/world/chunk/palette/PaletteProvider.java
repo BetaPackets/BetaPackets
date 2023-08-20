@@ -49,6 +49,17 @@ public enum PaletteProvider {
         }
     }
 
+    // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/protocol/world/chunk/palette/DataPalette.java#L160
+    public Palette createPalette(int bits) {
+        if (bits <= minBits) {
+            return new ArrayPalette(bits);
+        } else if (bits <= maxBits) {
+            return new BiMapPalette(bits);
+        } else {
+            return new PassThroughPalette();
+        }
+    }
+
     public int getMaxBits() {
         return maxBits;
     }

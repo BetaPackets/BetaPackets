@@ -28,9 +28,13 @@ public class BiMapPalette implements Palette {
     private TIntIntMap registry = new TIntIntHashMap();
     private int newSize;
 
-    public BiMapPalette(FunctionalByteBuf buf, int bits) {
+    public BiMapPalette(int bits) {
         maxId = 1 << bits;
         storage = new int[maxId];
+    }
+
+    public BiMapPalette(FunctionalByteBuf buf, int bits) {
+        this(bits);
         newSize = buf.readVarInt();
         for (int i = 0; i < newSize; i++) {
             int registryEntry = buf.readVarInt();
