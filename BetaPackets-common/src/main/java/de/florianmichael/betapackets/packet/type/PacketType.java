@@ -129,7 +129,7 @@ public class PacketType {
             PLAYER_INFO_REMOVE,
             PLAYER_INFO_UPDATE,
             LOOK_AT,
-            SYNC_PLAYER_POSITION,
+            TELEPORT_PLAYER,
             UPDATE_RECIPE_BOOK,
             REMOVE_ENTITIES,
             REMOVE_ENTITY_EFFECT,
