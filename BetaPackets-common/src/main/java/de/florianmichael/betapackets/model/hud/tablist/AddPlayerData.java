@@ -20,14 +20,14 @@ package de.florianmichael.betapackets.model.hud.tablist;
 import de.florianmichael.betapackets.packet.ModelMapper;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.model.auth.GameProfile;
-import de.florianmichael.betapackets.model.game.GameMode;
+import de.florianmichael.betapackets.model.game.OptionalGameMode;
 import net.lenni0451.mcstructs.text.ATextComponent;
 
 import java.util.Objects;
 
 public class AddPlayerData {
 
-    public ModelMapper<Integer, GameMode> gameMode = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, (version, value) -> GameMode.getById(version, value.shortValue()));
+    public ModelMapper<Integer, OptionalGameMode> gameMode = new ModelMapper<>(FunctionalByteBuf::readVarInt, FunctionalByteBuf::writeVarInt, (version, value) -> OptionalGameMode.getById(version, value.shortValue()));
     public int ping;
     public ATextComponent displayName;
     public GameProfile gameProfile;
@@ -35,7 +35,7 @@ public class AddPlayerData {
     public AddPlayerData() {
     }
 
-    public AddPlayerData(GameMode gameMode, int ping, ATextComponent displayName, GameProfile gameProfile) {
+    public AddPlayerData(OptionalGameMode gameMode, int ping, ATextComponent displayName, GameProfile gameProfile) {
         this.gameMode = new ModelMapper<>(FunctionalByteBuf::writeVarInt, gameMode);
         this.ping = ping;
         this.displayName = displayName;

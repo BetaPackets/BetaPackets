@@ -19,29 +19,37 @@ package de.florianmichael.betapackets.model.game;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
 
-public enum GameMode {
+public enum OptionalGameMode {
 
+    NOT_SET,
     SURVIVAL,
     CREATIVE,
     ADVENTURE,
     SPECTATOR;
 
+    private String name;
+
+    OptionalGameMode() {
+        this.name = name().toLowerCase();
+        if (this.name.equals("not_set")) {
+            this.name = "";
+        }
+    }
+
     public int getId() {
-        return ordinal();
+        return ordinal() - 1;
     }
 
-    public static GameMode getOrNull(final ProtocolCollection version, final short id) {
-        if (id == -1) return null;
-        for (GameMode value : values()) {
+    public static OptionalGameMode getById(final ProtocolCollection version, final short id) {
+        if (id < 0) return null;
+
+        for (OptionalGameMode value : values()) {
             if (value.getId() == id) return value;
         }
         return null;
     }
 
-    public static GameMode getById(final ProtocolCollection version, final short id) {
-        for (GameMode value : values()) {
-            if (value.getId() == id) return value;
-        }
-        return null;
+    public String getName() {
+        return name;
     }
 }

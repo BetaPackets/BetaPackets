@@ -17,9 +17,10 @@
 
 package de.florianmichael.betapackets.packet.model.s2c.play;
 
+import de.florianmichael.betapackets.model.game.GameMode;
 import de.florianmichael.betapackets.netty.bytebuf.FunctionalByteBuf;
 import de.florianmichael.betapackets.event.PacketEvent;
-import de.florianmichael.betapackets.model.game.GameMode;
+import de.florianmichael.betapackets.model.game.OptionalGameMode;
 import de.florianmichael.betapackets.model.position.GlobalPos;
 import de.florianmichael.betapackets.packet.model.PacketWrapper;
 import de.florianmichael.betapackets.packet.type.Packet;
@@ -61,8 +62,7 @@ public class WrapperPlayServerJoinGame extends PacketWrapper<WrapperPlayServerJo
         buf.writeInt(entityId);
         buf.writeBoolean(hardcore);
         buf.writeByte(gameMode.getId());
-        if (previousGameMode == null) buf.writeByte(-1);
-        else buf.writeByte(previousGameMode.getId());
+        buf.writeByte(previousGameMode == null ? -1 : previousGameMode.getId());
         buf.writeVarInt(dimensionNames.size());
         dimensionNames.forEach(buf::writeIdentifier);
         buf.writeCompoundTag(registryCodec);
@@ -85,11 +85,7 @@ public class WrapperPlayServerJoinGame extends PacketWrapper<WrapperPlayServerJo
         entityId = buf.readInt();
         hardcore = buf.readBoolean();
         gameMode = GameMode.getById(buf.getProtocolVersion(), buf.readUnsignedByte());
-
-        byte previousGameModeByte = buf.readByte();
-        if (previousGameModeByte == -1)
-            previousGameMode = null;
-        else previousGameMode = GameMode.getById(buf.getProtocolVersion(), previousGameModeByte);
+        previousGameMode = GameMode.getOrNull(buf.getProtocolVersion(), buf.readByte());
 
         int dimensionCount = buf.readVarInt();
         dimensionNames = new ArrayList<>(dimensionCount);
