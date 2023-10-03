@@ -12,8 +12,8 @@ public enum ParticleParameterType {
     POSITION_SOURCE(null, null) /* TODO */
     ;
 
-    private Writer<?> writer;
-    private Reader<?> reader;
+    private final Writer<?> writer;
+    private final Reader<?> reader;
 
     <T> ParticleParameterType(Writer<T> writer, Reader<T> reader) {
         this.writer = writer;

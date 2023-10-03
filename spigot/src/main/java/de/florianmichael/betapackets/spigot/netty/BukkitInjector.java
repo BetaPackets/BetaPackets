@@ -55,8 +55,7 @@ public class BukkitInjector {
 
     private static Field findChannelFutures(Class<?> serverConnection) {
         Field[] declaredFields = serverConnection.getDeclaredFields();
-        for (int i = 0; i < declaredFields.length; i++) {
-            Field field = declaredFields[i];
+        for (Field field : declaredFields) {
             if (field.getType() == List.class) {
                 field.setAccessible(true);
                 return field;

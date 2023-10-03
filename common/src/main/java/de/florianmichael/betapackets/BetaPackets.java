@@ -42,7 +42,6 @@ public class BetaPackets {
         BetaPackets.platform = platform;
 
         BetaPackets.api = new BetaPacketsAPI();
-
         BetaPackets.api.registerListener(new InternalHandshakeListener(platform));
 
         try {

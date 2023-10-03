@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Metadata {
 
-    private int index;
-    private String name;
-    private MetadataCodecType codecType;
+    private final int index;
+    private final String name;
+    private final MetadataCodecType codecType;
 
     public Metadata(int index, String name, MetadataCodecType codecType) {
         this.index = index;

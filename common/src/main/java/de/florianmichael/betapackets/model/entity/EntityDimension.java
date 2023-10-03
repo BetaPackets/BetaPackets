@@ -21,10 +21,10 @@ import java.util.Objects;
 
 public class EntityDimension {
 
-    private float width;
-    private float height;
-    private float eyeHeight;
-    private boolean fixed;
+    private final float width;
+    private final float height;
+    private final float eyeHeight;
+    private final boolean fixed;
 
     public EntityDimension(float width, float height, float eyeHeight, boolean fixed) {
         this.width = width;

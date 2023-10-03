@@ -1,14 +1,13 @@
 package de.florianmichael.betapackets.model.position;
 
 public class AABB {
+    private final double minX;
+    private final double minY;
+    private final double minZ;
 
-    private double minX;
-    private double minY;
-    private double minZ;
-
-    private double maxX;
-    private double maxY;
-    private double maxZ;
+    private final double maxX;
+    private final double maxY;
+    private final double maxZ;
 
     public AABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this.minX = minX;

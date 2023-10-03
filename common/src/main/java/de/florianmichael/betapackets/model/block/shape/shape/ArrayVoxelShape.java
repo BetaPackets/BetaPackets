@@ -24,9 +24,9 @@ import java.util.Arrays;
 
 public class ArrayVoxelShape extends VoxelShape {
 
-    private double[]xPoints;
-    private double[]yPoints;
-    private double[] zPoints;
+    private final double[] xPoints;
+    private final double[] yPoints;
+    private final double[] zPoints;
 
     public ArrayVoxelShape(VoxelSet voxelSet, double[] xPoints, double[] yPoints, double[] zPoints) {
         super(voxelSet);

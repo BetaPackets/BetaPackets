@@ -18,7 +18,6 @@
 package de.florianmichael.betapackets.model.entity.v1_9;
 
 import de.florianmichael.betapackets.model.base.ProtocolCollection;
-import de.florianmichael.betapackets.model.entity.EntityActionIDs;
 
 public enum Hand1_9 {
 

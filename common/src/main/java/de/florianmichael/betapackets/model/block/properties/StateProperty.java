@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public class StateProperty<T> {
 
-    private static Map<String, StateProperty<?>> properties = new HashMap<>();
+    private static final Map<String, StateProperty<?>> properties = new HashMap<>();
 
     private static <T> void add(String name, Function<String, T> serializer, Function<T, String> deserializer) {
         properties.put(name, new StateProperty<>(name, serializer, deserializer));

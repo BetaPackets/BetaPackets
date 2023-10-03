@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public abstract class PacketWrapper<T extends PacketWrapper<T>> {
 
-    private Packet type;
+    private final Packet type;
 
     public PacketWrapper(PacketEvent event) throws IOException {
         type = event.getType();
@@ -45,9 +45,8 @@ public abstract class PacketWrapper<T extends PacketWrapper<T>> {
         this.type = type;
     }
 
-    public abstract void write(Packet type, FunctionalByteBuf buf)throws IOException;
-
-    public abstract void read(Packet type, FunctionalByteBuf buf)throws IOException;
+    public abstract void write(Packet type, FunctionalByteBuf buf) throws IOException;
+    public abstract void read(Packet type, FunctionalByteBuf buf) throws IOException;
 
     public abstract void copyFrom(T base);
 

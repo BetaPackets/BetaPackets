@@ -6,10 +6,10 @@ import java.util.Objects;
 
 public class Particle {
 
-    private int id;
-    private ParticleType type;
+    private final int id;
+    private final ParticleType type;
 
-    private Map<String, ParticleParameterType> factory;
+    private final Map<String, ParticleParameterType> factory;
 
     public Particle(int id, ParticleType type, Map<String, ParticleParameterType> factory) {
         this.id = id;

@@ -7,11 +7,11 @@ import java.util.Objects;
 
 public class Item {
 
-    private int id;
-    private ItemType type;
-    private int maxStackSize;
-    private Block blockType;
-    private boolean edible;
+    private final int id;
+    private final ItemType type;
+    private final int maxStackSize;
+    private final Block blockType;
+    private final boolean edible;
 
     public Item(int id, ItemType type, int maxStackSize, Block blockType, boolean edible) {
         this.id = id;

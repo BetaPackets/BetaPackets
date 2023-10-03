@@ -7,12 +7,12 @@ import java.util.Objects;
 
 public class Entity {
 
-    private int entityId;
-    private int globalId;
-    private int livingId;
-    private EntityType type;
-    private DataTracker dataTracker;
-    private Map<EntityPose, EntityDimension> poseToDimension;
+    private final int entityId;
+    private final int globalId;
+    private final int livingId;
+    private final EntityType type;
+    private final DataTracker dataTracker;
+    private final Map<EntityPose, EntityDimension> poseToDimension;
 
     public Entity(int entityId, int globalId, int livingId, EntityType type, DataTracker dataTracker, Map<EntityPose, EntityDimension> poseToDimension) {
         this.entityId = entityId;

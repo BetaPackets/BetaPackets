@@ -17,7 +17,6 @@
 
 package de.florianmichael.betapackets;
 
-import de.florianmichael.betapackets.BetaPackets;
 import net.lenni0451.mcstructs.core.TextFormatting;
 
 import java.io.InputStream;
@@ -42,6 +41,9 @@ public interface BetaPacketsPlatform<T> {
         kickAll(TextFormatting.GREEN.toLegacy() + "Reload complete, please rejoin");
     }
 
+    /**
+     * Unloads the platform from BetaPackets
+     */
     default void unloadPlatform() {
         kickAll(TextFormatting.GREEN.toLegacy() + "Reload complete, please rejoin");
     }
@@ -62,11 +64,25 @@ public interface BetaPacketsPlatform<T> {
      */
     T getPlayer(final UUID uuid);
 
+    /**
+     * @param path The path of the resource
+     * @return The resource as an input stream
+     */
     InputStream getResource(String path);
 
+    /**
+     * @return The plugin object
+     */
     Object getPlugin();
 
+    /**
+     * @param name The name of the plugin
+     * @return If the plugin is loaded
+     */
     boolean isPluginLoaded(String name);
 
+    /**
+     * @param message The message to kick the players with
+     */
     void kickAll(String message);
 }

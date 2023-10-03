@@ -18,6 +18,7 @@
 package de.florianmichael.betapackets.model.entity;
 
 public enum EntityPose {
+
     STANDING,
     FALL_FLYING,
     SLEEPING,
@@ -32,6 +33,5 @@ public enum EntityPose {
     ROARING,
     SNIFFING,
     EMERGING,
-    DIGGING;
-
+    DIGGING
 }

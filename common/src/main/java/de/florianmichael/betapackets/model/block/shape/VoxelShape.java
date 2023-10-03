@@ -21,7 +21,7 @@ import java.util.Objects;
 
 public class VoxelShape {
 
-    private VoxelSet voxelSet;
+    private final VoxelSet voxelSet;
 
     public VoxelShape(VoxelSet voxelSet) {
         this.voxelSet = voxelSet;

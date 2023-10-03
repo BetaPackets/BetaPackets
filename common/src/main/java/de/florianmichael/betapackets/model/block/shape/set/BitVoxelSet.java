@@ -23,12 +23,12 @@ import java.util.Objects;
 
 public class BitVoxelSet implements VoxelSet {
 
-    private int minX;
-    private int minY;
-    private int minZ;
-    private int maxX;
-    private int maxY;
-    private int maxZ;
+    private final int minX;
+    private final int minY;
+    private final int minZ;
+    private final int maxX;
+    private final int maxY;
+    private final int maxZ;
 
     public BitVoxelSet(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         this.minX = minX;

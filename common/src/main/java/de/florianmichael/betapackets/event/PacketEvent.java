@@ -24,11 +24,11 @@ import de.florianmichael.betapackets.packet.type.Packet;
 
 public class PacketEvent {
 
-    private Packet type;
-    private FunctionalByteBuf byteBuf;
+    private final Packet type;
+    private final FunctionalByteBuf byteBuf;
     private PacketWrapper<?> lastPacketWrapper;
-    private UserConnection connection;
-    private Object player;
+    private final UserConnection connection;
+    private final Object player;
 
     private boolean cancelled;
     private boolean abort;

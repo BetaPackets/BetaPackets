@@ -7,8 +7,8 @@ import java.util.*;
 
 public class DataTracker {
 
-    private Map<String, Metadata> typeToData = new HashMap<>();
-    private Map<Integer, Metadata> indexToData = new HashMap<>();
+    private final Map<String, Metadata> typeToData = new HashMap<>();
+    private final Map<Integer, Metadata> indexToData = new HashMap<>();
 
     public void register(Metadata data) {
         if (typeToData.containsKey(data.getName())) throw new IllegalArgumentException("Duplicate entry (name): " + typeToData.get(data.getName()) + " -> " + data);

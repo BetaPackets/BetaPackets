@@ -17,8 +17,6 @@
 
 package de.florianmichael.betapackets.connection;
 
-import de.florianmichael.betapackets.model.game.PlayerDiggingStatus;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

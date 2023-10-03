@@ -25,9 +25,9 @@ public class Block {
 
     public static final Block AIR = new Block(0, BlockType.AIR, Collections.EMPTY_LIST);
 
-    private int id;
-    private BlockType type;
-    private List<String> properties;
+    private final int id;
+    private final BlockType type;
+    private final List<String> properties;
 
     public Block(int id, BlockType type, List<String> properties) {
         this.id = id;
