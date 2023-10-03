@@ -44,7 +44,7 @@ public class BetaPacketsAPI {
     }
 
     public void fireReadEvent(PacketEvent event) throws IOException {
-        List<PacketListener> packetListeners = listenerByType.get(event.getType());
+        final List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return;
 
         for (PacketListener listener : packetListeners) {
@@ -54,7 +54,7 @@ public class BetaPacketsAPI {
     }
 
     public void fireWriteEvent(PacketSendEvent event) throws IOException {
-        List<PacketListener> packetListeners = listenerByType.get(event.getType());
+        final List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return;
 
         for (PacketListener listener : packetListeners) {
@@ -71,7 +71,7 @@ public class BetaPacketsAPI {
     }
 
     public void unloadPlugin(Object plugin) {
-        List<PacketListener> packetListeners = listenerByPlugin.get(plugin);
+        final List<PacketListener> packetListeners = listenerByPlugin.get(plugin);
         if (packetListeners == null) return;
 
         packetListeners.forEach(this::unregisterListener);

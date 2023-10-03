@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 /**
  * This class represents a BetaPackets platform implementation
+ *
  * @param <T> The player class of the platform
  */
 public interface BetaPacketsPlatform<T> {

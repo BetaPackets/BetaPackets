@@ -21,24 +21,24 @@ import de.florianmichael.betapackets.event.InternalHandshakeListener;
 import de.florianmichael.betapackets.mapping.MappingLoader;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * The main class of BetaPackets, it has all instances in it.
  */
 public class BetaPackets {
 
-    /**
-     * The platform instance
-     */
     private static BetaPacketsPlatform<?> platform;
-
     private static BetaPacketsAPI api;
 
     /**
      * Called by {@link BetaPacketsPlatform#loadPlatform()} to initialize all instances and the platform
+     *
      * @param platform The platform instance
      */
     public static void init(final BetaPacketsPlatform<?> platform) {
+        if (BetaPackets.platform != null) throw new IllegalStateException("BetaPackets is already initialized");
+
         BetaPackets.platform = platform;
 
         BetaPackets.api = new BetaPacketsAPI();
@@ -47,7 +47,8 @@ public class BetaPackets {
         try {
             MappingLoader.load(platform.getResource("mappings.bin"));
         } catch (IOException e) {
-            throw new RuntimeException(e); // TODO Logger here
+            platform.getLogging().log(Level.SEVERE, "Failed to load mappings, quitting process.", e);
+            System.exit(1);
         }
     }
 

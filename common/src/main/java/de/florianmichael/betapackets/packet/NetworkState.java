@@ -30,13 +30,10 @@ public enum NetworkState {
 
     public static NetworkState fromId(ProtocolCollection version, int id) {
         switch (id) {
-
             case 0:
                 return PLAY;
-
             case 1:
                 return STATUS;
-
             case 2:
                 return LOGIN;
         }

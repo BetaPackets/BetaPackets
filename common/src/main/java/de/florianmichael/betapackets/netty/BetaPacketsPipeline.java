@@ -44,6 +44,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     /**
      * Creates a new BetaPacketsPipeline
+     *
      * @param userConnection The connection
      */
     public BetaPacketsPipeline(final UserConnection userConnection) {
@@ -53,6 +54,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     /**
      * Adds the BetaPacketsDecoder and BetaPacketsEncoder to the pipeline
+     *
      * @param ctx The ChannelHandlerContext
      */
     @Override
@@ -87,6 +89,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     /**
      * In case the implementation doesn't have an event when it reorders the compression, or you can't access it, you
      * can use this method to add a dummy handler which will automatically reorder the pipeline when it has to
+     *
      * @param channelPipeline The ChannelPipeline
      */
     public void addAutomaticallyReorderElement(final ChannelPipeline channelPipeline) {
@@ -126,6 +129,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
     /**
      * Checks if the pipeline needs to be reordered
+     *
      * @param pipeline The ChannelPipeline
      * @return True if the pipeline needs to be reordered
      */
@@ -138,11 +142,9 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      */
 
     public abstract String getPacketCompressName();
-
     public abstract String getFrameEncoderName();
 
     public abstract String getPacketDecoderName();
-
     public abstract String getPacketEncoderName();
 
     /**

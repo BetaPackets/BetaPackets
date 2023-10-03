@@ -27,7 +27,7 @@ import java.util.zip.Deflater;
 
 public class BetaPacketsLegacyBundleEncoder extends MessageToByteEncoder<LegacyBundle> {
 
-    private UserConnection connection;
+    private final UserConnection connection;
     private final byte[] deflateBuffer = new byte[8192];
     private final Deflater deflater = new Deflater();
 
