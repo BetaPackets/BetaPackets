@@ -84,7 +84,7 @@ public class PacketId1_20_1 extends PacketIdBase1_7 {
         registerPlayPacket(0x39, PacketType.Play.Server.PLAYER_INFO_REMOVE);
         registerPlayPacket(0x3a, PacketType.Play.Server.PLAYER_INFO_UPDATE);
         registerPlayPacket(0x3b, PacketType.Play.Server.LOOK_AT);
-//        registerPlayPacket(0x3c, PacketType.Play.Server.SYNC_PLAYER_POSITION);
+        registerPlayPacket(0x3c, PacketType.Play.Server.TELEPORT_PLAYER);
         registerPlayPacket(0x3d, PacketType.Play.Server.UPDATE_RECIPE_BOOK);
         registerPlayPacket(0x3e, PacketType.Play.Server.REMOVE_ENTITIES);
         registerPlayPacket(0x3f, PacketType.Play.Server.REMOVE_ENTITY_EFFECT);
