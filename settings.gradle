@@ -1,5 +1,9 @@
-include "BetaPackets-all"
+include "BetaPackets-universal"
 include "BetaPackets-common"
 include "BetaPackets-bungeecord"
 include "BetaPackets-spigot"
 
+project(":BetaPackets-universal").projectDir = file("universal")
+project(":BetaPackets-common").projectDir = file("common")
+project(":BetaPackets-bungeecord").projectDir = file("bungeecord")
+project(":BetaPackets-spigot").projectDir = file("spigot")
