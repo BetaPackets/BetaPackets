@@ -24,7 +24,7 @@ shadowJar {
     configurations {
         projectInclude
     }
-    relocate "com.google.gson", "de.florianmichael.betapackets.gson"
+    relocate "com.google.gson", "org.betapackets.betapackets.gson"
 }
 
 jar {

@@ -8,17 +8,17 @@ The idea of BetaPackets is to develop a protocol library that is not based on an
 
 ## Contact
 If you encounter any issues, please report them on the
-[issue tracker](https://github.com/FlorianMichael/BetaPackets/issues).  
+[issue tracker](https://github.com/BetaPackets/BetaPackets/issues).  
 If you just want to talk or need help with BetaPackets feel free to join my
 [Discord](https://discord.gg/BwWhCHUKDf).
 
 ## How to add this to your project
 ### Gradle/Maven
-To use BetaPackets with Gradle/Maven you can use this [Maven server](https://maven.lenni0451.net/#/releases/de/florianmichael) or [Jitpack](https://jitpack.io/#FlorianMichael/BetaPackets).  
+To use BetaPackets with Gradle/Maven you can use this [Maven server](https://maven.lenni0451.net/#/releases/de/florianmichael) or [Jitpack](https://jitpack.io/#BetaPackets/BetaPackets).  
 You can also find instructions how to implement it into your build script there.
 
 ### Jar File
-If you just want the latest jar file you can download it from the GitHub [Actions](https://github.com/FlorianMichael/BetaPackets/actions).
+If you just want the latest jar file you can download it from the GitHub [Actions](https://github.com/BetaPackets/BetaPackets/actions).
 
 ## Dependencies
 | Dependency      | Download                                          |

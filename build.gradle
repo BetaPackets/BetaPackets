@@ -54,11 +54,11 @@ subprojects {
                 pom {
                     name = artifactId
                     description = "The ultimate standalone Minecraft protocol library for all platforms and all Minecraft versions"
-                    url = "https://github.com/FlorianMichael/BetaPackets"
+                    url = "https://github.com/BetaPackets/BetaPackets"
                     licenses {
                         license {
                             name = "Apache-2.0 license"
-                            url = "https://github.com/FlorianMichael/BetaPackets/blob/main/LICENSE"
+                            url = "https://github.com/BetaPackets/BetaPackets/blob/main/LICENSE"
                         }
                     }
                     developers {
@@ -67,9 +67,9 @@ subprojects {
                         }
                     }
                     scm {
-                        connection = "scm:git:git://github.com/FlorianMichael/BetaPackets.git"
-                        developerConnection = "scm:git:ssh://github.com/FlorianMichael/BetaPackets.git"
-                        url = "github.com/FlorianMichael/BetaPackets"
+                        connection = "scm:git:git://github.com/BetaPackets/BetaPackets.git"
+                        developerConnection = "scm:git:ssh://github.com/BetaPackets/BetaPackets.git"
+                        url = "github.com/BetaPackets/BetaPackets"
                     }
                 }
             }
