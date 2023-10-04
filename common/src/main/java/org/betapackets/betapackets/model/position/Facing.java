@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.position;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 
 public enum Facing {
 
@@ -47,7 +47,7 @@ public enum Facing {
         return valueOf(name.toUpperCase());
     }
 
-    public static Facing getById(final ProtocolCollection version, final byte id) {
+    public static Facing getById(final VersionEnum version, final byte id) {
         for (Facing facing : values()) {
             if (facing.ordinal() == id) return facing;
         }

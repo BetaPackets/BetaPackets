@@ -18,9 +18,9 @@
 
 package org.betapackets.betapackets.packet.model.c2s.play;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.event.PacketEvent;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.model.entity.v1_9.Hand1_9;
 import org.betapackets.betapackets.packet.model.PacketWrapper;
 import org.betapackets.betapackets.packet.type.Packet;
@@ -207,7 +207,7 @@ public class WrapperPlayClientUseEntity extends PacketWrapper<WrapperPlayClientU
             return id;
         }
 
-        public static Action getById(ProtocolCollection version, int id) {
+        public static Action getById(VersionEnum version, int id) {
             for (Action action : values())
                 if (action.id == id)
                     return action;

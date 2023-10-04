@@ -19,7 +19,7 @@
 package org.betapackets.betapackets.spigot.netty;
 
 import org.betapackets.betapackets.netty.BetaPacketsPipeline;
-import org.betapackets.betapackets.netty.ViaVersionSupport;
+import org.betapackets.betapackets.util.ViaVersionSupport;
 import org.betapackets.betapackets.connection.UserConnection;
 import io.netty.channel.ChannelHandlerContext;
 

@@ -20,7 +20,7 @@ package org.betapackets.betapackets.netty;
 
 import org.betapackets.betapackets.BetaPackets;
 import org.betapackets.betapackets.connection.UserConnection;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.event.PacketEvent;
 import org.betapackets.betapackets.packet.CancelPacketException;
 import org.betapackets.betapackets.packet.type.Packet;
@@ -49,26 +49,34 @@ public class BetaPacketsInterceptorClient extends MessageToMessageDecoder<ByteBu
 
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        FunctionalByteBuf readBuffer = new FunctionalByteBuf(msg, userConnection);
+        // 1. read packet id
+        final FunctionalByteBuf readBuffer = new FunctionalByteBuf(msg, userConnection);
         int packetId = readBuffer.readVarInt();
 
+        // 2. validate packet id
         List<Packet> packets = userConnection.getC2SPackets();
-        if (packetId >= packets.size())
+        if (packetId >= packets.size()) {
             throw new DecoderException("Unknown packet-id " + packetId);
+        }
 
-        PacketEvent event = new PacketEvent(packets.get(packetId), readBuffer, userConnection);
-        BetaPackets.getAPI().fireReadEvent(event);
+        // 3. call internal event and check if packet is cancelled
+        final PacketEvent event = BetaPackets.getAPI().fireReadEvent(
+                new PacketEvent(packets.get(packetId), readBuffer, userConnection)
+        );
         if (event.isCancelled()) {
             msg.clear();
             throw CancelPacketException.INSTANCE;
         }
 
+        // 4. replace packet id with the event data if the packet was edited
         packetId = packets.indexOf(event.getType());
-        if (packetId == -1)
+        if (packetId == -1) {
             throw new DecoderException("Unregistered packet-type " + event.getType());
+        }
 
-        ByteBuf outBuf = ctx.alloc().buffer();
-        FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
+        // 5. write packet to the output
+        final ByteBuf outBuf = ctx.alloc().buffer();
+        final FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
         writeBuffer.writeVarInt(packetId);
 
         if (event.getLastPacketWrapper() != null) { // packet was edited

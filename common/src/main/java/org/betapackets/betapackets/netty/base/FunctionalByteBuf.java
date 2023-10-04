@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package org.betapackets.betapackets.netty.bytebuf;
+package org.betapackets.betapackets.netty.base;
 
 import org.betapackets.betapackets.connection.UserConnection;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.model.base.Reader;
 import org.betapackets.betapackets.model.base.Writer;
 import org.betapackets.betapackets.model.entity.metadata.Metadata;
@@ -280,7 +280,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         int x = (int) (value >> 38);
         int y;
         int z;
-        if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_14)) {
+        if (getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_14)) {
             y = (int) (value << 52 >> 52);
             z = (int) (value << 26 >> 38);
         } else {
@@ -293,13 +293,13 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     // https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/util/Vector3i.java#L63
     public void writeBlockPos(BlockPos pos) {
         long value;
-        if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_17)) {
+        if (getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_17)) {
             long x = pos.x & 0x3FFFFFF;
             long y = pos.y & 0xFFF;
             long z = pos.z & 0x3FFFFFF;
 
             value = x << 38 | z << 12 | y;
-        } else if (getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_14)) {
+        } else if (getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_14)) {
             value = ((long) (pos.x & 0x3FFFFFF) << 38) | ((long) (pos.z & 0x3FFFFFF) << 12) | (pos.y & 0xFFF);
         } else {
             value = ((long) (pos.x & 0x3FFFFFF) << 38) | ((long) (pos.y & 0xFFF) << 26) | (pos.z & 0x3FFFFFF);
@@ -311,7 +311,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
         return userConnection;
     }
 
-    public ProtocolCollection getProtocolVersion() {
+    public VersionEnum getProtocolVersion() {
         return userConnection.getProtocolVersion();
     }
 

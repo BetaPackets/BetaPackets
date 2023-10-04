@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.world.chunk.palette;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 
 /*
 This is located (yarn mappings) PalettedContainer.PaletteProvider

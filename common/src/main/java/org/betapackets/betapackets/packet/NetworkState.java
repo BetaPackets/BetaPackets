@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.packet;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 
 public enum NetworkState {
 
@@ -29,7 +29,7 @@ public enum NetworkState {
         return ordinal() - 1;
     }
 
-    public static NetworkState fromId(ProtocolCollection version, int id) {
+    public static NetworkState fromId(VersionEnum version, int id) {
         switch (id) {
             case 0:
                 return PLAY;

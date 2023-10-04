@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.world.chunk.palette;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 
 public class SingularPalette implements Palette {
 

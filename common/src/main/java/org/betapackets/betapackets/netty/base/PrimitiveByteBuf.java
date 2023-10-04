@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.betapackets.betapackets.netty.bytebuf;
+package org.betapackets.betapackets.netty.base;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;

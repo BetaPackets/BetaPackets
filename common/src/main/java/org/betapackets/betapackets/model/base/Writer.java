@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.base;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 
 import java.io.IOException;
 
