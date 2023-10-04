@@ -20,7 +20,7 @@ package org.betapackets.betapackets.packet.model.s2c.play;
 import org.betapackets.betapackets.event.PacketEvent;
 import org.betapackets.betapackets.model.entity.attribute.AttributeModifier;
 import org.betapackets.betapackets.model.entity.attribute.EntityAttribute;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.packet.model.PacketWrapper;
 import org.betapackets.betapackets.packet.type.Packet;
 
