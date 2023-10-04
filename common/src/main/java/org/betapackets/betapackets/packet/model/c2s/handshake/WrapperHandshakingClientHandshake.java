@@ -18,9 +18,9 @@
 
 package org.betapackets.betapackets.packet.model.c2s.handshake;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.event.PacketEvent;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.packet.NetworkState;
 import org.betapackets.betapackets.packet.model.PacketWrapper;
 import org.betapackets.betapackets.packet.type.Packet;
@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHandshakingClientHandshake> {
 
-    private ProtocolCollection version;
+    private VersionEnum version;
     private String hostName;
     private int port;
     private NetworkState intendedState;
@@ -40,7 +40,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
         super(event);
     }
 
-    public WrapperHandshakingClientHandshake(ProtocolCollection version, String hostName, int port, NetworkState intendedState) {
+    public WrapperHandshakingClientHandshake(VersionEnum version, String hostName, int port, NetworkState intendedState) {
         super(PacketType.Handshaking.Client.HANDSHAKE);
         this.version = version;
         this.hostName = hostName;
@@ -59,7 +59,7 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
     @Override
     public void read(Packet type, FunctionalByteBuf buf) {
         int protocolId = buf.readVarInt();
-        version = ProtocolCollection.fromProtocolId(protocolId);
+        version = VersionEnum.fromProtocolId(protocolId);
         if (version == null) throw new DecoderException("Unknown protocol-id " + protocolId);
 
         hostName = buf.readString(255);
@@ -78,11 +78,11 @@ public class WrapperHandshakingClientHandshake extends PacketWrapper<WrapperHand
         intendedState = base.intendedState;
     }
 
-    public ProtocolCollection getVersion() {
+    public VersionEnum getVersion() {
         return version;
     }
 
-    public void setVersion(ProtocolCollection version) {
+    public void setVersion(VersionEnum version) {
         this.version = version;
     }
 

@@ -18,16 +18,16 @@
 
 package org.betapackets.betapackets.model.world.chunk.v1_20_1;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.model.block.BlockState;
 import org.betapackets.betapackets.model.world.chunk.ChunkSection;
 import org.betapackets.betapackets.model.world.chunk.palette.PaletteProvider;
 import org.betapackets.betapackets.model.world.chunk.palette.PalettedContainer;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 
 public class ChunkSection1_20_1 implements ChunkSection {
 
-    private ProtocolCollection version;
+    private VersionEnum version;
     private short nonEmptyBlockCount;
     private PalettedContainer blockStateContainer = new PalettedContainer();
     private PalettedContainer biomeContainer = new PalettedContainer();

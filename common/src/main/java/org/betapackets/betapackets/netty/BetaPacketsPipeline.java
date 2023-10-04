@@ -20,6 +20,7 @@ package org.betapackets.betapackets.netty;
 
 import org.betapackets.betapackets.BetaPackets;
 import org.betapackets.betapackets.connection.UserConnection;
+import org.betapackets.betapackets.netty.event.ReorderPipelineEvent;
 import org.betapackets.betapackets.netty.legacybundle.BetaPacketsLegacyBundleEncoder;
 import io.netty.channel.*;
 
@@ -35,8 +36,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      */
     public final static String HANDLER_INTERCEPTOR_CLIENT_NAME = "betapackets-interceptor-client";
     public final static String HANDLER_INTERCEPTOR_SERVER_NAME = "betapackets-interceptor-server";
-    public final static String HANDLER_ENCODER = "betapackets-encoder";
-    public final static String HANDLER_LEGACY_BUNDLER = "betapackets-legacy-bundler";
+    public final static String HANDLER_LEGACY_BUNDLER_NAME = "betapackets-legacy-bundler";
     public final static String HANDLER_AUTO_REORDER_NAME = "betapackets-auto-reorder";
 
     private final UserConnection userConnection;
@@ -61,13 +61,15 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         final ChannelPipeline pipeline = ctx.channel().pipeline();
-        addHandlers(pipeline, createBetaPacketsInterceptorClient(userConnection), createBetaPacketsInterceptorServer(userConnection), createBetaPacketsEncoder());
+        addHandlers(pipeline, createBetaPacketsInterceptorClient(userConnection), createBetaPacketsInterceptorServer(userConnection));
         BetaPackets.getAPI().getConnections().addConnection(userConnection);
     }
 
     public void addLegacyBundlerSupport() {
-        if (userConnection.getChannel().pipeline().get(HANDLER_LEGACY_BUNDLER) == null) {
-            userConnection.getChannel().pipeline().addBefore(getFrameEncoderName(), HANDLER_LEGACY_BUNDLER, createLegacyBundleEncoder(userConnection));
+        final ChannelPipeline pipeline = userConnection.getChannel().pipeline();
+
+        if (pipeline.get(HANDLER_LEGACY_BUNDLER_NAME) == null) {
+            pipeline.addBefore(getFrameEncoderName(), HANDLER_LEGACY_BUNDLER_NAME, createLegacyBundleEncoder(userConnection));
             legacyBundleSupported = true;
         }
     }
@@ -76,10 +78,24 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
         return legacyBundleSupported;
     }
 
-    private void addHandlers(ChannelPipeline pipeline, ChannelHandler interceptorClient, ChannelHandler interceptorServer, ChannelHandler encoder) {
+    /**
+     * @param pipeline The ChannelPipeline
+     * @return If the connection is already compressed
+     */
+    public boolean isCompressed(ChannelPipeline pipeline) {
+        return pipeline.names().indexOf(getPacketCompressName()) > pipeline.names().indexOf(BetaPacketsPipeline.HANDLER_INTERCEPTOR_SERVER_NAME);
+    }
+
+    /**
+     * Adds the BetaPacketsInterceptorClient and BetaPacketsInterceptorServer to the pipeline in the correct order
+     *
+     * @param pipeline The ChannelPipeline instance
+     * @param interceptorClient The BetaPacketsInterceptorClient instance
+     * @param interceptorServer The BetaPacketsInterceptorServer instance
+     */
+    private void addHandlers(ChannelPipeline pipeline, ChannelHandler interceptorClient, ChannelHandler interceptorServer) {
         pipeline.addBefore(getPacketDecoderName(), HANDLER_INTERCEPTOR_CLIENT_NAME, interceptorClient);
         pipeline.addBefore(getPacketEncoderName(), HANDLER_INTERCEPTOR_SERVER_NAME, interceptorServer);
-        pipeline.addBefore(HANDLER_INTERCEPTOR_SERVER_NAME, HANDLER_ENCODER, encoder);
     }
 
     @Override
@@ -95,6 +111,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
      */
     public void addAutomaticallyReorderElement(final ChannelPipeline channelPipeline) {
         channelPipeline.addLast(HANDLER_AUTO_REORDER_NAME, new ChannelOutboundHandlerAdapter() {
+
             @Override
             public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
                 if (needsReorderPipeline(ctx.pipeline())) {
@@ -117,13 +134,12 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
 
             final ChannelHandler interceptorClient = pipeline.get(HANDLER_INTERCEPTOR_CLIENT_NAME);
             final ChannelHandler interceptorServer = pipeline.get(HANDLER_INTERCEPTOR_SERVER_NAME);
-            final ChannelHandler encoder = pipeline.get(HANDLER_ENCODER);
 
             pipeline.remove(interceptorClient);
             pipeline.remove(interceptorServer);
-            pipeline.remove(encoder);
 
-            addHandlers(pipeline, interceptorClient, interceptorServer, encoder);
+            addHandlers(pipeline, interceptorClient, interceptorServer);
+            pipeline.remove(HANDLER_AUTO_REORDER_NAME); // Remove the dummy handler
         }
         super.userEventTriggered(ctx, evt);
     }
@@ -157,15 +173,11 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     }
 
     public BetaPacketsInterceptorServer createBetaPacketsInterceptorServer(final UserConnection userConnection) {
-        return new BetaPacketsInterceptorServer(getPacketCompressName(), userConnection);
+        return new BetaPacketsInterceptorServer(userConnection);
     }
 
     public BetaPacketsLegacyBundleEncoder createLegacyBundleEncoder(final UserConnection userConnection) {
         return new BetaPacketsLegacyBundleEncoder(userConnection);
-    }
-
-    public BetaPacketsEncoder createBetaPacketsEncoder() {
-        return new BetaPacketsEncoder(getPacketCompressName());
     }
 
     public UserConnection getUserConnection() {

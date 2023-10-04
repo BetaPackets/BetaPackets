@@ -19,7 +19,7 @@
 package org.betapackets.betapackets.netty.legacybundle;
 
 import org.betapackets.betapackets.connection.UserConnection;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

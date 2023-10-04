@@ -18,21 +18,21 @@
 
 package org.betapackets.betapackets.model.entity.v1_9;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 
 public enum Hand1_9 {
 
     MAIN_HAND,
     OFF_HAND;
 
-    public static Hand1_9 getById(final ProtocolCollection version, final int id) {
+    public static Hand1_9 getById(final VersionEnum version, final int id) {
         for (Hand1_9 value : values()) {
             if (value.getId(version) == id) return value;
         }
         return null;
     }
 
-    public int getId(final ProtocolCollection version) {
+    public int getId(final VersionEnum version) {
         return this.ordinal();
     }
 }

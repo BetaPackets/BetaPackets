@@ -20,9 +20,9 @@ package org.betapackets.betapackets.connection;
 
 import org.betapackets.betapackets.BetaPackets;
 import org.betapackets.betapackets.connection.ack.Acknowledgements;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.netty.BetaPacketsPipeline;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.netty.legacybundle.LegacyBundle;
 import org.betapackets.betapackets.packet.NetworkSide;
 import org.betapackets.betapackets.packet.NetworkState;
@@ -52,7 +52,7 @@ public class UserConnection {
     private NetworkState state;
     private List<Packet> s2cPackets;
     private List<Packet> c2sPackets;
-    private ProtocolCollection protocolVersion;
+    private VersionEnum protocolVersion;
     private PacketIdList packetIdList;
     private TextComponentSerializer textComponentSerializer;
 
@@ -89,33 +89,33 @@ public class UserConnection {
      * Initializes the connection
      *
      * @param state           The {@link NetworkState} of the connection
-     * @param protocolVersion The {@link ProtocolCollection} of the connection
+     * @param protocolVersion The {@link VersionEnum} of the connection
      */
-    public void init(final NetworkState state, final ProtocolCollection protocolVersion) {
+    public void init(final NetworkState state, final VersionEnum protocolVersion) {
         this.protocolVersion = protocolVersion;
         this.packetIdList = protocolVersion.getPacketIdList();
         this.setState(state);
         this.loaded = true;
 
-        if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_19_4)) {
+        if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_19_4)) {
             textComponentSerializer = TextComponentSerializer.V1_19_4;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_18_1)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_18_1)) {
             textComponentSerializer = TextComponentSerializer.V1_18;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_17)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_17)) {
             textComponentSerializer = TextComponentSerializer.V1_17;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_16)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_16)) {
             textComponentSerializer = TextComponentSerializer.V1_16;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_15)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_15)) {
             textComponentSerializer = TextComponentSerializer.V1_15;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_14)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_14)) {
             textComponentSerializer = TextComponentSerializer.V1_14;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_12)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_12)) {
             textComponentSerializer = TextComponentSerializer.V1_12;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_9)) {
             textComponentSerializer = TextComponentSerializer.V1_9;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_8)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_8)) {
             textComponentSerializer = TextComponentSerializer.V1_8;
-        } else if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_7_5)) {
+        } else if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_7_5)) {
             textComponentSerializer = TextComponentSerializer.V1_7;
         }
         if (textComponentSerializer == null)
@@ -152,7 +152,7 @@ public class UserConnection {
         return state;
     }
 
-    public ProtocolCollection getProtocolVersion() {
+    public VersionEnum getProtocolVersion() {
         return protocolVersion;
     }
 
@@ -174,7 +174,7 @@ public class UserConnection {
             return;
         }
 
-        if (protocolVersion.isNewerThanOrEqualTo(ProtocolCollection.R1_19_4)) {
+        if (protocolVersion.isNewerThanOrEqualTo(VersionEnum.R1_19_4)) {
             write(WrapperPlayServerBundleDelimiter.INSTANCE);
             wrapper.forEach(this::write);
             write(WrapperPlayServerBundleDelimiter.INSTANCE);

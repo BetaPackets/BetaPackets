@@ -22,7 +22,7 @@ import org.betapackets.betapackets.event.PacketEvent;
 import org.betapackets.betapackets.model.base.Writer;
 import org.betapackets.betapackets.model.entity.metadata.MetadataCodecType;
 import org.betapackets.betapackets.model.entity.metadata.SerializedMetadata;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.packet.model.PacketWrapper;
 import org.betapackets.betapackets.packet.type.Packet;
 

@@ -22,7 +22,7 @@ import org.betapackets.betapackets.model.world.chunk.ChunkFormat;
 import org.betapackets.betapackets.model.world.chunk.ChunkSection;
 import org.betapackets.betapackets.model.world.chunk.PacketBlockEntity;
 import org.betapackets.betapackets.model.world.chunk.PacketChunk;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import io.netty.buffer.Unpooled;
 
 import java.io.IOException;

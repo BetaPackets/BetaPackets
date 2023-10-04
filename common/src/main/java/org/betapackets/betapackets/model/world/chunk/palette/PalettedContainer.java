@@ -20,7 +20,7 @@ package org.betapackets.betapackets.model.world.chunk.palette;
 
 import org.betapackets.betapackets.model.world.chunk.storage.BitStorage;
 import org.betapackets.betapackets.model.world.chunk.storage.Storage;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 
 public class PalettedContainer {
 

@@ -22,8 +22,8 @@ import org.betapackets.betapackets.BetaPackets;
 import org.betapackets.betapackets.connection.UserConnection;
 import org.betapackets.betapackets.event.PacketEvent;
 import org.betapackets.betapackets.event.PacketSendEvent;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.model.base.VersionEnum;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.netty.legacybundle.LegacyBundle;
 import org.betapackets.betapackets.packet.CancelPacketException;
 import org.betapackets.betapackets.packet.model.s2c.play.WrapperPlayServerBundleDelimiter;
@@ -46,27 +46,21 @@ import java.util.zip.Inflater;
 @ChannelHandler.Sharable
 public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBuf> {
 
-    private final UserConnection userConnection;
-    private final String compress;
-    private final byte[] deflateBuffer = new byte[8192];
     private final Inflater inflater = new Inflater();
     private final Deflater deflater = new Deflater();
+    private final byte[] deflateBuffer = new byte[8192];
 
-    public BetaPacketsInterceptorServer(String compress, UserConnection userConnection) {
+    private final UserConnection userConnection;
+
+    public BetaPacketsInterceptorServer(UserConnection userConnection) {
         this.userConnection = userConnection;
-        this.compress = compress;
-    }
-
-    private boolean isCompressed(ChannelPipeline pipeline) {
-        return pipeline.names().indexOf(compress) > pipeline.names().indexOf(BetaPacketsPipeline.HANDLER_INTERCEPTOR_SERVER_NAME);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         Throwable lastCause = cause;
         while (lastCause != null) {
-            if (lastCause instanceof CancelPacketException)
-                return;
+            if (lastCause instanceof CancelPacketException) return; // Cancel packets if cause stack contains CancelPacketException
             lastCause = lastCause.getCause();
         }
         super.exceptionCaught(ctx, cause);
@@ -74,15 +68,14 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
 
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        boolean couldBeCompressed = isCompressed(ctx.pipeline());
+        final boolean couldBeCompressed = userConnection.getPipeline().isCompressed(ctx.pipeline());
         boolean compressed = false;
 
         ByteBuf messageToRead = msg;
         if (couldBeCompressed) {
             FunctionalByteBuf buf = new FunctionalByteBuf(messageToRead, userConnection);
             int uncompressedSize = buf.readVarInt();
-            if (uncompressedSize == 0) {
-            } else {
+            if (uncompressedSize != 0) {
                 byte[] bytes = new byte[messageToRead.readableBytes()];
                 messageToRead.readBytes(bytes);
                 inflater.setInput(bytes);
@@ -129,7 +122,7 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
                 }
                 bundle[i] = writeBuffer;
             }
-            if (userConnection.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_19_4)) {
+            if (userConnection.getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_19_4)) {
                 ctx.writeAndFlush(userConnection.getPacket(WrapperPlayServerBundleDelimiter.INSTANCE));
                 for (FunctionalByteBuf byteBuf : bundle) {
                     ctx.writeAndFlush(byteBuf);

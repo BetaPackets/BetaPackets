@@ -23,10 +23,9 @@ import org.betapackets.betapackets.model.world.chunk.ChunkFormat;
 import org.betapackets.betapackets.model.world.chunk.v1_20_1.ChunkFormat1_20_1;
 import org.betapackets.betapackets.packet.ids.PacketId1_20_1;
 import org.betapackets.betapackets.packet.ids.PacketIdList;
-import org.betapackets.betapackets.mapping.*;
 
 // Thanks to my 12-year-old self for this enum, I guess?
-public enum ProtocolCollection {
+public enum VersionEnum {
 
     R1_20_1(763, "1.20/1.20.1", ChunkFormat1_20_1.INSTANCE, new PacketId1_20_1()),
 
@@ -95,14 +94,14 @@ public enum ProtocolCollection {
     private ParticleMapping particleMapping;
     private PotionEffectMapping potionEffectMapping;
 
-    ProtocolCollection(int protocolId, String protocolName, ChunkFormat chunkFormat, PacketIdList packetIdList) {
+    VersionEnum(int protocolId, String protocolName, ChunkFormat chunkFormat, PacketIdList packetIdList) {
         this.protocolId = protocolId;
         this.protocolName = protocolName;
         this.chunkFormat = chunkFormat;
         this.packetIdList = packetIdList;
     }
 
-    ProtocolCollection(int protocolId, String protocolName) {
+    VersionEnum(int protocolId, String protocolName) {
         this.protocolId = protocolId;
         this.protocolName = protocolName;
     }
@@ -175,8 +174,8 @@ public enum ProtocolCollection {
         return protocolName;
     }
 
-    public static ProtocolCollection fromProtocolId(final int protocolId) {
-        for (ProtocolCollection protocol : ProtocolCollection.values()) {
+    public static VersionEnum fromProtocolId(final int protocolId) {
+        for (VersionEnum protocol : VersionEnum.values()) {
             if (protocol.getProtocolId() == protocolId) {
                 return protocol;
             }
@@ -184,19 +183,19 @@ public enum ProtocolCollection {
         return null;
     }
 
-    public boolean isOlderThan(final ProtocolCollection other) {
+    public boolean isOlderThan(final VersionEnum other) {
         return this.ordinal() > other.ordinal();
     }
 
-    public boolean isOlderThanOrEqualTo(final ProtocolCollection other) {
+    public boolean isOlderThanOrEqualTo(final VersionEnum other) {
         return this.ordinal() >= other.ordinal();
     }
 
-    public boolean isNewerThan(final ProtocolCollection other) {
+    public boolean isNewerThan(final VersionEnum other) {
         return this.ordinal() < other.ordinal();
     }
 
-    public boolean isNewerThanOrEqualTo(final ProtocolCollection other) {
+    public boolean isNewerThanOrEqualTo(final VersionEnum other) {
         return this.ordinal() <= other.ordinal();
     }
 }

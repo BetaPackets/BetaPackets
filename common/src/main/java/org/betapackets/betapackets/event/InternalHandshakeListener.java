@@ -19,7 +19,7 @@
 package org.betapackets.betapackets.event;
 
 import org.betapackets.betapackets.BetaPacketsPlatform;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.packet.NetworkState;
 import org.betapackets.betapackets.packet.model.c2s.handshake.WrapperHandshakingClientHandshake;
 import org.betapackets.betapackets.packet.model.c2s.play.WrapperPlayClientKeepAlive;
@@ -58,7 +58,7 @@ public class InternalHandshakeListener extends PacketListener {
             WrapperLoginServerSetCompression setCompression = new WrapperLoginServerSetCompression(event);
             event.getConnection().setCompressionThreshold(setCompression.getThreshold());
         } else if (event.getType() == PacketType.Play.Server.JOIN_GAME) {
-            if (event.getConnection().getProtocolVersion().isOlderThan(ProtocolCollection.R1_19_4)) {
+            if (event.getConnection().getProtocolVersion().isOlderThan(VersionEnum.R1_19_4)) {
                 event.getConnection().getPipeline().addLegacyBundlerSupport();
             }
         } else if (event.getType() == PacketType.Play.Server.KEEP_ALIVE) {

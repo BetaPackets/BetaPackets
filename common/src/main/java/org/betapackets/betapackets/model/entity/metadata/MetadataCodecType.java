@@ -18,8 +18,8 @@
 
 package org.betapackets.betapackets.model.entity.metadata;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.betapackets.betapackets.model.base.Reader;
 import org.betapackets.betapackets.model.base.Writer;
 import org.betapackets.betapackets.model.entity.EntityPose;
@@ -31,13 +31,13 @@ public enum MetadataCodecType {
 
     BYTE(FunctionalByteBuf::writeByte, FunctionalByteBuf::readByte),
     INT((buf, object) -> {
-        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_9)) {
             buf.writeVarInt(object);
         } else {
             buf.writeInt(object);
         }
     }, (buf) -> {
-        if (buf.getProtocolVersion().isNewerThanOrEqualTo(ProtocolCollection.R1_9)) {
+        if (buf.getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_9)) {
             return buf.readVarInt();
         } else {
             return buf.readInt();

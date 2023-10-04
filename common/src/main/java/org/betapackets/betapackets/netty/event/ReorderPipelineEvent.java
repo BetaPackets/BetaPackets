@@ -1,7 +1,6 @@
 /*
- * This file is part of BetaPackets - https://github.com/BetaPackets/BetaPackets
- * Copyright (C) 2023 FlorianMichael/EnZaXD
- * Copyright (C) 2023 DietrichPaul and contributors
+ * This file is part of BetaPackets - https://github.com/FlorianMichael/BetaPackets
+ * Copyright (C) 2023 FlorianMichael/EnZaXD and contributors
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.betapackets.betapackets.netty;
+package org.betapackets.betapackets.netty.event;
 
 /**
  * This event is fired when the pipeline is reordered by the compression and can be used to reorder the whole BetaPackets pipeline after adding it.

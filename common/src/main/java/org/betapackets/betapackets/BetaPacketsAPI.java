@@ -44,24 +44,28 @@ public class BetaPacketsAPI {
         listenerByPlugin.computeIfAbsent(listener.getPlugin(), k -> new ArrayList<>()).add(listener);
     }
 
-    public void fireReadEvent(PacketEvent event) throws IOException {
+    public PacketEvent fireReadEvent(PacketEvent event) throws IOException {
         final List<PacketListener> packetListeners = listenerByType.get(event.getType());
-        if (packetListeners == null) return;
+        if (packetListeners == null) return event;
 
         for (PacketListener listener : packetListeners) {
             listener.onRead(event);
-            if (event.isAbort()) return;
+            if (event.isAbort()) return event;
         }
+
+        return event;
     }
 
-    public void fireWriteEvent(PacketSendEvent event) throws IOException {
+    public PacketEvent fireWriteEvent(PacketSendEvent event) throws IOException {
         final List<PacketListener> packetListeners = listenerByType.get(event.getType());
-        if (packetListeners == null) return;
+        if (packetListeners == null) return event;
 
         for (PacketListener listener : packetListeners) {
             listener.onWrite(event);
-            if (event.isAbort()) return;
+            if (event.isAbort()) return event;
         }
+
+        return event;
     }
 
     public void unregisterListener(PacketListener listener) {

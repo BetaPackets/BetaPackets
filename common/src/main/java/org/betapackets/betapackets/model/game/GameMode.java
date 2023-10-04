@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.game;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 
 public enum GameMode {
 
@@ -31,7 +31,7 @@ public enum GameMode {
         return ordinal();
     }
 
-    public static GameMode getOrNull(final ProtocolCollection version, final short id) {
+    public static GameMode getOrNull(final VersionEnum version, final short id) {
         if (id == -1) return null;
         for (GameMode value : values()) {
             if (value.getId() == id) return value;
@@ -39,7 +39,7 @@ public enum GameMode {
         return null;
     }
 
-    public static GameMode getById(final ProtocolCollection version, final short id) {
+    public static GameMode getById(final VersionEnum version, final short id) {
         for (GameMode value : values()) {
             if (value.getId() == id) return value;
         }

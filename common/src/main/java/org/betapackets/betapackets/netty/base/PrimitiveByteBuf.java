@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.betapackets.betapackets.netty.bytebuf;
+package org.betapackets.betapackets.netty.base;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
@@ -189,11 +189,11 @@ public class PrimitiveByteBuf {
 
     public void writeVarLong(long value) {
         while ((value & -128L) != 0L) {
-            this.writeByte((int)(value & 127L) | 128);
+            this.writeByte((int) (value & 127L) | 128);
             value >>>= 7;
         }
 
-        this.writeByte((int)value);
+        this.writeByte((int) value);
     }
 
     public short readUnsignedByte() {

@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.game;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 
 public enum OptionalGameMode {
 
@@ -41,7 +41,7 @@ public enum OptionalGameMode {
         return ordinal() - 1;
     }
 
-    public static OptionalGameMode getById(final ProtocolCollection version, final short id) {
+    public static OptionalGameMode getById(final VersionEnum version, final short id) {
         if (id < 0) return null;
 
         for (OptionalGameMode value : values()) {

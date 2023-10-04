@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.mapping;
 
-import org.betapackets.betapackets.model.base.ProtocolCollection;
+import org.betapackets.betapackets.model.base.VersionEnum;
 import org.tukaani.xz.XZInputStream;
 
 import java.io.DataInputStream;
@@ -31,14 +31,14 @@ public class MappingLoader {
         XZInputStream xis = new XZInputStream(mappingFile);
         DataInputStream data = new DataInputStream(xis);
 
-        ProtocolCollection protocolCollection = ProtocolCollection.R1_20_1;
-        protocolCollection.setBlockMapping(BlockMapping.read(data));
-        protocolCollection.setBlockStateMapping(BlockStateMapping.read(protocolCollection.getBlockMapping(), data));
-        protocolCollection.setItemMapping(ItemMapping.read(protocolCollection.getBlockMapping(), data));
-        protocolCollection.setMetadataCodecMapping(MetadataCodecMapping.read(data));
-        protocolCollection.setParticleMapping(ParticleMapping.read(data));
-        protocolCollection.setPotionEffectMapping(PotionEffectMapping.read(data));
-        protocolCollection.setEntityMapping(EntityMapping.read(data));
+        VersionEnum versionEnum = VersionEnum.R1_20_1;
+        versionEnum.setBlockMapping(BlockMapping.read(data));
+        versionEnum.setBlockStateMapping(BlockStateMapping.read(versionEnum.getBlockMapping(), data));
+        versionEnum.setItemMapping(ItemMapping.read(versionEnum.getBlockMapping(), data));
+        versionEnum.setMetadataCodecMapping(MetadataCodecMapping.read(data));
+        versionEnum.setParticleMapping(ParticleMapping.read(data));
+        versionEnum.setPotionEffectMapping(PotionEffectMapping.read(data));
+        versionEnum.setEntityMapping(EntityMapping.read(data));
 
         xis.close();
     }

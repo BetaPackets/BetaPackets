@@ -21,7 +21,7 @@ package org.betapackets.betapackets.packet.model.s2c.play;
 import org.betapackets.betapackets.event.PacketEvent;
 import org.betapackets.betapackets.model.game.GameMode;
 import org.betapackets.betapackets.model.position.GlobalPos;
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.packet.model.PacketWrapper;
 import org.betapackets.betapackets.packet.type.Packet;
 import org.betapackets.betapackets.packet.type.PacketType;

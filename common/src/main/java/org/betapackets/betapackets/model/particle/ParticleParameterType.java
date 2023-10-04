@@ -18,7 +18,7 @@
 
 package org.betapackets.betapackets.model.particle;
 
-import org.betapackets.betapackets.netty.bytebuf.FunctionalByteBuf;
+import org.betapackets.betapackets.netty.base.FunctionalByteBuf;
 import org.betapackets.betapackets.model.base.Reader;
 import org.betapackets.betapackets.model.base.Writer;
 
