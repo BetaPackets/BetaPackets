@@ -1,0 +1,15 @@
+plugins {
+    id "java"
+}
+
+dependencies {
+    compileOnly "io.netty:netty-all:${project.netty_version}"
+    compileOnly "com.google.code.gson:gson:${project.gson_version}"
+
+    implementation "net.lenni0451.mcstructs:nbt:${project.mcstructs_nbt_version}"
+    implementation "net.lenni0451.mcstructs:text:${project.mcstructs_text_version}"
+
+    implementation "org.joml:joml:${project.joml_version}"
+    implementation "org.tukaani:xz:${project.xz_version}"
+    implementation "gnu.trove:trove:${project.trove_version}"
+}

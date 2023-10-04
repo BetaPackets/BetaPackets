@@ -2,9 +2,12 @@ subprojects {
     apply plugin: "java-library"
     apply plugin: "maven-publish"
 
-    archivesBaseName = "BetaPackets-" + project.maven_name
+    archivesBaseName = project.maven_name
     group = project.maven_group
     version = project.maven_version
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     repositories {
         mavenCentral()
@@ -15,6 +18,9 @@ subprojects {
         maven {
             name = "Lenni0451 Snapshots"
             url = "https://maven.lenni0451.net/snapshots"
+        }
+        maven {
+            url = "https://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/"
         }
     }
 
@@ -48,11 +54,11 @@ subprojects {
                 pom {
                     name = artifactId
                     description = "The ultimate standalone Minecraft protocol library for all platforms and all Minecraft versions"
-                    url = "https://github.com/FlorianMichael/BetaPackets"
+                    url = "https://github.com/BetaPackets/BetaPackets"
                     licenses {
                         license {
                             name = "Apache-2.0 license"
-                            url = "https://github.com/FlorianMichael/BetaPackets/blob/main/LICENSE"
+                            url = "https://github.com/BetaPackets/BetaPackets/blob/main/LICENSE"
                         }
                     }
                     developers {
@@ -61,9 +67,9 @@ subprojects {
                         }
                     }
                     scm {
-                        connection = "scm:git:git://github.com/FlorianMichael/BetaPackets.git"
-                        developerConnection = "scm:git:ssh://github.com/FlorianMichael/BetaPackets.git"
-                        url = "github.com/FlorianMichael/BetaPackets"
+                        connection = "scm:git:git://github.com/BetaPackets/BetaPackets.git"
+                        developerConnection = "scm:git:ssh://github.com/BetaPackets/BetaPackets.git"
+                        url = "github.com/BetaPackets/BetaPackets"
                     }
                 }
             }

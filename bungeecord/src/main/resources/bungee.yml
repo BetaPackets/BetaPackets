@@ -1,0 +1,6 @@
+name: BetaPackets
+version: '${version}'
+main: org.betapackets.betapackets.bungeecord.BungeeCordPlugin
+author: Florian Michael
+softDepends:
+  - 'ViaVersion'

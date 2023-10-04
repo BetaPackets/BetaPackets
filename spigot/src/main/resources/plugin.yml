@@ -1,0 +1,6 @@
+name: BetaPackets
+version: 1.0.0
+author: Florian Michael
+main: org.betapackets.betapackets.spigot.SpigotPlugin
+softdepend:
+  - 'ViaVersion'
