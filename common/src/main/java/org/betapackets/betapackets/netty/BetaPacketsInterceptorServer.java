@@ -68,10 +68,13 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
 
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        final boolean couldBeCompressed = userConnection.getPipeline().isCompressed(ctx.pipeline());
+        final boolean couldBeCompressed = userConnection.getPipeline().isCompressed(ctx.pipeline()); // Check if compression is enabled
         boolean compressed = false;
 
         ByteBuf messageToRead = msg;
+        // 1. Detect if packet is really compressed and decompress it
+        //  -> Uncompressed when compressed: we are in front of ViaVersion but behind the compress handler. ViaVersion reorders, we reorder.
+        //  -> Happens after CompressionThreshold + LoginSuccess
         if (couldBeCompressed) {
             FunctionalByteBuf buf = new FunctionalByteBuf(messageToRead, userConnection);
             int uncompressedSize = buf.readVarInt();
@@ -87,30 +90,38 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
             }
         }
 
-        FunctionalByteBuf readBuffer = new FunctionalByteBuf(messageToRead, userConnection);
+        // 2. read packet id
+        final FunctionalByteBuf readBuffer = new FunctionalByteBuf(messageToRead, userConnection);
         int packetId = readBuffer.readVarInt();
 
-        List<Packet> packets = userConnection.getS2CPackets();
-        if (packetId >= packets.size())
+        // 3. validate packet id
+        final List<Packet> packets = userConnection.getS2CPackets();
+        if (packetId >= packets.size()) {
             throw new EncoderException("Unknown packet-id " + packetId);
+        }
 
-        PacketSendEvent event = new PacketSendEvent(packets.get(packetId), readBuffer, userConnection);
-        BetaPackets.getAPI().fireWriteEvent(event);
+        // 4. call internal event and check if packet is cancelled
+        final PacketSendEvent event = BetaPackets.getAPI().fireWriteEvent(
+                new PacketSendEvent(packets.get(packetId), readBuffer, userConnection)
+        );
         if (event.isCancelled()) {
             msg.clear();
             throw CancelPacketException.INSTANCE;
         }
 
+        // 5. check if we have a bundle and send it
         if (event.getBundle().size() > 1) {
-            FunctionalByteBuf[] bundle = new FunctionalByteBuf[event.getBundle().size()];
+            final FunctionalByteBuf[] bundle = new FunctionalByteBuf[event.getBundle().size()];
             for (int i = 0; i < event.getBundle().size(); i++) {
-                PacketEvent packetEvent = event.getBundle().get(i);
+                final PacketEvent packetEvent = event.getBundle().get(i);
                 ByteBuf outBuf = ctx.alloc().buffer();
 
                 packetId = packets.indexOf(packetEvent.getType());
-                if (packetId == -1)
+                if (packetId == -1) { // should never happen
                     throw new EncoderException("Unregistered packet-type " + packetEvent.getType());
+                }
 
+                // write packet data into buffer and add it to the bundle array
                 FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
                 writeBuffer.writeVarInt(packetId);
                 if (packetEvent == event && packetEvent.getLastPacketWrapper() == null) {
@@ -122,6 +133,10 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
                 }
                 bundle[i] = writeBuffer;
             }
+
+            // send bundle:
+            // 1.19.4+: send bundle delimiter + bundle + bundle delimiter
+            // 1.19.4-: send legacy bundle (if supported) or send all packets individually (if not supported)
             if (userConnection.getProtocolVersion().isNewerThanOrEqualTo(VersionEnum.R1_19_4)) {
                 ctx.writeAndFlush(userConnection.getPacket(WrapperPlayServerBundleDelimiter.INSTANCE));
                 for (FunctionalByteBuf byteBuf : bundle) {
@@ -131,18 +146,24 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
             } else if (userConnection.getPipeline().isLegacyBundleSupported()) {
                 ctx.writeAndFlush(new LegacyBundle(bundle));
             } else {
+                // send all packets individually if we don't have legacy bundle support
                 for (FunctionalByteBuf buf : bundle) {
                     ctx.writeAndFlush(buf);
                 }
             }
+
+            // cancel the original packet
             msg.clear();
             throw CancelPacketException.INSTANCE;
         }
 
+        // 6. replace packet id with the event data if the packet was edited
         packetId = packets.indexOf(event.getType());
-        if (packetId == -1)
+        if (packetId == -1) {
             throw new EncoderException("Unregistered packet-type " + event.getType());
+        }
 
+        // 7. write packet to the output
         ByteBuf outBuf = ctx.alloc().buffer();
         FunctionalByteBuf writeBuffer = new FunctionalByteBuf(outBuf, userConnection);
         writeBuffer.writeVarInt(packetId);
@@ -153,25 +174,32 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
             writeBuffer.writeBytes(messageToRead);
         }
 
+        // 8. compress packet if compression is enabled
         if (couldBeCompressed) {
-            FunctionalByteBuf buf = new FunctionalByteBuf(Unpooled.buffer(), userConnection);
+            final FunctionalByteBuf buf = new FunctionalByteBuf(Unpooled.buffer(), userConnection);
             if (compressed) {
+                // compressed
                 buf.writeVarInt(outBuf.readableBytes());
+
                 byte[] bytes = new byte[outBuf.readableBytes()];
                 outBuf.readBytes(bytes);
                 deflater.setInput(bytes);
+
                 deflater.finish();
                 while (!deflater.finished()) {
                     int index = deflater.deflate(deflateBuffer);
                     buf.writeBytes(deflateBuffer, 0, index);
                 }
+
                 deflater.reset();
             } else {
+                // uncompressed if original packet was uncompressed
                 buf.writeVarInt(0);
                 buf.writeBytes(outBuf);
             }
             out.add(buf.getBuffer());
         } else {
+            // Pass-through output buffer/data if compression is disabled
             out.add(outBuf);
         }
     }

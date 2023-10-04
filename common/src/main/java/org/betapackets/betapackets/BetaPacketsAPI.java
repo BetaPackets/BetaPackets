@@ -56,7 +56,7 @@ public class BetaPacketsAPI {
         return event;
     }
 
-    public PacketEvent fireWriteEvent(PacketSendEvent event) throws IOException {
+    public PacketSendEvent fireWriteEvent(PacketSendEvent event) throws IOException {
         final List<PacketListener> packetListeners = listenerByType.get(event.getType());
         if (packetListeners == null) return event;
 
