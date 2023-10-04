@@ -79,6 +79,14 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     }
 
     /**
+     * @param pipeline The ChannelPipeline
+     * @return If the connection is already compressed
+     */
+    public boolean isCompressed(ChannelPipeline pipeline) {
+        return pipeline.names().indexOf(getPacketCompressName()) > pipeline.names().indexOf(BetaPacketsPipeline.HANDLER_INTERCEPTOR_SERVER_NAME);
+    }
+
+    /**
      * Adds the BetaPacketsInterceptorClient and BetaPacketsInterceptorServer to the pipeline in the correct order
      *
      * @param pipeline The ChannelPipeline instance
@@ -165,7 +173,7 @@ public abstract class BetaPacketsPipeline extends ChannelInboundHandlerAdapter {
     }
 
     public BetaPacketsInterceptorServer createBetaPacketsInterceptorServer(final UserConnection userConnection) {
-        return new BetaPacketsInterceptorServer(getPacketCompressName(), userConnection);
+        return new BetaPacketsInterceptorServer(userConnection);
     }
 
     public BetaPacketsLegacyBundleEncoder createLegacyBundleEncoder(final UserConnection userConnection) {

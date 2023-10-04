@@ -46,27 +46,21 @@ import java.util.zip.Inflater;
 @ChannelHandler.Sharable
 public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBuf> {
 
-    private final UserConnection userConnection;
-    private final String compress;
-    private final byte[] deflateBuffer = new byte[8192];
     private final Inflater inflater = new Inflater();
     private final Deflater deflater = new Deflater();
+    private final byte[] deflateBuffer = new byte[8192];
 
-    public BetaPacketsInterceptorServer(String compress, UserConnection userConnection) {
+    private final UserConnection userConnection;
+
+    public BetaPacketsInterceptorServer(UserConnection userConnection) {
         this.userConnection = userConnection;
-        this.compress = compress;
-    }
-
-    private boolean isCompressed(ChannelPipeline pipeline) {
-        return pipeline.names().indexOf(compress) > pipeline.names().indexOf(BetaPacketsPipeline.HANDLER_INTERCEPTOR_SERVER_NAME);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         Throwable lastCause = cause;
         while (lastCause != null) {
-            if (lastCause instanceof CancelPacketException)
-                return;
+            if (lastCause instanceof CancelPacketException) return; // Cancel packets if cause stack contains CancelPacketException
             lastCause = lastCause.getCause();
         }
         super.exceptionCaught(ctx, cause);
@@ -74,7 +68,7 @@ public class BetaPacketsInterceptorServer extends MessageToMessageEncoder<ByteBu
 
     @Override
     public void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        boolean couldBeCompressed = isCompressed(ctx.pipeline());
+        final boolean couldBeCompressed = userConnection.getPipeline().isCompressed(ctx.pipeline());
         boolean compressed = false;
 
         ByteBuf messageToRead = msg;
