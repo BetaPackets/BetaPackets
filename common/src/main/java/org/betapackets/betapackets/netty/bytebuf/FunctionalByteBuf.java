@@ -61,9 +61,7 @@ public class FunctionalByteBuf extends PrimitiveByteBuf {
     }
 
     public Identifier readIdentifier() {
-        String str = readString();
-        System.out.println("STR: " + str);
-        return Identifier.of(str);
+        return Identifier.of(readString());
     }
 
     public ItemStackV1_3 readItemStack() throws IOException {

@@ -189,11 +189,11 @@ public class PrimitiveByteBuf {
 
     public void writeVarLong(long value) {
         while ((value & -128L) != 0L) {
-            this.writeByte((int)(value & 127L) | 128);
+            this.writeByte((int) (value & 127L) | 128);
             value >>>= 7;
         }
 
-        this.writeByte((int)value);
+        this.writeByte((int) value);
     }
 
     public short readUnsignedByte() {
